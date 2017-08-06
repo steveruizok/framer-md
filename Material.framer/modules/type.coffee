@@ -88,5 +88,5 @@ class exports.Button extends TextLayer
 			fontWeight: 500
 			lineHeight: 1.3
 			color: '#009688'
-			letterSpacing: 1.1
+			letterSpacing: 0.5
 			padding: {left: 4, right: 4, top: 8, bottom: 0},

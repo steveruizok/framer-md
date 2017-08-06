@@ -46,7 +46,6 @@ source =
 			text: menuTextColor
 			invert: menuInvert
 
-
 theme = 
 	tint: source.colors.secondary.main
 	primary: source.colors.primary.main
@@ -101,6 +100,9 @@ theme =
 			shadowColor: 'rgba(0,0,0,.18)'
 			shadowBlur: 6
 
+	fab:
+		backgroundColor: source.colors.secondary.main
+		invert: primaryInvert
 
 	dialog: 
 		backgroundColor:'#FAFAFA'

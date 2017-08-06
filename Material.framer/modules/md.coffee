@@ -23,27 +23,32 @@ exports.Caption = Caption = type.Caption
 exports.DialogAction = DialogAction = type.DialogAction
 
 
-#  .d888888                   
-# d8'    88                   
-# 88aaaaa88a 88d888b. 88d888b.
-# 88     88  88'  `88 88'  `88
-# 88     88  88.  .88 88.  .88
-# 88     88  88Y888P' 88Y888P'
-#            88       88      
-#            dP       dP      
 
 
-exports.App = class App extends FlowComponent
+
+# 	 .d888888
+# 	d8'    88
+# 	88aaaaa88a 88d888b. 88d888b.
+# 	88     88  88'  `88 88'  `88
+# 	88     88  88.  .88 88.  .88
+# 	88     88  88Y888P' 88Y888P'
+# 	           88       88
+# 	           dP       dP
+
+
+
+class App extends Layer
 	constructor: (options = {}) ->
-
 		@_footer = options.footer ? true
-		@theme = theme
+		@_theme = theme
+		@_views = options.views ? []
 
 		super _.defaults options,
-			name: 'Flow'
-			animationOptions:
-				time: .2
+			name: 'App'
+			size: Screen.size
+			backgroundColor: null
 
+		# FOOTER
 
 		if @_footer
 			@footer = new Layer
@@ -51,18 +56,12 @@ exports.App = class App extends FlowComponent
 				width: Screen.width, height: 48
 				image: 'images/nav_bar.png'
 		
+		# HEADER
+
 		@header = new Header
 			theme: theme
 
-		@onTransitionStart (current, next, direction) => 
 
-			@header.title = next._header?.title ? 'Default'
-			@header.icon = next._header?.icon ? 'menu'
-			@header.iconAction = next._header?.iconAction ? -> null
-			@header.visible = next._header?.visible ? true
-			next._onLoad()
-
-		
 		# KEYBOARD
 
 		@keyboard = new Layer
@@ -71,36 +70,6 @@ exports.App = class App extends FlowComponent
 			width: 360, height: 269
 			animationOptions:
 				time: .25
-
-	newPage: (options = {}) ->
-
-		page = new Page _.defaults options,
-			contentInset: {top: @header.height}
-
-		# adjust content inset for page
-		if page.contentInset.top < @header.height then page.contentInset = 
-			top: page.contentInset.top += @header.height
-			bottom: page.contentInset.bottom
-			left: page.contentInset.left
-			right: page.contentInset.right
-
-		return page 
-
-	addPage: (page) ->
-		page.contentInset = {top: @header.height}
-
-		# adjust content inset for page
-		if page.contentInset.top < @header.height then page.contentInset = 
-			top: page.contentInset.top += @header.height
-			bottom: page.contentInset.bottom
-			left: page.contentInset.left
-			right: page.contentInset.right
-
-		return page 
-
-	linkTo: (page) ->
-		if page? and @current isnt page
-			@showNext(page)
 
 
 	showKeyboard: ->
@@ -116,6 +85,68 @@ exports.App = class App extends FlowComponent
 
 
 
+# 	dP     dP oo
+# 	88     88
+# 	88    .8P dP .d8888b. dP  dP  dP
+# 	88    d8' 88 88ooood8 88  88  88
+# 	88  .d8P  88 88.  ... 88.88b.88'
+# 	888888'   dP `88888P' 8888P Y8P
+
+
+
+exports.View = class View extends FlowComponent
+	constructor: (options = {}) ->
+
+		@app = app
+
+		super _.defaults options,
+			name: 'View'
+			parent: app
+			animationOptions:
+				time: .2
+
+		@onTransitionStart (current, next, direction) => 
+
+			@app.header.title = next._header?.title ? 'Default'
+			@app.header.icon = next._header?.icon ? 'menu'
+			@app.header.iconAction = next._header?.iconAction ? -> null
+			@app.header.visible = next._header?.visible ? true
+			next._onLoad()
+
+	newPage: (options = {}) ->
+
+		page = new Page _.defaults options,
+			contentInset: {top: @app.header.height}
+
+		# adjust content inset for page
+		if page.contentInset.top < @app.header.height then page.contentInset = 
+			top: page.contentInset.top += @app.header.height
+			bottom: page.contentInset.bottom
+			left: page.contentInset.left
+			right: page.contentInset.right
+
+		return page 
+
+	addPage: (page) ->
+		page.contentInset = {top: @app.header.height}
+
+		# adjust content inset for page
+		if page.contentInset.top < @app.header.height then page.contentInset = 
+			top: page.contentInset.top += @app.header.height
+			bottom: page.contentInset.bottom
+			left: page.contentInset.left
+			right: page.contentInset.right
+
+		return page
+
+	linkTo: (page) ->
+		if page? and @current isnt page
+			@showNext(page)
+
+
+
+
+
 
 
 
@@ -125,6 +156,7 @@ exports.App = class App extends FlowComponent
 #       `8b   88   88'  `88   88   88    88 Y8ooooo.  88   `8b. 88'  `88 88'  `88
 # d8'   .8P   88   88.  .88   88   88.  .88       88  88    .88 88.  .88 88      
 #  Y88888P    dP   `88888P8   dP   `88888P' `88888P'  88888888P `88888P8 dP  
+
 
 
 exports.StatusBar = class StatusBar extends Layer
@@ -143,12 +175,18 @@ exports.StatusBar = class StatusBar extends Layer
 
 
 
+
+
+
+
+
 # dP     dP                          dP                  
 # 88     88                          88                  
 # 88aaaaa88a .d8888b. .d8888b. .d888b88 .d8888b. 88d888b.
 # 88     88  88ooood8 88'  `88 88'  `88 88ooood8 88'  `88
 # 88     88  88.  ... 88.  .88 88.  .88 88.  ... 88      
-# dP     dP  `88888P' `88888P8 `88888P8 `88888P' dP      
+# dP     dP  `88888P' `88888P8 `88888P8 `88888P' dP    
+
 
 
 exports.Header = class Header extends Layer
@@ -187,7 +225,7 @@ exports.Header = class Header extends Layer
 		@icon = options.icon ? 'menu'
 
 		@iconLayer.onTap => @_iconAction()
-		@iconLayer.onTouchStart (event) -> ripple(header, event.point)
+		@iconLayer.onTouchStart (event) -> ripple(app.header, event.point)
 
 
 	@define "title",
@@ -221,6 +259,7 @@ exports.Header = class Header extends Layer
 #  dP        `88888P8 `8888P88 `88888P'
 #                          .88         
 #                      d8888P          
+
 
 
 exports.Page = class Page extends ScrollComponent
@@ -258,12 +297,19 @@ exports.Page = class Page extends ScrollComponent
 
 
 
+
+
+
+
+
 #  888888ba                      dP   dP                      
 #  88    `8b                     88   88                      
 # a88aaaa8P' .d8888b. dP  dP  dP 88 d8888P .d8888b. 88d8b.d8b.
 #  88   `8b. 88'  `88 88  88  88 88   88   88ooood8 88'`88'`88
 #  88     88 88.  .88 88.88b.88' 88   88   88.  ... 88  88  88
 #  dP     dP `88888P' 8888P Y8P  dP   dP   `88888P' dP  dP  dP
+
+
 
 exports.RowItem = class RowItem extends Layer
 	constructor: (options = {}) ->
@@ -294,12 +340,19 @@ exports.RowItem = class RowItem extends Layer
 			text: @_text
 
 
+
+
+
+
+
+
 # 	8888ba.88ba                              888888ba             dP     dP
 # 	88  `8b  `8b                             88    `8b            88     88
 # 	88   88   88 .d8888b. 88d888b. dP    dP a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 # 	88   88   88 88ooood8 88'  `88 88    88  88   `8b. 88    88   88     88   88'  `88 88'  `88
 # 	88   88   88 88.  ... 88    88 88.  .88  88    .88 88.  .88   88     88   88.  .88 88    88
 # 	dP   dP   dP `88888P' dP    dP `88888P'  88888888P `88888P'   dP     dP   `88888P' dP    dP
+
 
 
 class MenuButton extends Layer
@@ -333,6 +386,11 @@ class MenuButton extends Layer
 
 
 
+
+
+
+
+
 # 	8888ba.88ba                              .88888.                             dP                  
 # 	88  `8b  `8b                            d8'   `8b                            88                  
 # 	88   88   88 .d8888b. 88d888b. dP    dP 88     88 dP   .dP .d8888b. 88d888b. 88 .d8888b. dP    dP
@@ -341,6 +399,8 @@ class MenuButton extends Layer
 # 	dP   dP   dP `88888P' dP    dP `88888P'  `8888P'  8888P'   `88888P' dP       dP `88888P8 `8888P88
 #                                                                                               .88
 #                                                                                           d8888P 
+
+
 
 exports.MenuOverlay = class MenuOverlay extends Layer
 	
@@ -436,6 +496,12 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			@scrim.sendToBack()
 
 
+
+
+
+
+
+
 # 	888888ba  oo          dP
 # 	88    `8b             88
 # 	88     88 dP .d8888b. 88 .d8888b. .d8888b.
@@ -444,6 +510,8 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 # 	8888888P  dP `88888P8 dP `88888P' `8888P88
 # 	                                       .88
 # 	                                   d8888P
+
+
 
 exports.Dialog = class Dialog extends Layer
 	constructor: (options = {}) ->
@@ -507,7 +575,6 @@ exports.Dialog = class Dialog extends Layer
 		for button in [@accept, @decline]
 			button?.onTap @close
 		
-		
 		# ON LOAD
 		@open()
 	
@@ -538,12 +605,18 @@ exports.Dialog = class Dialog extends Layer
 
 
 
+
+
+
+
+
 # 	 888888ba             dP     dP
 # 	 88    `8b            88     88
 # 	a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
 # 	 88   `8b. 88    88   88     88   88'  `88 88'  `88
 # 	 88    .88 88.  .88   88     88   88.  .88 88    88
 # 	 88888888P `88888P'   dP     dP   `88888P' dP    dP
+
 
 
 exports.Button = Button = class Button extends Layer 
@@ -607,6 +680,59 @@ exports.Button = Button = class Button extends Layer
 
 
 
+
+
+# 	 88888888b          dP
+# 	 88                 88
+# 	a88aaaa    .d8888b. 88d888b.
+# 	 88        88'  `88 88'  `88
+# 	 88        88.  .88 88.  .88
+# 	 dP        `88888P8 88Y8888'
+
+
+
+exports.Fab = Fab = class Fab extends Layer 
+	constructor: (options = {}) ->
+
+		@_raised = options.raised ? false
+		@_action = options.action ? -> null
+		@_icon = options.icon ? 'add'
+
+		super _.defaults options,
+			name: '.'
+			x: Align.right(-16), y: Align.bottom(-66)
+			width: 64, height: 64, borderRadius: 32
+			backgroundColor: theme.fab.backgroundColor
+			shadowY: 2, shadowBlur: 3
+			shadowColor: 'rgba(0,0,0,.25)'
+			animationOptions: {time: .15}
+
+		@iconLayer = new Layer
+			name: '.', parent: @
+			x: Align.center, y: Align.center
+			width: 32, height: 32
+			image: "images/icons/#{@_icon}.png"
+			invert: theme.fab.invert
+
+		@onTouchStart (event) -> 
+			@showTouched()
+			Utils.delay 1, => @reset()
+		
+		@onTouchEnd (event) -> 
+			@_action()
+			@reset()
+
+
+	showTouched: -> 
+		ripple(@, event.point, @iconLayer)
+		@animate {shadowY: 3, shadowSpread: 1}
+
+	reset: ->
+		@animate 
+			shadowY: 2
+			shadowSpread: 0
+
+exports.App = app = new App
 
 
 

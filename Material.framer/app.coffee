@@ -38,26 +38,26 @@ lots
 
 md = require "md"
 Framer.Extras.Hints.disable()
+color_pallete.destroy()
 
 
 # APP
+view = new md.View
 
-app = new md.App
 
 # MENU OVERLAY
 
 menuOverlay = new md.MenuOverlay
 	title: 'MenuDemo@gmail.com'
 	links: [
-		{title: 'Home', icon: 'home', action: -> app.linkTo(home)},
-		{title: 'Profile', icon: 'person', action: -> app.linkTo(profile)}
+		{title: 'Home', icon: 'home', action: -> view.linkTo(home)},
+		{title: 'Profile', icon: 'person', action: -> view.linkTo(profile)}
 		]
-
 
 
 # PAGE (home)
 
-home = app.newPage
+home = view.newPage
 	header:
 		title: "Home"
 		iconAction: -> menuOverlay.show()
@@ -76,7 +76,8 @@ link = new md.Button
 	parent: home
 	x: Align.center, y: 200
 	text: 'link'
-	action: -> app.showNext(profile)
+	action: -> 
+		view.showNext(profile)
 
 dialog = new md.Button 
 	parent: home
@@ -86,24 +87,29 @@ dialog = new md.Button
 	color: md.theme.tint
 	action: ->	
 		new md.Dialog
-			theme: app.theme
 			title: 'Dialog example'
 			body: 'Here is where the body text goes.'
 			acceptText: 'confirm'
-			acceptAction: -> resultText.template = 'Dialog confirmed.'
+			acceptAction: -> 
+				resultText.template = 'Dialog confirmed.'
 			declineText: 'decline'
 			declineAction: -> 
 				resultText.template = 'Dialog declined.'
 
+fab = new md.Fab
+	icon: 'add'
+	action: -> resultText.template = 'Fab tapped.'
+
+
 # PAGE (profile)
 
-profile = app.newPage
+profile = view.newPage
 	header:
 		title: "Profile"
 		icon: 'arrow-back'
-		iconAction: -> app.showPrevious()
-
+		iconAction: -> 
+			view.showPrevious()
 
 
 # show home screen
-app.showNext(home)
+view.showNext(home)

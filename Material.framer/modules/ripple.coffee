@@ -27,6 +27,7 @@ ripple = (layer, point, placeBehind, color) ->
 		name: '.'
 		parent: layer
 		size: layer.size
+		borderRadius: layer.borderRadius
 		backgroundColor: null
 		clip: true
 		opacity: 0
@@ -52,7 +53,7 @@ ripple = (layer, point, placeBehind, color) ->
 		rippleCircle.props = 
 			backgroundColor: layer.backgroundColor
 			saturate: 150
-			brightness: 170
+			brightness: 120
 			opacity: .3
 	
 	# ANIMATIONS CIRCLE

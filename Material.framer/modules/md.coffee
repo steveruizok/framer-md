@@ -1,158 +1,20 @@
 {database} = require 'database'
+{ripple} = require 'ripple'
+{theme} = require 'theme'
+type = require 'type'
 
-#  88888888b                     dP           
-#  88                            88           
-# a88aaaa    .d8888b. 88d888b. d8888P .d8888b.
-#  88        88'  `88 88'  `88   88   Y8ooooo.
-#  88        88.  .88 88    88   88         88
-#  dP        `88888P' dP    dP   dP   `88888P'
+# Our goal is to require only one require in Framer project, so this 
+# is a clunky way of letting user create text using md.Title, etc.
 
-
-Utils.insertCSS(
-	"""
-    @font-face {
-      font-family: "Roboto";
-      src: url("fonts/Roboto.ttf");
-    }
-    """)
-
-exports.Headline = eadline = class Headline extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 24
-			fontWeight: 400
-			lineHeight: 1.3
-			color: 'rgba(0,0,0,.87)'
-exports.Title = Title = class Title extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 20
-			fontWeight: 500
-			lineHeight: 1.3
-			color: 'rgba(0,0,0,.87)'
-exports.Regular = Regular = class Regular extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 16
-			fontWeight: 400
-			lineHeight: 1.3
-			color: 'rgba(0,0,0,.87)'
-exports.Body2 = Body2 = class Body2 extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 14
-			fontWeight: 500
-			lineHeight: 1.3
-			color: 'rgba(0,0,0,.87)'
-exports.Menu = Menu = class Menu extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 14
-			fontWeight: 500
-			lineHeight: 1.7
-			color: 'rgba(0,0,0,.87)'
-exports.Body1 = Body1 = class Body1 extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 14
-			fontWeight: 400
-			lineHeight: 1.4
-			color: 'rgba(0,0,0,.87)'
-exports.Caption = Caption = class Caption extends TextLayer
-	constructor: (options) ->
-		super _.defaults options,
-			fontFamily: 'Roboto'
-			fontSize: 12
-			fontWeight: 400
-			lineHeight: 1.3
-			color: 'rgba(0,0,0,.54)'
- 
-
-
-
-
-
-#   dP   dP                                            
-#   88   88                                            
-# d8888P 88d888b. .d8888b. 88d8b.d8b. .d8888b. .d8888b.
-#   88   88'  `88 88ooood8 88'`88'`88 88ooood8 Y8ooooo.
-#   88   88    88 88.  ... 88  88  88 88.  ...       88
-#   dP   dP    dP `88888P' dP  dP  dP `88888P' `88888P'
-
-
-exports.themes = themes =
-	dark:
-		name: 'dark'
-		tint: '#009688'
-		header: 
-			backgroundColor: '#212121'
-			title: '#FFFFFF'
-			invertIcon: true
-		statusBar: 
-			image: 'images/status_bar_dark.png'
-			backgroundColor: '#000000'
-			invert: false
-		page:
-			backgroundColor: '#303030'
-		dialog: 
-			backgroundColor: '#424242'
-		text:
-			title: 'rgba(255,255,255,1)'
-			text: 'rgba(255,255,255,.7)'
-		navBar:
-			backgroundColor: '#000000'
-	light:
-		name: 'light'
-		tint: '#009688'
-		header: 
-			backgroundColor: '#E0E0E0'
-			title: 'rgba(0,0,0,.87)'
-			invertIcon: false
-		statusBar: 
-			image: 'images/status_bar_light.png'
-			backgroundColor: '#757575'
-			invert: false
-		page:
-			backgroundColor: '#EEEEEE'
-		dialog: 
-			backgroundColor:'#FAFAFA'
-		text:
-			title: 'rgba(0,0,0,.87)'
-			text: 'rgba(0,0,0,.54)'
-		navBar:
-			backgroundColor: '#000000'
-	dau:
-		name: 'dau'
-		tint: '#009688'
-		header: 
-			backgroundColor: '#000'
-			title: '#FFFFFF'
-			invertIcon: true
-		statusBar: 
-			image: 'images/status_bar_dark.png'
-			backgroundColor: '#000000'
-			invert: false
-		page:
-			backgroundColor: '#000000'
-		dialog: 
-			backgroundColor: '#424242'
-		text:
-			title: 'rgba(255,255,255,1)'
-			text: 'rgba(255,255,255,.9)'
-		navBar:
-			backgroundColor: '#303030'
-
-
-
-
-
-
+exports.theme = theme
+exports.Title = Title = type.Title
+exports.Headline = Headline = type.Headline
+exports.SubheadSecondary = SubheadSecondary = type.SubheadSecondary
+exports.Regular = Regular = type.Regular
+exports.Body2 = Body2 = type.Body2
+exports.Body1 = Body1 = type.Body1
+exports.Caption = Caption = type.Caption
+exports.DialogAction = DialogAction = type.DialogAction
 
 #  .d888888                   
 # d8'    88                   
@@ -167,17 +29,13 @@ exports.themes = themes =
 exports.App = class App extends FlowComponent
 	constructor: (options = {}) ->
 
-
-		@_theme = options.theme #? themes.dark
 		@_footer = options.footer ? true
+		@theme = theme
 
 		super _.defaults options,
 			name: 'Flow'
 			animationOptions:
 				time: .2
-		
-
-		@theme = @_theme ? themes.dark
 
 		if @_footer
 			@footer = new Layer
@@ -186,7 +44,7 @@ exports.App = class App extends FlowComponent
 				image: 'images/nav_bar.png'
 		
 		@header = new Header
-			theme: @_theme
+			theme: theme
 
 		@onTransitionStart (current, next, direction) => 
 
@@ -201,7 +59,7 @@ exports.App = class App extends FlowComponent
 
 		@keyboard = new Layer
 			name: 'Keyboard'
-			y: @maxY, image: 'images/keyboard_dark.png'
+			y: @maxY, image: theme.keyboard.image
 			width: 360, height: 269
 			animationOptions:
 				time: .25
@@ -209,7 +67,6 @@ exports.App = class App extends FlowComponent
 	newPage: (options = {}) ->
 
 		page = new Page _.defaults options,
-			theme: @_theme
 			contentInset: {top: @header.height}
 
 		# adjust content inset for page
@@ -223,7 +80,6 @@ exports.App = class App extends FlowComponent
 
 	addPage: (page) ->
 		page.contentInset = {top: @header.height}
-		page.theme = @_theme
 
 		# adjust content inset for page
 		if page.contentInset.top < @header.height then page.contentInset = 
@@ -248,11 +104,6 @@ exports.App = class App extends FlowComponent
 		@keyboard.animate
 			y: Screen.maxY
 
-	@define "theme",
-		get: -> return @_theme
-		set: (theme) ->
-			return if theme is @_theme
-			@_theme = theme
 
 
 
@@ -270,28 +121,17 @@ exports.App = class App extends FlowComponent
 
 exports.StatusBar = class StatusBar extends Layer
 	constructor: (options = {}) ->
-		
-		@_theme = undefined
 
 		super _.defaults options,
 			name: '.'
 			width: Screen.width, height: 24
+			backgroundColor: theme.statusBar.backgroundColor
 
-		@theme = options.theme ? throw 'Needs theme.'
-
-	@define "theme",
-		get: -> return @_theme
-		set: (theme) ->
-			return if theme is @_theme
-
-			@_theme = theme
-			@backgroundColor = null
-			@image = @_theme.statusBar.image
-			@invert = if @_theme.statusBar.invert is true then 100 else 0
-
-
-
-
+		@items = new Layer
+			name: '.', parent: @
+			size: @size
+			image: theme.statusBar.image
+			invert: theme.statusBar.invert
 
 
 
@@ -306,29 +146,23 @@ exports.StatusBar = class StatusBar extends Layer
 exports.Header = class Header extends Layer
 	constructor: (options = {}) ->
 		
-		@_theme = options.theme
 		@_title = undefined
 		@_icon = undefined
 		@_iconAction = options.iconAction ? -> null
 
 		super _.defaults options,
-			width: Screen.width
-			y: 0
-			height: 80
+			name: 'Header', 
+			width: Screen.width, height: 80
 			shadowY: 2, shadowBlur: 3, shadowColor: 'rgba(0,0,0,.24)'
-
-		@theme = options.theme ? throw 'Needs theme.'
-		
-		@backgroundColor = @_theme.header.backgroundColor
+			backgroundColor: theme.header.backgroundColor
 
 		@statusBar = new StatusBar
 			name: '.', parent: @
-			theme: @_theme
 
-		@titleLayer = new Title
+		@titleLayer = new type.Title
 			name: '.', parent: @
 			x: 72, y: Align.bottom(-14)
-			color: @theme.header.title
+			color: theme.header.title
 			text: @title ? "No title"
 
 		@title = options.title ? 'Default Header'
@@ -336,11 +170,9 @@ exports.Header = class Header extends Layer
 		@iconLayer = new Layer
 			name: '.', parent: @, 
 			x: 12, y: Align.center(12)
-			width: 32
-			height: 32
-			image: ''
-			backgroundColor: null
-			invert: if @theme.header.invertIcon is true then 100 else 0
+			width: 32, height: 32
+			image: '', backgroundColor: null
+			invert: theme.header.invert
 
 		@icon = options.icon ? 'menu'
 
@@ -364,16 +196,6 @@ exports.Header = class Header extends Layer
 		set: (action) ->
 			@_iconAction = action
 
-	@define "theme",
-		get: -> return @_theme
-		set: (theme) ->
-			return if theme is @_theme
-
-			@_theme = theme
-			@backgroundColor = @_theme.header.backgroundColor
-			@titleLayer.color = @_theme.header.title
-			@iconLayer.invert = if @_theme.header.invertIcon is true then 100 else 0
-
 
 
 
@@ -393,7 +215,6 @@ exports.Header = class Header extends Layer
 exports.Page = class Page extends ScrollComponent
 	constructor: (options = {}) ->
 		
-		@_theme = options.theme
 		@_header = options.header ? {title: 'Default', visible: true, icon: 'menu', iconAction: -> return null}
 		@_template = options.template
 		@_templateOpacity = options.templateOpacity ? .5
@@ -407,14 +228,12 @@ exports.Page = class Page extends ScrollComponent
 			name: 'Page'
 			size: Screen.size
 			scrollHorizontal: false
+			backgroundColor: theme.page.primary.backgroundColor
 		
 		@contentInset =
 			top: 0, bottom: 500
 
-		@theme = options.theme ? throw 'Needs theme.'
-
-		@backgroundColor = @theme.page.backgroundColor
-		@content.backgroundColor = @theme.page.backgroundColor
+		@content.backgroundColor = null
 
 		if @_template?
 			@_template.props =
@@ -423,14 +242,6 @@ exports.Page = class Page extends ScrollComponent
 
 		@sendToBack()
 
-
-	@define "theme",
-		get: -> return @_theme
-		set: (theme) ->
-			return if theme is @_theme
-
-			@_theme = theme
-			@backgroundColor = @_theme.page.backgroundColor
 
 	update: -> return null
 
@@ -458,8 +269,6 @@ exports.RowItem = class RowItem extends Layer
 			height: 48
 			backgroundColor: null
 
-		@theme = options.theme ? throw 'needs theme'
-
 		@icon = new Layer
 			name: '.', parent: @
 			x: 16, y: Align.center
@@ -467,11 +276,11 @@ exports.RowItem = class RowItem extends Layer
 			backgroundColor: @_iconBackgroundColor
 			image: @_icon
 
-		@labelLayer = new Regular
+		@labelLayer = new type.Regular
 			name: '.', parent: @
-			text: @_text
 			x: @icon.maxX + 16, y: Align.center
-			color: @theme.text.text
+			color: theme.text.text
+			text: @_text
 
 
 # 	8888ba.88ba                              888888ba             dP     dP
@@ -497,14 +306,14 @@ class MenuButton extends Layer
 			name: '.', parent: @
 			y: Align.center
 			height: 32, width: 32
-			invert: 100
+			invert: theme.menu.invert
 			image: @_icon
 
-		@labelLayer = new Regular
+		@labelLayer = new type.Regular
 			name: 'label', parent: @
 			x: @iconLayer.maxX + 16
 			y: Align.center()
-			color: '#FFF'
+			color: theme.menuOverlay.text
 			text: @_text
 
 		@onTap @_action
@@ -537,7 +346,7 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			width: 304
 			height: Screen.height
 			visible: false
-			backgroundColor: '#303030'
+			backgroundColor: theme.menuOverlay.backgroundColor
 			animationOptions: {curve: "spring(300, 35, 0)"}
 
 
@@ -553,31 +362,30 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 		@scrim.onTap => @hide()
 		@onSwipeLeftEnd => @hide()
 
-		@topSection = new Layer
+		@header = new Layer
 			name: '.', parent: @
 			width: @width, height: 173
 			image: database.user.image
-			backgroundColor: 'rgba(0,0,0,.3)'
+			backgroundColor: theme.menuOverlay.header.backgroundColor
 
 		@titleIcon = new Layer
-			name: '.', parent: @topSection
+			name: '.', parent: @header
 			x: 16, y: 40
 			height: 64, width: 64
 			borderRadius: 32
-			backgroundColor: '#777'
+			backgroundColor: theme.menuOverlay.header.icon
 
 		@titleExpand = new Layer
-			name: '.', parent: @topSection
+			name: '.', parent: @header
 			x: Align.right(-16)
 			y: Align.bottom(-13)
 			height: 32, width: 32
-			invert: 100
+			invert: theme.secondary.invert
 			image: "images/icons/expand-more.png"
 
-		@title = new Body1
-			name: '.', parent: @topSection
+		@title = new type.Body1
+			name: '.', parent: @header
 			width: @width
-			color: '#FFF'
 			x: 16, y: Align.bottom(-18)
 			text: @_title
 
@@ -585,7 +393,7 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 
 		for link, i in @_links
 			links[i] = new MenuButton
-				name: 'test', parent: @
+				name: '.', parent: @
 				x: 16, y: 189 + (48 * i)
 				text: link.title
 				icon: "images/icons/#{link.icon}.png"
@@ -629,10 +437,8 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 exports.Dialog = class Dialog extends Layer
 	constructor: (options = {}) ->
 
-		@_theme = options.theme ? 'dark'
-
 		super _.defaults options,
-			name: '.', size: Screen.size, color: @_theme.tint
+			name: '.', size: Screen.size, color: theme.tint
 			backgroundColor: 'rgba(0, 0, 0, .5)'
 			opacity: 0
 			
@@ -649,43 +455,37 @@ exports.Dialog = class Dialog extends Layer
 			name: 'container', parent: @
 			x: Align.center
 			height: 128, width: Screen.width - 80
-			backgroundColor: @_theme.dialog.backgroundColor
+			backgroundColor: theme.dialog.backgroundColor
 			shadowX: 0, shadowY: 7, shadowBlur: 30
 			opacity: 0
 			shadowColor: 'rgba(0,0,0,.3)'
 		
-		@title = new TextLayer
+		@title = new type.Title
 			name: '.', parent: @container
 			x: 24, y: 20
-			fontSize: 16, fontWeight: 500, color: @_theme.text.title
+			fontSize: 16, fontWeight: 500, color: theme.text.title
 			text: @_title
 		
-		@body = new TextLayer
+		@body = new type.SubheadSecondary
 			name: 'body', parent: @container
 			x: 24, y: 52
 			width: @container.width - 42
-			fontSize: 16
-			fontWeight: 400, lineHeight: 1.5, color: @_theme.text.body
 			text: @_body
 		
 		buttonsY = if @_body is '' then 128 else @body.maxY + 16
 		
-		@accept = new TextLayer
+		@accept = new type.DialogAction
 			name: '.', parent: @container
 			x: Align.right(-16), y: buttonsY
-			fontSize: 14, fontWeight: 500, textAlign: 'center'
-			letterSpacing: 1.1, padding: {left: 4, right: 4, top: 8, bottom: 0}, 
-			color: @_theme.tint, text: @_acceptText.toUpperCase()
+			color: theme.tint, text: @_acceptText.toUpperCase()
 			
 		@accept.onTap @_acceptAction
 		
 		if @_declineText isnt ''
-			@decline = new TextLayer
+			@decline = new type.DialogAction
 				name: '.', parent: @container
 				x: 0, y: buttonsY
-				fontSize: 14, fontWeight: 500, textAlign: 'center'
-				letterSpacing: 1.1, padding: {left: 4, right: 4, top: 8, bottom: 0}, 
-				color: @_theme.tint, text: @_declineText.toUpperCase()
+				color: theme.tint, text: @_declineText.toUpperCase()
 
 			@decline.onTap @_declineAction
 

@@ -40,32 +40,30 @@ lots
 md = require "md"
 
 # THEMES
-
-customTheme =
-	name: 'customTheme'
-	tint: '#FF5A00'
-	header: 
-		backgroundColor: '#2665FF'
-		title: '#FFFFFF'
-		invertIcon: true
-	statusBar: 
-		image: 'images/status_bar_dim.png'
-		invert: false
-	page:
-		backgroundColor: '#efefef'
-	dialog: 
-		backgroundColor: '#424242'
-	text:
-		title: 'rgba(0,0,0,1)'
-		text: 'rgba(0,0,0,.9)'
-	navBar:
-		backgroundColor: '#303030'
+# 
+# customTheme =
+# 	name: 'customTheme'
+# 	tint: '#FF5A00'
+# 	header: 
+# 		backgroundColor: '#2665FF'
+# 		title: '#FFFFFF'
+# 		invertIcon: true
+# 	statusBar: 
+# 		image: 'images/status_bar_dim.png'
+# 		invert: false
+# 	page:
+# 		backgroundColor: '#efefef'
+# 	dialog: 
+# 		backgroundColor: '#424242'
+# 	text:
+# 		title: 'rgba(0,0,0,1)'
+# 		text: 'rgba(0,0,0,.9)'
+# 	navBar:
+# 		backgroundColor: '#303030'
 
 # APP
 
 app = new md.App
-	theme: customTheme
-
 
 # MENU OVERLAY
 
@@ -89,7 +87,7 @@ link = new md.Title
 	parent: home
 	x: Align.center, y: Align.center
 	text: 'link'
-	color: app.theme.tint
+	color: md.theme.tint
 
 link.onTap -> app.showNext(profile)
 
@@ -97,7 +95,7 @@ dialog = new md.Title
 	parent: home
 	x: Align.center, y: Align.center(64)
 	text: 'Dialog'
-	color: app.theme.tint
+	color: md.theme.tint
 
 dialog.onTap -> 
 	new md.Dialog
@@ -108,8 +106,6 @@ dialog.onTap ->
 		acceptAction: -> print 'confirmed'
 		declineText: 'reject'
 		declineAction: -> print 'declined'
-
-
 
 # PAGE (profile)
 

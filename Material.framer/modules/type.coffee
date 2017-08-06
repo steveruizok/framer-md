@@ -80,7 +80,7 @@ class exports.Caption extends TextLayer
 			fontWeight: 400
 			lineHeight: 1.3
 			color: 'rgba(0,0,0,.54)'
-class exports.DialogAction extends TextLayer
+class exports.Button extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
 			fontFamily: 'Roboto'

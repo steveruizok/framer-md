@@ -3,6 +3,12 @@
 {theme} = require 'theme'
 type = require 'type'
 
+
+# TODO: Change App from master flow component to Screen manager.
+# App shouldn't directly manage pages: a new class, 'screen' will manage Pages.
+# Tabs allow navigation between Screens. Content is still added to Pages.
+
+
 # Our goal is to require only one require in Framer project, so this 
 # is a clunky way of letting user create text using md.Title, etc.
 
@@ -15,6 +21,7 @@ exports.Body2 = Body2 = type.Body2
 exports.Body1 = Body1 = type.Body1
 exports.Caption = Caption = type.Caption
 exports.DialogAction = DialogAction = type.DialogAction
+
 
 #  .d888888                   
 # d8'    88                   
@@ -36,6 +43,7 @@ exports.App = class App extends FlowComponent
 			name: 'Flow'
 			animationOptions:
 				time: .2
+
 
 		if @_footer
 			@footer = new Layer
@@ -159,6 +167,8 @@ exports.Header = class Header extends Layer
 		@statusBar = new StatusBar
 			name: '.', parent: @
 
+		# TODO: if options.icon is false then no iconLayer, move title left
+
 		@titleLayer = new type.Title
 			name: '.', parent: @
 			x: 72, y: Align.bottom(-14)
@@ -177,6 +187,7 @@ exports.Header = class Header extends Layer
 		@icon = options.icon ? 'menu'
 
 		@iconLayer.onTap => @_iconAction()
+		@iconLayer.onTouchStart (event) -> ripple(header, event.point)
 
 
 	@define "title",
@@ -474,20 +485,18 @@ exports.Dialog = class Dialog extends Layer
 		
 		buttonsY = if @_body is '' then 128 else @body.maxY + 16
 		
-		@accept = new type.DialogAction
+		@accept = new Button
 			name: '.', parent: @container
 			x: Align.right(-16), y: buttonsY
-			color: theme.tint, text: @_acceptText.toUpperCase()
-			
-		@accept.onTap @_acceptAction
+			text: @_acceptText.toUpperCase()
+			action: @_acceptAction
 		
 		if @_declineText isnt ''
-			@decline = new type.DialogAction
+			@decline = new Button
 				name: '.', parent: @container
 				x: 0, y: buttonsY
-				color: theme.tint, text: @_declineText.toUpperCase()
-
-			@decline.onTap @_declineAction
+				text: @_declineText.toUpperCase()
+				action: @_declineAction
 
 		# set positions
 		@container.height = @accept.maxY + 12
@@ -526,6 +535,103 @@ exports.Dialog = class Dialog extends Layer
 				time: .25
 		
 		Utils.delay .5, => @destroy()
+
+
+
+# 	 888888ba             dP     dP
+# 	 88    `8b            88     88
+# 	a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
+# 	 88   `8b. 88    88   88     88   88'  `88 88'  `88
+# 	 88    .88 88.  .88   88     88   88.  .88 88    88
+# 	 88888888P `88888P'   dP     dP   `88888P' dP    dP
+
+
+exports.Button = Button = class Button extends Layer 
+	constructor: (options = {}) ->
+
+		@_raised = options.raised ? false
+		@_type = if @_raised then 'raised' else 'flat'
+		@_action = options.action ? -> null
+
+		super _.defaults options,
+			name: '.'
+			width: 0, height: 36
+			borderRadius: 2
+			backgroundColor: theme.button[@_type].backgroundColor
+			shadowY: theme.button[@_type].shadowY
+			shadowBlur: theme.button[@_type].shadowBlur
+			shadowColor: theme.button[@_type].shadowColor
+			animationOptions: {time: .15}
+
+		@labelLayer = new type.Button
+			name: '.', parent: @
+			color: theme.button[@_type].color
+			text: options.text ? 'button'
+			textTransform: 'uppercase'
+			textAlign: 'center'
+			animationOptions: {time: .15}
+			padding: 
+				left: 16.5, right: 16.5
+				top: 9, bottom: 11
+
+		@size = @labelLayer.size
+		@x = options.x
+
+		@onTouchStart (event) -> 
+			@showTouched()
+			Utils.delay 1, => @reset()
+		
+		@onTouchEnd (event) -> 
+			@_action()
+			@reset()
+
+
+	showTouched: -> 
+		@labelLayer.animate {brightness: 110, saturate: 110}
+		
+		switch @_type
+			when 'flat' then @animate {backgroundColor: 'rgba(0,0,0,.05)'}
+			when 'raised'
+				ripple(@, event.point, @labelLayer)
+				@animate {shadowY: 3, shadowSpread: 1}
+
+	reset: ->
+		@labelLayer.animate {brightness: 100, saturate: 100}
+		@backgroundColor = theme.button[@_type].backgroundColor
+		@animate 
+			shadowY: theme.button[@_type].shadowY
+			shadowSpread: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

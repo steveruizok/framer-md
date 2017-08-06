@@ -29,7 +29,6 @@ Input fields
 Header tabs
 Footer tabs
 Row items (one line, two line, etc)
-Ripple effects
 
 TODO:
 
@@ -38,28 +37,8 @@ lots
 ###
 
 md = require "md"
+Framer.Extras.Hints.disable()
 
-# THEMES
-# 
-# customTheme =
-# 	name: 'customTheme'
-# 	tint: '#FF5A00'
-# 	header: 
-# 		backgroundColor: '#2665FF'
-# 		title: '#FFFFFF'
-# 		invertIcon: true
-# 	statusBar: 
-# 		image: 'images/status_bar_dim.png'
-# 		invert: false
-# 	page:
-# 		backgroundColor: '#efefef'
-# 	dialog: 
-# 		backgroundColor: '#424242'
-# 	text:
-# 		title: 'rgba(0,0,0,1)'
-# 		text: 'rgba(0,0,0,.9)'
-# 	navBar:
-# 		backgroundColor: '#303030'
 
 # APP
 
@@ -83,29 +62,38 @@ home = app.newPage
 		title: "Home"
 		iconAction: -> menuOverlay.show()
 
-link = new md.Title 
+resultText = new md.Regular
+	name: '.', parent: home
+	x: Align.center, y: 150
+	width: Screen.width
+	textAlign: 'center'
+	text: 'Results: {results}'
+
+resultText.template =
+	results: 'Nothing yet.'
+
+link = new md.Button 
 	parent: home
-	x: Align.center, y: Align.center
+	x: Align.center, y: 200
 	text: 'link'
-	color: md.theme.tint
+	action: -> app.showNext(profile)
 
-link.onTap -> app.showNext(profile)
-
-dialog = new md.Title 
+dialog = new md.Button 
 	parent: home
-	x: Align.center, y: Align.center(64)
+	raised: true
+	x: Align.center, y: 250
 	text: 'Dialog'
 	color: md.theme.tint
-
-dialog.onTap -> 
-	new md.Dialog
-		theme: app.theme
-		title: 'Dialog example'
-		body: 'Here is where the body text goes.'
-		acceptText: 'confirm'
-		acceptAction: -> print 'confirmed'
-		declineText: 'reject'
-		declineAction: -> print 'declined'
+	action: ->	
+		new md.Dialog
+			theme: app.theme
+			title: 'Dialog example'
+			body: 'Here is where the body text goes.'
+			acceptText: 'confirm'
+			acceptAction: -> resultText.template = 'Dialog confirmed.'
+			declineText: 'decline'
+			declineAction: -> 
+				resultText.template = 'Dialog declined.'
 
 # PAGE (profile)
 

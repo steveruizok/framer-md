@@ -74,7 +74,7 @@ theme =
 			backgroundColor: '#E1E2E1'
 		secondary:
 			backgroundColor: '#F5F5F6'
-	
+
 	menuOverlay:
 		header:
 			backgroundColor: source.colors.secondary.main
@@ -85,6 +85,22 @@ theme =
 			knob: source.colors.secondary.light
 			fill: source.colors.secondary.dark
 		invert: source.colors.menu.invert
+
+	button:
+		flat:
+			backgroundColor: null
+			color: source.colors.secondary.main
+			shadowY: 0
+			shadowColor: 'rgba(0,0,0,.18)'
+			shadowBlur: 0
+
+		raised:
+			backgroundColor: source.colors.secondary.main
+			color: source.colors.secondary.text
+			shadowY: 2
+			shadowColor: 'rgba(0,0,0,.18)'
+			shadowBlur: 6
+
 
 	dialog: 
 		backgroundColor:'#FAFAFA'
@@ -109,11 +125,7 @@ theme =
 	slider:
 		knob: source.colors.primary.light
 		fill: source.colors.primary.dark
-	
-	button:
-		backgroundColor: source.colors.primary.main
-		color: source.colors.secondary.text
-	
+
 	card:
 		header: source.colors.secondary.dark
 	
@@ -122,5 +134,7 @@ theme =
 	
 	keyboard:
 		image: 'images/keyboard_light.png'
+
+color_pallete.destroy()
 
 exports.theme = theme

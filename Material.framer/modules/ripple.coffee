@@ -53,7 +53,7 @@ ripple = (layer, point, placeBehind, color) ->
 			backgroundColor: layer.backgroundColor
 			saturate: 150
 			brightness: 170
-			opacity: .8
+			opacity: .3
 	
 	# ANIMATIONS CIRCLE
 	
@@ -68,6 +68,11 @@ ripple = (layer, point, placeBehind, color) ->
 		height: longSide * 2.6
 		options: {time: .5}
 	
+	Utils.delay 2, -> 
+		mask.animate
+			opacity: 0
+		mask.onAnimationEnd mask.destroy
+
 	# TOUCH END
 	
 	layer.onTouchEnd -> 

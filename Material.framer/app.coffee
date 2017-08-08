@@ -72,13 +72,8 @@ General:
 md = require "md"
 
 # ------------
-# Create Views
-view = new md.View
-
-# ------------
-# App Settings
-
-md.App.setup
+# Create App
+app = new md.App
 	bottomNav:
 		links: [
 			{
@@ -91,9 +86,9 @@ md.App.setup
 				icon: 'account', 
 				action: -> view.linkTo(profile)
 				},
-			{
+			{ 
 				title: 'Settings', 
-				icon: 'settings', 
+				icon: 'settings',
 				action: -> view.linkTo(settings)
 				}
 			]
@@ -118,6 +113,10 @@ md.App.setup
 			]
 
 # ------------
+# Create Views
+view = new md.View
+
+# ------------
 # Create Pages
 
 
@@ -127,7 +126,7 @@ md.App.setup
 home = view.newPage
 	header:
 		title: "Home"
-		iconAction: -> md.App.menuOverlay.show()
+		iconAction: -> app.menuOverlay.show()
 
 # Text layer to register our actions.
 resultText = new md.Regular
@@ -165,7 +164,7 @@ showKeyboard = new md.Button
 	x: Align.center, y: 260
 	text: 'show keyboard'
 	action: -> 
-		md.App.showKeyboard()
+		app.showKeyboard()
 		resultText.template = 'Keyboard opened.'
 
 # fab to... do nothing yet

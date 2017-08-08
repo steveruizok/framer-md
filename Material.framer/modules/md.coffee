@@ -23,6 +23,13 @@ exports.Body1 = Body1 = type.Body1
 exports.Caption = Caption = type.Caption
 exports.DialogAction = DialogAction = type.DialogAction
 
+app = undefined
+
+
+
+
+
+
 
 
 # 	 .d888888
@@ -36,11 +43,12 @@ exports.DialogAction = DialogAction = type.DialogAction
 
 
 
-class App extends Layer
+exports.App = class App extends Layer
 	constructor: (options = {}) ->
 
 		@_theme = theme
-
+		@_bottomNav = options.bottomNav ? undefined
+		@_menuOverlay = options.menuOverlay ? undefined
 		@views = options.views ? []
 
 		super _.defaults options,
@@ -48,6 +56,8 @@ class App extends Layer
 			size: Screen.size
 			backgroundColor: null
 		
+		app = @
+
 		# HEADER
 
 		@header = new Header
@@ -63,6 +73,21 @@ class App extends Layer
 			index: 999
 			y: Align.bottom()
 
+		if @_bottomNav
+			@bottomNav = new BottomNav
+				name: 'Bottom Nav', parent: @
+				destinations: @_bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+				y: if @footer? then Align.bottom(-@footer.height) else Align.bottom()
+				index: 999
+
+		# MENU OVERLAY
+		if @_menuOverlay
+			@menuOverlay = new MenuOverlay
+				name: 'Menu Overlay'
+				title: @_menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
+				links: @_menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+
+
 		# KEYBOARD
 
 		@keyboard = new Layer
@@ -76,23 +101,23 @@ class App extends Layer
 		@keyboard.onTap => @hideKeyboard()
 
 
-	setup: (options = {}) ->
+	# setup: (options = {}) ->
 
-		# BOTTOM NAV
+	# 	# BOTTOM NAV
 
-		if options.bottomNav
-			@bottomNav = new BottomNav
-				name: 'Bottom Nav', parent: @
-				destinations: options.bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
-				y: Align.bottom(-@footer?.height)
-				index: 999
+	# 	if options.bottomNav
+	# 		@bottomNav = new BottomNav
+	# 			name: 'Bottom Nav', parent: @
+	# 			destinations: options.bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+	# 			y: Align.bottom(-@footer?.height)
+	# 			index: 999
 
-		# MENU OVERLAY
-		if options.menuOverlay
-			@menuOverlay = new MenuOverlay
-				name: 'Menu Overlay'
-				title: options.menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
-				links: options.menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+	# 	# MENU OVERLAY
+	# 	if options.menuOverlay
+	# 		@menuOverlay = new MenuOverlay
+	# 			name: 'Menu Overlay'
+	# 			title: options.menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
+	# 			links: options.menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
 
 	showKeyboard: ->
 		@keyboard.animate
@@ -102,6 +127,13 @@ class App extends Layer
 	hideKeyboard: ->
 		@keyboard.animate
 			y: @maxY
+
+
+
+
+
+
+
 
 # 	dP     dP oo
 # 	88     88
@@ -337,9 +369,9 @@ exports.BottomNav = class BottomNav extends Layer
 		
 		@_destinations = options.destinations ? throw 'Needs at least one destination.'
 		@_items = []
-		@_activeDestination = undefined
 		@_initialDestination = options.initialDestination ? undefined
 		# destination should be: [{name: string, icon: iconString, action: function}]
+		@_activeDestination = @_initialDestination ? @_items[0]
 
 		super _.defaults options,
 			name: 'Bottom Nav'
@@ -386,7 +418,9 @@ exports.BottomNav = class BottomNav extends Layer
 
 			@_items.push(item)
 
-		@activeDestination = @_initialDestination ? @_items[0]
+			@.showActive(@_items[0])
+
+		
 
 	@define "activeDestination",
 		get: -> return @_activeDestination
@@ -395,14 +429,16 @@ exports.BottomNav = class BottomNav extends Layer
 			@_activeDestination = destination
 
 			@_activeDestination.action()
-			@_activeDestination.labelLayer.animate {color: theme.primary, opacity: 1}
-			@_activeDestination.iconLayer.color = theme.primary
-			
+			@showActive(@_activeDestination)
 
-			for sib in @_activeDestination.siblings
-				sib.labelLayer.animate {color: '#777'}
-				sib.iconLayer.color = '#777'
+	showActive: (item) ->
+		item.labelLayer.animate {color: theme.primary, opacity: 1}
+		item.iconLayer.color = theme.primary
+		
 
+		for sib in item.siblings
+			sib.labelLayer.animate {color: '#777'}
+			sib.iconLayer.color = '#777'
 
 
 
@@ -885,10 +921,6 @@ exports.Fab = Fab = class Fab extends Layer
 		@animate 
 			shadowY: 2
 			shadowSpread: 0
-
-exports.App = app = new App
-
-
 
 
 

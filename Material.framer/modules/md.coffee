@@ -976,6 +976,7 @@ exports.GridList = GridList = class GridList extends Layer
 				y: 8 + (@tileHeight + 8) * Math.floor(tile.i / @_columns)
 		@height = _.last(@tiles).maxY
 
+		if @parent?.parent?.content? then @parent.parent.updateContent()
 
 
 

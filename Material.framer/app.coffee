@@ -1,5 +1,9 @@
 ### Notes / Todo
 
+REFERENCE:
+https://material.io/guidelines/
+https://materialdesignicons.com/
+
 IN PROJECT:
 
 Fonts: 
@@ -28,6 +32,7 @@ BottomNav
 Dialogs
 Keyboard
 Ripple effects
+Grid Lists / Tiles
 
 TODO
 
@@ -87,9 +92,9 @@ app = new md.App
 				action: -> view.linkTo(profile)
 				},
 			{ 
-				title: 'Settings', 
-				icon: 'settings',
-				action: -> view.linkTo(settings)
+				title: 'Gallery', 
+				icon: 'image',
+				action: -> view.linkTo(gallery)
 				}
 			]
 	menuOverlay:
@@ -106,9 +111,9 @@ app = new md.App
 				action: -> view.linkTo(profile)
 				},
 			{
-				title: 'Settings', 
-				icon: 'settings', 
-				action: -> view.linkTo(settings)
+				title: 'Gallery', 
+				icon: 'image', 
+				action: -> view.linkTo(gallery)
 				}
 			]
 
@@ -194,21 +199,29 @@ welcomeProfile = new md.Regular
 
 
 
-# --- PAGE (settings)
+# --- PAGE (gallery)
 
-settings = view.newPage
+gallery = view.newPage
 	header:
-		title: "Settings"
+		title: "Gallery"
 		icon: 'arrow-left'
 		iconAction: -> 
 			view.showPrevious()
 
-welcomeSettings = new md.Regular
-	name: '.', parent: settings
-	x: Align.center, y: 150
-	width: Screen.width
-	textAlign: 'center'
-	text: 'Welcome to the Settings Page!'
+gridList = new md.GridList
+	name: 'Grid', parent: gallery.content
+	columns: 2
+	
+
+for i in _.range(20)
+	tile = new md.Tile
+		gridList: gridList
+		image: Utils.randomImage()
+		tileHeight: 150
+		footer: true
+		title: 'Tile ' + i
+		#support: 'A nice image!'
+		icon: Utils.randomChoice(['coffee', 'emoticon', 'cup', 'flask'])
 
 # show home screen
 view.showNext(home)

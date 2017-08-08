@@ -220,8 +220,16 @@ for i in _.range(20)
 		tileHeight: 150
 		footer: true
 		title: 'Tile ' + i
-		#support: 'A nice image!'
+		support: 'A nice image!'
 		icon: Utils.randomChoice(['coffee', 'emoticon', 'cup', 'flask'])
+		rippleColor: new Color(app.theme.primary).alpha(.3)
+		action: ->
+			@animate {rotation: 360}
+		footerAction: ->
+			@animate {rotation: 360}
+			
+	tile.onLongPress ->
+		gridList.removeTile(@)
 
 # show home screen
 view.showNext(home)

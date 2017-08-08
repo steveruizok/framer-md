@@ -46,7 +46,8 @@ app = undefined
 exports.App = class App extends Layer
 	constructor: (options = {}) ->
 
-		@_theme = theme
+		@theme = theme
+
 		@_bottomNav = options.bottomNav ? undefined
 		@_menuOverlay = options.menuOverlay ? undefined
 		@views = options.views ? []
@@ -473,7 +474,7 @@ exports.Page = class Page extends ScrollComponent
 			backgroundColor: theme.page.primary.backgroundColor
 		
 		@contentInset =
-			top: 0, bottom: 500
+			top: 0, bottom: 160
 
 		@content.backgroundColor = null
 
@@ -962,15 +963,18 @@ exports.GridList = GridList = class GridList extends Layer
 
 		if @parent?.parent?.content? then @parent.parent.updateContent()
 	
-	removeTile = (tile) ->
+	removeTile: (tile) ->
 		_.pull(@tiles, tile)
+		tile.destroy()
 		@repositionTiles()
 
 	repositionTiles: ->
 		for tile, i in @tiles
-			tile.x = 8 + (@tileWidth + 8) * (tile.i % @_columns)
-			tile.y = 8 + (@tileHeight + 8) * Math.floor(tile.i / @_columns)
-			@height = _.last(@tiles).maxY
+			tile.i = i
+			tile.animate
+				x: 8 + (@tileWidth + 8) * (tile.i % @_columns)
+				y: 8 + (@tileHeight + 8) * Math.floor(tile.i / @_columns)
+		@height = _.last(@tiles).maxY
 
 
 
@@ -995,17 +999,28 @@ exports.Tile = Tile = class Tile extends Layer
 		
 		@_header = options.header ? false
 		@_footer = options.footer ? false
+		@_action = options.action ? -> null
+		@_headerAction = options.headerAction ? -> null
+		@_footerAction = options.footerAction ? -> null
 		
 		if @_header and @_footer then throw 'Tile cannot have both a header and a footer.'
 		
 		@_icon = options.icon
-		@_gridList = options.gridList ? throw 'Tile needs a grid property.'
+		@gridList = options.gridList ? throw 'Tile needs a grid property.'
 		
 		super _.defaults options,
-			name: '.', parent: @_gridList
-			width: @_gridList.tileWidth
-			height: @_gridList.tileHeight
-			
+			name: '.', parent: @gridList
+			width: @gridList.tileWidth
+			height: @gridList.tileHeight
+			animationOptions: {time: .3}
+		
+		@onTouchStart (event) -> 
+			if @gridList.parent?.parent?.content and @gridList.parent?.parent?.isMoving is false
+				ripple(@, event.point, @header, options.rippleColor ? 'rgba(0,0,0,.1)')
+		
+		@onTap @_action
+		@onTap (event) -> event.stopPropagation()
+
 		if @_header or @_footer
 			@header = new Layer
 				name: '.', parent: @
@@ -1013,7 +1028,14 @@ exports.Tile = Tile = class Tile extends Layer
 				width: @width
 				height: if options.support then 68 else 48
 				backgroundColor: options.backgroundColor ? 'rgba(0,0,0,.5)'
-				
+			
+			@header.onTouchStart (event) -> ripple(@, event.point, @title)
+			
+			if @_footer then @header.onTap @_footerAction
+			else @header.onTap @_headerAction
+
+			@header.onTap (event) -> event.stopPropagation()
+
 			if options.title
 				@header.title = new type.Regular
 					name: '.', parent: @header
@@ -1037,9 +1059,8 @@ exports.Tile = Tile = class Tile extends Layer
 					icon: options.icon
 					color: @color
 
-
 		@i = undefined
-		@_gridList.addTile(@)
+		@gridList.addTile(@)
 			
 
 

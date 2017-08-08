@@ -69,7 +69,7 @@ theme =
 			selector: source.colors.secondary.main
 	
 	statusBar: 
-		image: 'images/status_bar_clear.png'
+		image: 'images/status_bar.png'
 		backgroundColor: source.colors.primary.dark
 		invert: primaryInvert
 	
@@ -149,7 +149,7 @@ theme =
 		backgroundColor: '#000000'
 	
 	keyboard:
-		image: 'images/keyboard_light.png'
+		image: 'images/keyboard.png'
 
 color_pallete.destroy()
 

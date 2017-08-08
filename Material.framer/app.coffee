@@ -121,6 +121,7 @@ md.App.setup
 # Create Pages
 
 
+
 # --- PAGE (home)
 
 home = view.newPage
@@ -174,6 +175,7 @@ fab = new md.Fab
 	action: -> resultText.template = 'Fab tapped.'
 
 
+
 # --- PAGE (profile)
 
 profile = view.newPage
@@ -211,3 +213,7 @@ welcomeSettings = new md.Regular
 
 # show home screen
 view.showNext(home)
+
+
+
+color_pallete.destroy()

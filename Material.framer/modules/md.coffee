@@ -1,7 +1,7 @@
-{database} = require 'database'
 {ripple} = require 'ripple'
 {theme} = require 'theme'
 type = require 'type'
+icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
 
 
 # TODO: Change App from master flow component to Screen manager.
@@ -24,8 +24,6 @@ exports.DialogAction = DialogAction = type.DialogAction
 
 
 
-
-
 # 	 .d888888
 # 	d8'    88
 # 	88aaaaa88a 88d888b. 88d888b.
@@ -39,9 +37,11 @@ exports.DialogAction = DialogAction = type.DialogAction
 
 class App extends Layer
 	constructor: (options = {}) ->
+
 		@_footer = options.footer ? true
 		@_theme = theme
-		@_views = options.views ? []
+
+		@views = options.views ? []
 
 		super _.defaults options,
 			name: 'App'
@@ -55,11 +55,14 @@ class App extends Layer
 				name: '.', parent: @
 				width: Screen.width, height: 48
 				image: 'images/nav_bar.png'
+				index: 999
+				y: Align.bottom()
 		
 		# HEADER
 
 		@header = new Header
 			theme: theme
+			index: 999
 
 
 		# KEYBOARD
@@ -68,6 +71,7 @@ class App extends Layer
 			name: 'Keyboard'
 			y: @maxY, image: theme.keyboard.image
 			width: 360, height: 269
+			index: 1000
 			animationOptions:
 				time: .25
 
@@ -81,7 +85,19 @@ class App extends Layer
 		@keyboard.animate
 			y: Screen.maxY
 
+	setup: (options = {}) ->
 
+		if options.bottomNav
+			@bottomNav = new BottomNav
+				name: 'BottomNav', parent: @
+				destinations: options.bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+				y: Align.bottom(-@footer?.height)
+				index: 999
+
+		if options.menuOverlay
+			@menuOverlay = new MenuOverlay
+				title: options.menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
+				links: options.menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
 
 
 
@@ -102,6 +118,7 @@ exports.View = class View extends FlowComponent
 		super _.defaults options,
 			name: 'View'
 			parent: app
+			index: 900
 			animationOptions:
 				time: .2
 
@@ -112,6 +129,8 @@ exports.View = class View extends FlowComponent
 			@app.header.iconAction = next._header?.iconAction ? -> null
 			@app.header.visible = next._header?.visible ? true
 			next._onLoad()
+
+		app.views.push(@)
 
 	newPage: (options = {}) ->
 
@@ -144,6 +163,54 @@ exports.View = class View extends FlowComponent
 			@showNext(page)
 
 
+
+
+
+
+
+
+# 	dP
+# 	88
+# 	88 .d8888b. .d8888b. 88d888b.
+# 	88 88'  `"" 88'  `88 88'  `88
+# 	88 88.  ... 88.  .88 88    88
+# 	dP `88888P' `88888P' dP    dP
+# 	
+# 	
+
+exports.Icon = class Icon extends Layer
+	constructor: (options = {}) ->
+
+		@_icon = options.icon ? 'menu'
+		@_color = options.color ? '#00000'
+		@_backgroundColor = options.backgroundColor ? null
+
+		super _.defaults options,
+			name: '.'
+			height: 24, width: 24
+			backgroundColor: @_backgroundColor
+
+		# @icon = @_icon
+
+	@define "icon",
+		get: -> return @_icon
+		set: (name) ->
+			@_icon = name
+
+			svg = if icons[@_icon] then "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
+			else throw "Error: icon '#{name}' was not found. See https://materialdesignicons.com/ for full list of icons."
+
+			@html = svg
+
+	@define "color",
+		get: -> return @_color
+		set: (color) ->
+			@_color = new Color(color)
+
+			svg = if icons[@_icon] then "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
+			else throw "Error: icon '#{name}' was not found. See https://materialdesignicons.com/ for full list of icons."
+
+			@html = svg
 
 
 
@@ -215,12 +282,10 @@ exports.Header = class Header extends Layer
 
 		@title = options.title ? 'Default Header'
 
-		@iconLayer = new Layer
+		@iconLayer = new Icon
 			name: '.', parent: @, 
 			x: 12, y: Align.center(12)
-			width: 32, height: 32
-			image: '', backgroundColor: null
-			invert: theme.header.invert
+			icon: 'menu', color: theme.header.icon.color
 
 		@icon = options.icon ? 'menu'
 
@@ -238,7 +303,12 @@ exports.Header = class Header extends Layer
 		get: -> return @_icon
 		set: (iconName) -> 
 			@_icon = iconName
-			@iconLayer.image = "images/icons/#{@_icon}.png"
+			@iconLayer.icon = iconName
+
+	@define "iconColor",
+		get: -> return @_icon.color
+		set: (color) -> 
+			@iconLayer.color = color
 
 	@define "iconAction",
 		get: -> return @_iconAction
@@ -246,6 +316,90 @@ exports.Header = class Header extends Layer
 			@_iconAction = action
 
 
+
+
+
+
+
+# 	 888888ba             dP     dP                       888888ba
+# 	 88    `8b            88     88                       88    `8b
+# 	a88aaaa8P' .d8888b. d8888P d8888P .d8888b. 88d8b.d8b. 88     88 .d8888b. dP   .dP
+# 	 88   `8b. 88'  `88   88     88   88'  `88 88'`88'`88 88     88 88'  `88 88   d8'
+# 	 88    .88 88.  .88   88     88   88.  .88 88  88  88 88     88 88.  .88 88 .88'
+# 	 88888888P `88888P'   dP     dP   `88888P' dP  dP  dP dP     dP `88888P8 8888P'
+
+
+
+exports.BottomNav = class BottomNav extends Layer
+	constructor: (options = {}) ->
+		
+		@_destinations = options.destinations ? throw 'Needs at least one destination.'
+		@_items = []
+		@_activeDestination = undefined
+		@_initialDestination = options.initialDestination ? undefined
+		# destination should be: [{name: string, icon: iconString, action: function}]
+
+		super _.defaults options,
+			name: 'Bottom Nav'
+			y: Align.bottom
+			width: Screen.width, height: 56
+			backgroundColor: theme.bottomNav.backgroundColor
+			shadowY: theme.bottomNav.shadowY
+			shadowBlur: theme.bottomNav.shadowBlur
+			shadowColor: theme.bottomNav.shadowColor
+
+
+		for destination, i in @_destinations
+			item = new Layer
+				name: '.', parent: @
+				x: @width/@_destinations.length * i
+				width: @width/@_destinations.length, height: @height
+				backgroundColor: null
+
+			item.disk = new Layer
+				name: '.', parent: item
+				x: Align.center, y: Align.center
+				height: @height, width: @height, borderRadius: @height/2
+				backgroundColor: null
+
+			item.iconLayer = new Icon
+				name: '.', parent: item.disk
+				x: Align.center, y: Align.center(-8)
+				icon: destination.icon
+				animationOptions: {time: .15}
+
+			item.labelLayer = new type.Caption
+				name: '.', parent: item.disk
+				x: Align.center, y: Align.center(14)
+				width: @width, textAlign: 'center'
+				text: destination.title
+				animationOptions: {time: .15}
+
+			item.action = destination.action
+
+			item.disk.onTouchStart (event) -> 
+				ripple(@, event.point, @parent.iconLayer, new Color(theme.primary).alpha(.5))
+
+			item.onTap -> @parent.activeDestination = @
+
+			@_items.push(item)
+
+		@activeDestination = @_initialDestination ? @_items[0]
+
+	@define "activeDestination",
+		get: -> return @_activeDestination
+		set: (destination) ->
+			return if destination is @_activeDestination
+			@_activeDestination = destination
+
+			@_activeDestination.action()
+			@_activeDestination.labelLayer.animate {color: theme.primary, opacity: 1}
+			@_activeDestination.iconLayer.color = theme.primary
+			
+
+			for sib in @_activeDestination.siblings
+				sib.labelLayer.animate {color: '#777'}
+				sib.iconLayer.color = '#777'
 
 
 
@@ -366,12 +520,10 @@ class MenuButton extends Layer
 			height: 48, width: 304
 			backgroundColor: null
 
-		@iconLayer = new Layer
+		@iconLayer = new Icon
 			name: '.', parent: @
 			y: Align.center
-			height: 32, width: 32
-			invert: theme.menu.invert
-			image: @_icon
+			icon: @_icon, color: theme.menuOverlay.text
 
 		@labelLayer = new type.Regular
 			name: 'label', parent: @
@@ -436,7 +588,7 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 		@header = new Layer
 			name: '.', parent: @
 			width: @width, height: 173
-			image: database.user.image
+			image: theme.user.image
 			backgroundColor: theme.menuOverlay.header.backgroundColor
 
 		@titleIcon = new Layer
@@ -446,13 +598,12 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			borderRadius: 32
 			backgroundColor: theme.menuOverlay.header.icon
 
-		@titleExpand = new Layer
+		@titleExpand = new Icon
 			name: '.', parent: @header
 			x: Align.right(-16)
 			y: Align.bottom(-13)
-			height: 32, width: 32
-			invert: theme.secondary.invert
-			image: "images/icons/expand-more.png"
+			icon: 'menu-down'
+			color: theme.menuOverlay.text
 
 		@title = new type.Body1
 			name: '.', parent: @header
@@ -467,7 +618,7 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 				name: '.', parent: @
 				x: 16, y: 189 + (48 * i)
 				text: link.title
-				icon: "images/icons/#{link.icon}.png"
+				icon: link.icon
 				action: link.action
 
 	show: ->
@@ -696,7 +847,7 @@ exports.Fab = Fab = class Fab extends Layer
 
 		@_raised = options.raised ? false
 		@_action = options.action ? -> null
-		@_icon = options.icon ? 'add'
+		@_icon = options.icon ? 'plus'
 
 		super _.defaults options,
 			name: '.'
@@ -707,12 +858,12 @@ exports.Fab = Fab = class Fab extends Layer
 			shadowColor: 'rgba(0,0,0,.25)'
 			animationOptions: {time: .15}
 
-		@iconLayer = new Layer
+		if app.bottomNav? then @y -= app.bottomNav.height
+
+		@iconLayer = new Icon
 			name: '.', parent: @
 			x: Align.center, y: Align.center
-			width: 32, height: 32
-			image: "images/icons/#{@_icon}.png"
-			invert: theme.fab.invert
+			icon: @_icon, color: theme.fab.color
 
 		@onTouchStart (event) -> 
 			@showTouched()

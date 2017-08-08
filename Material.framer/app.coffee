@@ -5,7 +5,10 @@ IN PROJECT:
 Fonts: 
 TextLayer classes set to Material's default fonts
 
-App: 
+App:
+A wrapper that includes the header and footer.
+
+View: 
 A modified FlowComponent that uses themes and has a "smart" header.
 
 MenuOverlay:
@@ -40,27 +43,55 @@ md = require "md"
 Framer.Extras.Hints.disable()
 color_pallete.destroy()
 
-
-# APP
+# View
 view = new md.View
 
+# App
 
-# MENU OVERLAY
+md.App.setup
+	bottomNav:
+		links: [
+			{
+				title: 'Home', 
+				icon: 'home', 
+				action: -> view.linkTo(home)
+				}, 
+			{
+				title: 'Profile', 
+				icon: 'account', 
+				action: -> view.linkTo(profile)
+				},
+			{
+				title: 'Settings', 
+				icon: 'settings', 
+				action: -> view.linkTo(settings)
+				}
+			]
+	menuOverlay:
+		title: 'MenuDemo@gmail.com'
+		links: [
+			{
+				title: 'Home', 
+				icon: 'home', 
+				action: -> view.linkTo(home)
+				},
+			{
+				title: 'Profile', 
+				icon: 'account', 
+				action: -> view.linkTo(profile)
+				}
+			]
 
-menuOverlay = new md.MenuOverlay
-	title: 'MenuDemo@gmail.com'
-	links: [
-		{title: 'Home', icon: 'home', action: -> view.linkTo(home)},
-		{title: 'Profile', icon: 'person', action: -> view.linkTo(profile)}
-		]
 
+# View
+view = new md.View
 
 # PAGE (home)
 
 home = view.newPage
 	header:
 		title: "Home"
-		iconAction: -> menuOverlay.show()
+		iconAction: -> md.App.menuOverlay.show()
 
 resultText = new md.Regular
 	name: '.', parent: home
@@ -97,7 +128,8 @@ dialog = new md.Button
 				resultText.template = 'Dialog declined.'
 
 fab = new md.Fab
-	icon: 'add'
+	parent: home
+	icon: 'plus'
 	action: -> resultText.template = 'Fab tapped.'
 
 
@@ -106,10 +138,18 @@ fab = new md.Fab
 profile = view.newPage
 	header:
 		title: "Profile"
-		icon: 'arrow-back'
+		icon: 'arrow-left'
 		iconAction: -> 
 			view.showPrevious()
 
+# PAGE (settings)
+
+settings = view.newPage
+	header:
+		title: "Settings"
+		icon: 'arrow-left'
+		iconAction: -> 
+			view.showPrevious()
 
 # show home screen
 view.showNext(home)

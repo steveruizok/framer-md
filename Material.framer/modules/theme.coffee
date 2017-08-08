@@ -54,10 +54,15 @@ theme =
 	menu: source.colors.menu.light
 	menuInvert: source.colors.menu.invert
 
+	user:
+		image: undefined
+
 	header: 
 		backgroundColor: source.colors.primary.main
 		title: source.colors.primary.text
 		invert: primaryInvert
+		icon:
+			color: source.colors.primary.text
 		tabs:
 			backgroundColor: source.colors.primary.light
 			color: source.colors.primary.text
@@ -68,6 +73,12 @@ theme =
 		backgroundColor: source.colors.primary.dark
 		invert: primaryInvert
 	
+	bottomNav:
+		backgroundColor: '#FFFFFF'
+		shadowY: -2
+		shadowBlur: 6
+		shadowColor: 'rgba(0,0,0,.1)'
+
 	page:
 		primary:
 			backgroundColor: '#E1E2E1'
@@ -102,6 +113,7 @@ theme =
 
 	fab:
 		backgroundColor: source.colors.secondary.main
+		color: source.colors.secondary.text
 		invert: primaryInvert
 
 	dialog: 

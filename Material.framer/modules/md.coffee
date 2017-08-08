@@ -961,6 +961,18 @@ exports.GridList = GridList = class GridList extends Layer
 		@height = _.last(@tiles).maxY
 
 		if @parent?.parent?.content? then @parent.parent.updateContent()
+	
+	removeTile = (tile) ->
+		_.pull(@tiles, tile)
+		@repositionTiles()
+
+	repositionTiles: ->
+		for tile, i in @tiles
+			tile.x = 8 + (@tileWidth + 8) * (tile.i % @_columns)
+			tile.y = 8 + (@tileHeight + 8) * Math.floor(tile.i / @_columns)
+			@height = _.last(@tiles).maxY
+
+
 
 
 

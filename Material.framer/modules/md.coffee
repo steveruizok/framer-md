@@ -3,6 +3,7 @@
 type = require 'type'
 icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
 
+Framer.Extras.Hints.disable()
 
 # TODO: Change App from master flow component to Screen manager.
 # App shouldn't directly manage pages: a new class, 'screen' will manage Pages.
@@ -38,7 +39,6 @@ exports.DialogAction = DialogAction = type.DialogAction
 class App extends Layer
 	constructor: (options = {}) ->
 
-		@_footer = options.footer ? true
 		@_theme = theme
 
 		@views = options.views ? []
@@ -47,16 +47,6 @@ class App extends Layer
 			name: 'App'
 			size: Screen.size
 			backgroundColor: null
-
-		# FOOTER
-
-		if @_footer
-			@footer = new Layer
-				name: '.', parent: @
-				width: Screen.width, height: 48
-				image: 'images/nav_bar.png'
-				index: 999
-				y: Align.bottom()
 		
 		# HEADER
 
@@ -64,17 +54,45 @@ class App extends Layer
 			theme: theme
 			index: 999
 
+		# FOOTER
+
+		@footer = new Layer
+			name: '.', parent: @
+			width: Screen.width, height: 48
+			image: 'images/nav_bar.png'
+			index: 999
+			y: Align.bottom()
 
 		# KEYBOARD
 
 		@keyboard = new Layer
 			name: 'Keyboard'
 			y: @maxY, image: theme.keyboard.image
-			width: 360, height: 269
+			width: @width, height: 222
 			index: 1000
 			animationOptions:
 				time: .25
 
+		@keyboard.onTap => @hideKeyboard()
+
+
+	setup: (options = {}) ->
+
+		# BOTTOM NAV
+
+		if options.bottomNav
+			@bottomNav = new BottomNav
+				name: 'Bottom Nav', parent: @
+				destinations: options.bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+				y: Align.bottom(-@footer?.height)
+				index: 999
+
+		# MENU OVERLAY
+		if options.menuOverlay
+			@menuOverlay = new MenuOverlay
+				name: 'Menu Overlay'
+				title: options.menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
+				links: options.menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
 
 	showKeyboard: ->
 		@keyboard.animate
@@ -83,23 +101,7 @@ class App extends Layer
 
 	hideKeyboard: ->
 		@keyboard.animate
-			y: Screen.maxY
-
-	setup: (options = {}) ->
-
-		if options.bottomNav
-			@bottomNav = new BottomNav
-				name: 'BottomNav', parent: @
-				destinations: options.bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
-				y: Align.bottom(-@footer?.height)
-				index: 999
-
-		if options.menuOverlay
-			@menuOverlay = new MenuOverlay
-				title: options.menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
-				links: options.menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
-
-
+			y: @maxY
 
 # 	dP     dP oo
 # 	88     88
@@ -378,7 +380,7 @@ exports.BottomNav = class BottomNav extends Layer
 			item.action = destination.action
 
 			item.disk.onTouchStart (event) -> 
-				ripple(@, event.point, @parent.iconLayer, new Color(theme.primary).alpha(.5))
+				ripple(@, event.point, @parent.iconLayer, new Color(theme.primary).alpha(.3))
 
 			item.onTap -> @parent.activeDestination = @
 
@@ -598,18 +600,19 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			borderRadius: 32
 			backgroundColor: theme.menuOverlay.header.icon
 
-		@titleExpand = new Icon
+		@subheaderExpand = new Icon
 			name: '.', parent: @header
 			x: Align.right(-16)
-			y: Align.bottom(-13)
+			y: Align.bottom(-16)
 			icon: 'menu-down'
-			color: theme.menuOverlay.text
+			color: theme.menuOverlay.subheader.text
 
-		@title = new type.Body1
+		@subheader = new type.Body1
 			name: '.', parent: @header
 			width: @width
 			x: 16, y: Align.bottom(-18)
 			text: @_title
+			color: theme.menuOverlay.subheader.text
 
 		links = []
 

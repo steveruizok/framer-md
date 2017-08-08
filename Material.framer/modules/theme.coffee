@@ -89,6 +89,8 @@ theme =
 		header:
 			backgroundColor: source.colors.secondary.main
 			icon: source.colors.secondary.light
+		subheader:
+			color: source.colors.menu.text
 		backgroundColor: source.colors.menu.light
 		text: source.colors.menu.text
 		slider: 

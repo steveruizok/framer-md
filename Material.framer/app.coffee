@@ -135,7 +135,7 @@ app = new md.App
 
 # Text layer to register our actions.
 welcome = new md.Regular
-	name: '.', parent: buttons.home
+	name: 'welcome', parent: buttons.home
 	x: Align.center, y: 32
 	width: Screen.width - 64
 	textAlign: 'center'
@@ -143,6 +143,7 @@ welcome = new md.Regular
 
 # button to go to the second page
 toSecondPage = new md.Button 
+	name: 'to second page'
 	parent: buttons.home
 	x: Align.center, y: welcome.maxY + 16
 	text: 'go to second page'
@@ -151,7 +152,7 @@ toSecondPage = new md.Button
 
 # Text layer to register our actions.
 resultText = new md.Regular
-	name: '.', parent: buttons.home
+	name: 'results', parent: buttons.home
 	x: Align.center, y: toSecondPage.maxY + 32
 	width: Screen.width
 	textAlign: 'center'
@@ -162,6 +163,7 @@ resultText.template =
 
 # button to create a dialog
 dialog = new md.Button 
+	name: 'dialog button'
 	parent: buttons.home
 	raised: true
 	x: Align.center, y: resultText.maxY + 32
@@ -182,6 +184,7 @@ dialog = new md.Button
 
 # button to open the keyboard
 showKeyboard = new md.Button 
+	name: 'keyboard button'
 	parent: buttons.home
 	x: Align.center, y: dialog.maxY + 16
 	text: 'show keyboard'
@@ -191,6 +194,7 @@ showKeyboard = new md.Button
 
 # fab to... do nothing yet
 fab = new md.Fab
+	name: 'fab'
 	parent: buttons.home
 	icon: 'plus'
 	action: -> resultText.template = 'Fab tapped.'
@@ -199,6 +203,7 @@ fab = new md.Fab
 # --- secondPage (page of buttons view)
 
 secondPage = buttons.newPage
+	name: 'second page'
 	header:
 		title: "Second Page"
 		icon: 'arrow-left'
@@ -207,7 +212,7 @@ secondPage = buttons.newPage
 			
 # Text layer to register our actions.
 tip = new md.Regular
-	name: '.', parent: secondPage
+	name: 'second page tip', parent: secondPage
 	x: Align.center, y: 32
 	width: Screen.width - 32
 	textAlign: 'center'
@@ -215,6 +220,7 @@ tip = new md.Regular
 	
 # button to go to the third page
 toThirdPage = new md.Button 
+	name: 'button to third page'
 	parent: secondPage
 	x: Align.center, y: tip.maxY + 16
 	text: 'go to third page'
@@ -224,6 +230,7 @@ toThirdPage = new md.Button
 # --- thirdPage (page of buttons view)
 
 thirdPage = buttons.newPage
+	name: 'third page'
 	header:
 		title: "Third Page"
 		icon: 'arrow-left'
@@ -232,7 +239,7 @@ thirdPage = buttons.newPage
 			
 # Text layer to register our actions.
 tip = new md.Regular
-	name: '.', parent: thirdPage.content
+	name: 'third page tip', parent: thirdPage.content
 	x: Align.center, y: 32
 	width: Screen.width - 32
 	textAlign: 'center'

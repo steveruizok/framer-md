@@ -121,9 +121,10 @@ exports.App = class App extends Layer
 		view.i = i
 		view.parent = @
 		view.y = @header.maxY
-		view.height = Screen.height - @header.height - @footer.height - @bottomNav.height
+		view.height = Screen.height - @header.height - @footer.height
 
 		view.home = view.newPage
+		 	name: 'home'
 		 	header:
 			 	title: view._title
 			 	icon: view._icon
@@ -136,11 +137,9 @@ exports.App = class App extends Layer
 		return if view is @current
 
 		@header.title = view.current._header?.title ? 'Default'
-		@header.icon = view.current.icon ? 'menu'
-		@header.iconAction = view.current.iconAction ? -> app.showMenu()
-		@header.visible = view.current.visible ? true
-		
-
+		@header.icon = view.current._header?.icon ? 'menu'
+		@header.iconAction = view.current._header?.iconAction ? -> app.showMenu()
+		@header.visible = view.current._header?.visible ? true
 
 		if view.i > @current.i
 			view.x = Screen.width 
@@ -191,23 +190,10 @@ exports.View = class View extends FlowComponent
 
 		@onTransitionStart (current, next, direction) -> app.changePage(next)
 
-
 	newPage: (options = {}) ->
 		page = new Page _.defaults options,
 			size: @size
 		return page 
-
-	addPage: (page) ->
-		# page.contentInset = {top: @app.header.height}
-
-		# adjust content inset for page
-		# if page.contentInset.top < @app.header.height then page.contentInset = 
-		# 	top: page.contentInset.top += @app.header.height
-		# 	bottom: page.contentInset.bottom
-		# 	left: page.contentInset.left
-		# 	right: page.contentInset.right
-
-		return page
 
 	linkTo: (page) ->
 		if page? and @current isnt page

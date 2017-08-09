@@ -275,7 +275,7 @@
             "blurType" : "background",
             "__class" : "RectangleNode",
             "id" : "P't9erwf",
-            "fillColor" : "rgb(41, 187, 255)",
+            "fillColor" : "rgb(15, 91, 255)",
             "aspectRatioLocked" : true,
             "widthFactor" : null,
             "opacity" : 1,
@@ -435,7 +435,7 @@
             "blurType" : "background",
             "__class" : "RectangleNode",
             "id" : "<>X!UE\/]",
-            "fillColor" : "rgb(235, 180, 0)",
+            "fillColor" : "rgb(212, 43, 43)",
             "aspectRatioLocked" : true,
             "widthFactor" : null,
             "opacity" : 1,
@@ -509,7 +509,7 @@
                         },
                         {
                           "length" : 12,
-                          "style" : "COLOR:rgb(61, 0, 0)",
+                          "style" : "COLOR:rgb(255, 255, 255)",
                           "offset" : 0
                         }
                       ],
@@ -523,7 +523,7 @@
                           "LINEHEIGHT:1.2",
                           "FONT:Roboto-Regular",
                           "ALIGN:center",
-                          "COLOR:rgb(61, 0, 0)"
+                          "COLOR:rgb(255, 255, 255)"
                         ]
                       },
                       "text" : "Primary Text",
@@ -554,7 +554,7 @@
                 "bottom" : null,
                 "height" : 19,
                 "opacity" : 1,
-                "width" : 91,
+                "width" : 92,
                 "widthFactor" : null,
                 "targetName" : "primary_text_color",
                 "heightFactor" : null,

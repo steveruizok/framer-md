@@ -76,67 +76,83 @@ General:
 
 md = require "md"
 
-# ------------
 # Create App
+
 app = new md.App
 	bottomNav:
 		links: [
 			{
-				title: 'Home', 
+				title: 'Buttons', 
 				icon: 'home', 
-				action: -> view.linkTo(home)
+				action: -> app.changeView(buttons)
 				}, 
-			{
-				title: 'Profile', 
-				icon: 'account', 
-				action: -> view.linkTo(profile)
-				},
+			{ 
+				title: 'Form', 
+				icon: 'pencil',
+				action: -> app.changeView(form)
+				}
 			{ 
 				title: 'Gallery', 
 				icon: 'image',
-				action: -> view.linkTo(gallery)
-				}
+				action: -> app.changeView(gallery)
+				},
 			]
 	menuOverlay:
 		title: 'MenuDemo@gmail.com'
 		links: [
 			{
-				title: 'Home', 
+				title: 'Buttons', 
 				icon: 'home', 
-				action: -> view.linkTo(home)
+				action: -> app.changeView(buttons)
 				},
 			{
-				title: 'Profile', 
-				icon: 'account', 
-				action: -> view.linkTo(profile)
+				title: 'Form', 
+				icon: 'pencil', 
+				action: -> app.changeView(form)
 				},
 			{
 				title: 'Gallery', 
 				icon: 'image', 
-				action: -> view.linkTo(gallery)
+				action: -> app.changeView(gallery)
 				}
 			]
+	views: [
+		buttons = new md.View
+			title: "Buttons"
+			iconAction: -> app.showMenu(),
+		form = new md.View
+			title: "Form"
+			iconAction: -> app.showMenu(),
+		gallery = new md.View
+			title: "Gallery"
+			iconAction: -> app.showMenu()
+			]
 
-# ------------
-# Create Views
-view = new md.View
 
-# ------------
-# Create Pages
+# Views
 
+# --- buttons (view)
 
+# Text layer to register our actions.
+welcome = new md.Regular
+	name: '.', parent: buttons.home
+	x: Align.center, y: 32
+	width: Screen.width - 64
+	textAlign: 'center'
+	text: 'Welcome to the Material Kit demo. This is the Buttons view. There are two other views: Form and Gallery.'
 
-# --- PAGE (home)
-
-home = view.newPage
-	header:
-		title: "Home"
-		iconAction: -> app.menuOverlay.show()
+# button to go to the second page
+toSecondPage = new md.Button 
+	parent: buttons.home
+	x: Align.center, y: welcome.maxY + 16
+	text: 'go to second page'
+	raised: true
+	action: -> buttons.showNext(secondPage)
 
 # Text layer to register our actions.
 resultText = new md.Regular
-	name: '.', parent: home
-	x: Align.center, y: 150
+	name: '.', parent: buttons.home
+	x: Align.center, y: toSecondPage.maxY + 32
 	width: Screen.width
 	textAlign: 'center'
 	text: 'Results: {results}'
@@ -146,16 +162,16 @@ resultText.template =
 
 # button to create a dialog
 dialog = new md.Button 
-	parent: home
+	parent: buttons.home
 	raised: true
-	x: Align.center, y: 200
+	x: Align.center, y: resultText.maxY + 32
 	text: 'Dialog'
 	color: md.theme.tint
 	action: ->	
 		resultText.template = 'Dialog opened.'
 		new md.Dialog
-			title: 'Dialog example'
-			body: 'Here is where the body text goes.'
+			title: 'Dialog'
+			body: 'Here is where the body would go.'
 			acceptText: 'confirm'
 			acceptAction: -> 
 				resultText.template = 'Dialog confirmed.'
@@ -163,10 +179,11 @@ dialog = new md.Button
 			declineAction: -> 
 				resultText.template = 'Dialog declined.'
 
+
 # button to open the keyboard
 showKeyboard = new md.Button 
-	parent: home
-	x: Align.center, y: 260
+	parent: buttons.home
+	x: Align.center, y: dialog.maxY + 16
 	text: 'show keyboard'
 	action: -> 
 		app.showKeyboard()
@@ -174,42 +191,70 @@ showKeyboard = new md.Button
 
 # fab to... do nothing yet
 fab = new md.Fab
-	parent: home
+	parent: buttons.home
 	icon: 'plus'
 	action: -> resultText.template = 'Fab tapped.'
 
 
+# --- secondPage (page of buttons view)
 
-# --- PAGE (profile)
-
-profile = view.newPage
+secondPage = buttons.newPage
 	header:
-		title: "Profile"
+		title: "Second Page"
 		icon: 'arrow-left'
 		iconAction: -> 
-			view.showPrevious()
+			buttons.showPrevious()
+			
+# Text layer to register our actions.
+tip = new md.Regular
+	name: '.', parent: secondPage
+	x: Align.center, y: 32
+	width: Screen.width - 32
+	textAlign: 'center'
+	text: "This is another page of the Buttons view. Views are modified flow components. When a new page is loaded, the app's header changes to show its title. You can also set the header's button icon and action."
+	
+# button to go to the third page
+toThirdPage = new md.Button 
+	parent: secondPage
+	x: Align.center, y: tip.maxY + 16
+	text: 'go to third page'
+	raised: true
+	action: -> buttons.showNext(thirdPage)
+	
+# --- thirdPage (page of buttons view)
+
+thirdPage = buttons.newPage
+	header:
+		title: "Third Page"
+		icon: 'arrow-left'
+		iconAction: -> 
+			buttons.showPrevious()
+			
+# Text layer to register our actions.
+tip = new md.Regular
+	name: '.', parent: thirdPage.content
+	x: Align.center, y: 32
+	width: Screen.width - 32
+	textAlign: 'center'
+	text: "Pages are modified scroll components. Fixed content can be added to the page, and scrolling content (like this) to the page.content."
+
+
+# --- form (view)
 
 # Text layer to register our actions.
 welcomeProfile = new md.Regular
-	name: '.', parent: profile
+	name: '.', parent: form.home
 	x: Align.center, y: 150
 	width: Screen.width
 	textAlign: 'center'
-	text: 'Welcome to the Profile Page!'
+	text: 'Welcome to the Form Page!'
 
+# --- gallery (view)
 
-
-# --- PAGE (gallery)
-
-gallery = view.newPage
-	header:
-		title: "Gallery"
-		icon: 'arrow-left'
-		iconAction: -> 
-			view.showPrevious()
+# grid list
 
 gridList = new md.GridList
-	name: 'Grid', parent: gallery.content
+	name: 'Grid', parent: gallery.home.content
 	columns: 2
 	
 
@@ -230,10 +275,6 @@ for i in _.range(20)
 			
 	tile.onLongPress ->
 		gridList.removeTile(@)
-
-# show home screen
-view.showNext(home)
-
 
 
 color_pallete.destroy()

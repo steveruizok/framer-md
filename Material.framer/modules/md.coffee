@@ -46,16 +46,18 @@ app = undefined
 exports.App = class App extends Layer
 	constructor: (options = {}) ->
 
-		@theme = theme
-
 		@_bottomNav = options.bottomNav ? undefined
 		@_menuOverlay = options.menuOverlay ? undefined
+		
+		@theme = theme
 		@views = options.views ? []
+		@current = {i: 0}
 
 		super _.defaults options,
 			name: 'App'
 			size: Screen.size
 			backgroundColor: null
+			index: 1
 		
 		app = @
 
@@ -68,7 +70,7 @@ exports.App = class App extends Layer
 		# FOOTER
 
 		@footer = new Layer
-			name: '.', parent: @
+			name: 'Footer'
 			width: Screen.width, height: 48
 			image: 'images/nav_bar.png'
 			index: 999
@@ -76,10 +78,10 @@ exports.App = class App extends Layer
 
 		if @_bottomNav
 			@bottomNav = new BottomNav
-				name: 'Bottom Nav', parent: @
+				name: 'Bottom Nav'
 				destinations: @_bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
 				y: if @footer? then Align.bottom(-@footer.height) else Align.bottom()
-				index: 999
+				index: 998
 
 		# MENU OVERLAY
 		if @_menuOverlay
@@ -101,24 +103,10 @@ exports.App = class App extends Layer
 
 		@keyboard.onTap => @hideKeyboard()
 
+		for view, i in @views
+			@addView(view, i)
 
-	# setup: (options = {}) ->
-
-	# 	# BOTTOM NAV
-
-	# 	if options.bottomNav
-	# 		@bottomNav = new BottomNav
-	# 			name: 'Bottom Nav', parent: @
-	# 			destinations: options.bottomNav.links ? "md.app.bottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
-	# 			y: Align.bottom(-@footer?.height)
-	# 			index: 999
-
-	# 	# MENU OVERLAY
-	# 	if options.menuOverlay
-	# 		@menuOverlay = new MenuOverlay
-	# 			name: 'Menu Overlay'
-	# 			title: options.menuOverlay.title ? throw 'md.app.menuOverlay needs a title.'
-	# 			links: options.menuOverlay.links ? throw "md.app.menuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+		@changeView(@views[0])
 
 	showKeyboard: ->
 		@keyboard.animate
@@ -129,8 +117,52 @@ exports.App = class App extends Layer
 		@keyboard.animate
 			y: @maxY
 
+	addView: (view, i) ->
+		view.i = i
+		view.parent = @
+		view.y = @header.maxY
+		view.height = Screen.height - @header.height - @footer.height - @bottomNav.height
+
+		view.home = view.newPage
+		 	header:
+			 	title: view._title
+			 	icon: view._icon
+			 	iconAction: view._iconAction
+
+		view.showNext(view.home)
+
+	changeView: (view) ->
+
+		return if view is @current
+
+		@header.title = view.current._header?.title ? 'Default'
+		@header.icon = view.current.icon ? 'menu'
+		@header.iconAction = view.current.iconAction ? -> app.showMenu()
+		@header.visible = view.current.visible ? true
+		
 
 
+		if view.i > @current.i
+			view.x = Screen.width 
+		else if view.i < @current.i
+			view.x = -Screen.width
+
+		view.animate {x: 0}
+		view.bringToFront()
+		@current = view
+
+	showMenu: ->
+		@menuOverlay.show()
+
+	hideMenu: ->
+		@menuOverlay.hide()
+
+	changePage: (page) ->
+		@header.title = page._header.title
+		@header.icon = page._header.icon
+		@header.iconAction = page._header.iconAction
+		@header.visible = page._header.visible
+		page._onLoad()
 
 
 
@@ -148,48 +180,32 @@ exports.App = class App extends Layer
 exports.View = class View extends FlowComponent
 	constructor: (options = {}) ->
 
-		@app = app
+		@_title = options.title ? 'Home'
+		@_icon = options.icon ? 'menu'
+		@_iconAction = options.iconAction ? -> app.menuOverlay.show() 
 
 		super _.defaults options,
 			name: 'View'
-			parent: app
-			index: 900
-			animationOptions:
-				time: .2
+			animationOptions: {curve: "spring(300, 35, 0)"}
+			shadowSpread: 2, shadowColor: 'rgba(0,0,0,.1)', shadowBlur: 6
 
-		@onTransitionStart (current, next, direction) => 
+		@onTransitionStart (current, next, direction) -> app.changePage(next)
 
-			@app.header.title = next._header?.title ? 'Default'
-			@app.header.icon = next._header?.icon ? 'menu'
-			@app.header.iconAction = next._header?.iconAction ? -> null
-			@app.header.visible = next._header?.visible ? true
-			next._onLoad()
-
-		app.views.push(@)
 
 	newPage: (options = {}) ->
-
 		page = new Page _.defaults options,
-			contentInset: {top: @app.header.height}
-
-		# adjust content inset for page
-		if page.contentInset.top < @app.header.height then page.contentInset = 
-			top: page.contentInset.top += @app.header.height
-			bottom: page.contentInset.bottom
-			left: page.contentInset.left
-			right: page.contentInset.right
-
+			size: @size
 		return page 
 
 	addPage: (page) ->
-		page.contentInset = {top: @app.header.height}
+		# page.contentInset = {top: @app.header.height}
 
 		# adjust content inset for page
-		if page.contentInset.top < @app.header.height then page.contentInset = 
-			top: page.contentInset.top += @app.header.height
-			bottom: page.contentInset.bottom
-			left: page.contentInset.left
-			right: page.contentInset.right
+		# if page.contentInset.top < @app.header.height then page.contentInset = 
+		# 	top: page.contentInset.top += @app.header.height
+		# 	bottom: page.contentInset.bottom
+		# 	left: page.contentInset.left
+		# 	right: page.contentInset.right
 
 		return page
 
@@ -458,7 +474,12 @@ exports.BottomNav = class BottomNav extends Layer
 exports.Page = class Page extends ScrollComponent
 	constructor: (options = {}) ->
 		
-		@_header = options.header ? {title: 'Default', visible: true, icon: 'menu', iconAction: -> return null}
+		@_header = {}
+		@_header.title = options.header?.title ? 'New Page'
+		@_header.visible = options.header?.visible ? true
+		@_header.icon = options.header?.icon ? 'menu'
+		@_header.iconAction = options.header?.iconAction ? -> null
+
 		@_template = options.template
 		@_templateOpacity = options.templateOpacity ? .5
 		@_onLoad = options.onLoad ? -> null
@@ -606,7 +627,6 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 		super _.defaults options,
 			height: Screen.height
 			width: 304
-			height: Screen.height
 			visible: false
 			backgroundColor: theme.menuOverlay.backgroundColor
 			animationOptions: {curve: "spring(300, 35, 0)"}
@@ -891,7 +911,7 @@ exports.Fab = Fab = class Fab extends Layer
 
 		super _.defaults options,
 			name: '.'
-			x: Align.right(-16), y: Align.bottom(-66)
+			x: Align.right(-16), y: Align.bottom(-17)
 			width: 64, height: 64, borderRadius: 32
 			backgroundColor: theme.fab.backgroundColor
 			shadowY: 2, shadowBlur: 3

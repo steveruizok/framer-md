@@ -145,7 +145,7 @@ welcome = new md.Regular
 toSecondPage = new md.Button 
 	name: 'to second page'
 	parent: buttons.home
-	x: Align.center, y: welcome.maxY + 16
+	x: Align.center, y: 130
 	text: 'go to second page'
 	raised: true
 	action: -> buttons.showNext(secondPage)
@@ -222,7 +222,7 @@ tip = new md.Regular
 toThirdPage = new md.Button 
 	name: 'button to third page'
 	parent: secondPage
-	x: Align.center, y: tip.maxY + 16
+	x: Align.center, y: 168
 	text: 'go to third page'
 	raised: true
 	action: -> buttons.showNext(thirdPage)

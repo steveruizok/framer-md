@@ -4,6 +4,7 @@ type = require 'type'
 icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
 
 Framer.Extras.Hints.disable()
+Framer.Extras.Preloader.enable()
 
 # TODO: Change App from master flow component to Screen manager.
 # App shouldn't directly manage pages: a new class, 'screen' will manage Pages.
@@ -384,6 +385,7 @@ exports.BottomNav = class BottomNav extends Layer
 			shadowY: theme.bottomNav.shadowY
 			shadowBlur: theme.bottomNav.shadowBlur
 			shadowColor: theme.bottomNav.shadowColor
+			clip: true
 
 
 		for destination, i in @_destinations
@@ -396,7 +398,7 @@ exports.BottomNav = class BottomNav extends Layer
 			item.disk = new Layer
 				name: '.', parent: item
 				x: Align.center, y: Align.center
-				height: @height, width: @height, borderRadius: @height/2
+				height: @height * 1.5, width: @height * 1.5, borderRadius: @height
 				backgroundColor: null
 
 			item.iconLayer = new Icon
@@ -648,7 +650,7 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			x: Align.right(-16)
 			y: Align.bottom(-16)
 			icon: 'menu-down'
-			color: theme.menuOverlay.subheader.text
+			color: theme.menuOverlay.subheader.icon
 
 		@subheader = new type.Body1
 			name: '.', parent: @header

@@ -65,52 +65,6 @@
                 "centerAnchorX" : 0.108695652173913,
                 "parentid" : "_vtmQ,^@",
                 "rotation" : 0,
-                "locked" : true,
-                "intrinsicWidth" : 24,
-                "top" : 8,
-                "right" : null,
-                "intrinsicHeight" : 24,
-                "name" : "dehaze",
-                "shadows" : [
-                  {
-                    "y" : 2,
-                    "enabled" : false,
-                    "blur" : 5,
-                    "x" : 0,
-                    "__class" : "Shadow",
-                    "color" : "rgba(0,0,0,0.25)"
-                  }
-                ],
-                "aspectRatioLocked" : true,
-                "id" : "CKYuQ|s>",
-                "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z\"><\/path><\/svg>",
-                "constraintsLocked" : false,
-                "left" : 8,
-                "bottom" : null,
-                "height" : 24,
-                "fillGradient" : {
-                  "end" : "rgba(0,0,0,0)",
-                  "alpha" : 1,
-                  "angle" : 0,
-                  "__class" : "LinearGradient",
-                  "start" : "black"
-                },
-                "width" : 24,
-                "widthFactor" : null,
-                "targetName" : null,
-                "heightFactor" : null,
-                "fillColor" : "rgb(255, 255, 255)",
-                "opacity" : 1,
-                "centerAnchorY" : 0.09803921568627451,
-                "visible" : true
-              },
-              {
-                "__class" : "SVGNode",
-                "fillType" : "color",
-                "originalFilename" : "dehaze",
-                "centerAnchorX" : 0.108695652173913,
-                "parentid" : "_vtmQ,^@",
-                "rotation" : 0,
                 "locked" : false,
                 "intrinsicWidth" : 24,
                 "top" : 8,
@@ -156,7 +110,7 @@
                 "centerAnchorX" : 0.5,
                 "parentid" : "_vtmQ,^@",
                 "rotation" : 0,
-                "top" : 89,
+                "top" : 11,
                 "right" : null,
                 "styledText" : {
                   "blocks" : [
@@ -241,7 +195,7 @@
                 "heightFactor" : null,
                 "editable" : false,
                 "visible" : true,
-                "centerAnchorY" : 0.482843137254902,
+                "centerAnchorY" : 0.1004901960784314,
                 "autoSize" : true,
                 "y" : 61
               }
@@ -403,6 +357,52 @@
                 "centerAnchorY" : 0.482843137254902,
                 "autoSize" : true,
                 "y" : 61
+              },
+              {
+                "__class" : "SVGNode",
+                "fillType" : "color",
+                "originalFilename" : "dehaze",
+                "centerAnchorX" : 0.09803921568627451,
+                "parentid" : "P't9erwf",
+                "rotation" : 0,
+                "locked" : false,
+                "intrinsicWidth" : 24,
+                "top" : 8,
+                "right" : null,
+                "intrinsicHeight" : 24,
+                "name" : "primary_invert",
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "aspectRatioLocked" : true,
+                "id" : "8yH)VKBN",
+                "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z\"><\/path><\/svg>",
+                "constraintsLocked" : false,
+                "left" : 8,
+                "bottom" : null,
+                "height" : 24,
+                "fillGradient" : {
+                  "end" : "rgba(0,0,0,0)",
+                  "alpha" : 1,
+                  "angle" : 0,
+                  "__class" : "LinearGradient",
+                  "start" : "black"
+                },
+                "width" : 24,
+                "widthFactor" : null,
+                "targetName" : null,
+                "heightFactor" : null,
+                "fillColor" : "rgb(0, 0, 0)",
+                "opacity" : 1,
+                "centerAnchorY" : 0.09803921568627451,
+                "visible" : true
               }
             ],
             "fillEnabled" : true,
@@ -568,53 +568,7 @@
                 "__class" : "SVGNode",
                 "fillType" : "color",
                 "originalFilename" : "dehaze",
-                "centerAnchorX" : 0.09313725490196079,
-                "parentid" : "<>X!UE\/]",
-                "rotation" : 0,
-                "locked" : true,
-                "intrinsicWidth" : 24,
-                "top" : 8,
-                "right" : null,
-                "intrinsicHeight" : 24,
-                "name" : "dehaze",
-                "shadows" : [
-                  {
-                    "y" : 2,
-                    "enabled" : false,
-                    "blur" : 5,
-                    "x" : 0,
-                    "__class" : "Shadow",
-                    "color" : "rgba(0,0,0,0.25)"
-                  }
-                ],
-                "aspectRatioLocked" : true,
-                "id" : "I0[,%*=f",
-                "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z\"><\/path><\/svg>",
-                "constraintsLocked" : false,
-                "left" : 7,
-                "bottom" : null,
-                "height" : 24,
-                "fillGradient" : {
-                  "end" : "rgba(0,0,0,0)",
-                  "alpha" : 1,
-                  "angle" : 0,
-                  "__class" : "LinearGradient",
-                  "start" : "black"
-                },
-                "width" : 24,
-                "widthFactor" : null,
-                "targetName" : null,
-                "heightFactor" : null,
-                "fillColor" : "rgb(255, 255, 255)",
-                "opacity" : 1,
-                "centerAnchorY" : 0.09803921568627451,
-                "visible" : true
-              },
-              {
-                "__class" : "SVGNode",
-                "fillType" : "color",
-                "originalFilename" : "dehaze",
-                "centerAnchorX" : 0.09313725490196079,
+                "centerAnchorX" : 0.09803921568627451,
                 "parentid" : "<>X!UE\/]",
                 "rotation" : 0,
                 "locked" : false,
@@ -637,7 +591,7 @@
                 "id" : "'m+IyDL4",
                 "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z\"><\/path><\/svg>",
                 "constraintsLocked" : false,
-                "left" : 7,
+                "left" : 8,
                 "bottom" : null,
                 "height" : 24,
                 "fillGradient" : {

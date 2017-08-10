@@ -221,7 +221,7 @@ showFirstNotification = ->
 showNextNotifications = ->
 	first = new md.Notification
 		title: 'Another Notification'
-		body: 'Notifications stack like thi and position automatically.'
+		body: 'Notifications stack like this and position automatically.'
 		icon: 'emoticon-happy'
 		iconBackgroundColor: 'rgba(0, 152, 168, 1)'
 		timeout: 5
@@ -318,7 +318,7 @@ uiswitch.on "change:isOn", (isOn) -> formResults.template = "Switch's isOn prope
 for i in [0..3]
 	checkbox = new md.Checkbox
 		name: 'switch', parent: form.home
-		x: Align.center(-64), y: 180 + (i * 32)
+		x: Align.center(-64), y: 120 + (i * 32)
 	
 	checkbox.on "change:isOn", (isOn) -> formResults.template = "Checkbox's isOn property is #{isOn}."
 
@@ -327,11 +327,26 @@ radioboxGroup = []
 for i in [0..3]
 	radiobox = new md.Radiobox
 		name: 'switch', parent: form.home
-		x: Align.center(64), y: 180 + (i * 32)
+		x: Align.center(64), y: 120 + (i * 32)
 		group: radioboxGroup
+		
+	radiobox.i = i
 	
-	radiobox.on "change:isOn", (isOn) -> formResults.template = "Radiobox's isOn property is #{isOn}."
+	radiobox.on "change:isOn", (isOn) -> if isOn then formResults.template = "Radiobox number #{@i} is active."
 
+slider = new md.Slider
+	parent: form.home
+	x: Align.center, y: 280
+	
+slider.onValueChange -> 
+	formResults.template = "Slider's value is #{@value.toFixed(2)}"
+	
+notchSlider = new md.Slider
+	parent: form.home
+	x: Align.center, y: 332
+	notched: true
+
+notchSlider.onValueChange -> formResults.template = "Notched slider's value is #{Math.round(@value)}"
 
 # --- gallery (view)
 

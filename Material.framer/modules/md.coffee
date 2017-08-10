@@ -137,7 +137,6 @@ exports.App = class App extends Layer
 		view.showNext(view.home)
 
 	changeView: (view) ->
-
 		return if view is @current
 
 		@header.title = view.current._header?.title ? 'Default'
@@ -147,8 +146,10 @@ exports.App = class App extends Layer
 
 		if view.i > @current.i
 			view.x = Screen.width 
+			@current.animate {x: -Screen.width}
 		else if view.i < @current.i
 			view.x = -Screen.width
+			@current.animate {x: Screen.width}
 
 		view.animate {x: 0}
 		view.bringToFront()
@@ -1165,6 +1166,7 @@ exports.Notification = Notification = class Notification extends Layer
 		@_iconColor = options.iconColor ? theme.text.secondary
 		@_iconBackgroundColor = options.iconBackgroundColor ? theme.secondary
 		@_time = options.time ? new Date()
+		#TODO: replace action1 / action2 with @actions (array)
 		@_action1 = options.action1
 		@_action2 = options.action2
 		@_timeout = options.timeout ? 5
@@ -1446,7 +1448,7 @@ exports.Radiobox = Radiobox = class Radiobox extends Icon
 			color: 'rgba(0,0,0,.54)'
 
 		@isOn = options.isOn ? false
-		@onTap -> @isOn = !@isOn
+		@onTap -> if @isOn is false then @isOn = true
 
 		@_group.push(@)
 
@@ -1468,6 +1470,93 @@ exports.Radiobox = Radiobox = class Radiobox extends Icon
 		else 
 			@icon = 'radiobox-blank'
 			@color = 'rgba(0,0,0,.54)'
+
+
+
+# 	.d88888b  dP oo       dP
+# 	88.    "' 88          88
+# 	`Y88888b. 88 dP .d888b88 .d8888b. 88d888b.
+# 	      `8b 88 88 88'  `88 88ooood8 88'  `88
+# 	d8'   .8P 88 88 88.  .88 88.  ... 88
+# 	 Y88888P  dP dP `88888P8 `88888P' dP
+
+
+exports.Slider = Slider = class Slider extends SliderComponent
+	constructor: (options = {}) ->
+
+		@_notched = options.notched ? false
+
+		super _.defaults options,
+			height: 2
+			backgroundColor: 'rgba(0,0,0,.26)'
+			min: 1, max: 10
+		
+		@fill.backgroundColor = theme.colors.primary.main
+
+		@knob.props =
+			backgroundColor: null
+			shadowX: 0
+			shadowY: 0
+			shadowBlur: 0
+
+		@thumb = new Layer
+			name: '.', parent: @knob
+			x: Align.center, y: Align.center
+			height: 12, width: 12, borderRadius: 12
+			backgroundColor: theme.colors.primary.main
+			animationOptions: {time: .15}
+
+		if @_notched
+
+			for i in [0...@max-@min]
+				notch = new Layer
+					name: '.', parent: @
+					x: i * @width/(@max-@min)
+					width: 2, height: 2, borderRadius: 2,
+					backgroundColor: theme.colors.primary.text
+
+			@tip = new Layer
+				parent: @knob
+				x: Align.center, y: -24
+				width: 26, height: 32
+				html: '<svg width="26px" height="32px" viewBox="0 0 26 32"><path d="M13,0.1 C20.2,0.1 26,6 26,13.3 C26,17 24,20.9 18.7,26.2 L13,32 L7.2,26.2 C2,20.8 0,16.9 0,13.3 C-3.55271368e-15,6 5.8,0.1 13,0.1 L13,0.1 Z" fill="' + theme.colors.primary.main + '"></path></svg>'
+				backgroundColor: null, opacity: 0
+				animationOptions: {time: .15}
+
+			@tipValue = new TextLayer
+				name: 'Tip Value', parent: @tip
+				y: 5, width: 26
+				color: theme.colors.primary.text
+				fontSize: 12, fontFamily: 'Roboto', textAlign: 'center'
+				text: "{value}"
+
+			@tipValue.template =
+				value: @value
+
+			@knob.onTouchStart => 
+				@thumb.animate {opacity: 0}
+				@tip.animate {opacity: 1}
+
+			@onTouchEnd ->
+				@thumb.animate {opacity: 1}
+				@tip.animate {opacity: 0}
+
+			round = (number, nearest) ->
+			    Math.round(number / nearest) * nearest
+			 
+			@knob.draggable.updatePosition = (point) =>
+			    point.x = round(point.x, @width / (@max-@min) ) - (@knob.width / 2)
+			    return point
+
+			@onValueChange -> 
+				@tipValue.template = Math.round(@value)
+
+		else 
+			@knob.onTouchStart => 
+				@thumb.animate {width: 18, height: 18, x: 6, y: 6}
+			@knob.onTouchEnd => 
+				@thumb.animate {width: 12, height: 12, x: 9, y: 9}
+		
 
 
 

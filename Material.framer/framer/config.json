@@ -14,12 +14,12 @@
   "projectId" : "4D0B2EAC-2748-4F58-8567-D210BD4FCD22",
   "deviceOrientation" : 0,
   "selectedHand" : "",
-  "showBezel" : 0,
+  "showBezel" : true,
   "foldedCodeRanges" : [
     "{0, 1274}",
-    "{2217, 4404}",
-    "{6622, 953}",
-    "{7576, 552}"
+    "{2217, 4405}",
+    "{6623, 1332}",
+    "{7956, 552}"
   ],
   "deviceScale" : "fit"
 }

@@ -1,3 +1,5 @@
+theme = require 'theme'
+
 # 	d888888P                                                                dP
 # 	   88                                                                   88
 # 	   88    dP    dP 88d888b. .d8888b. .d8888b. 88d888b. .d8888b. 88d888b. 88d888b. dP    dP
@@ -17,15 +19,17 @@ Utils.insertCSS(
 class exports.Headline extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 24
 			fontWeight: 400
 			lineHeight: 1.3
 			color: 'rgba(0,0,0,.87)'
 
-class exports.SubheadSecondary extends TextLayer
+class exports.Subhead extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 16
 			fontWeight: 400, 
@@ -35,6 +39,7 @@ class exports.SubheadSecondary extends TextLayer
 class exports.Title extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 20
 			fontWeight: 500
@@ -43,6 +48,7 @@ class exports.Title extends TextLayer
 class exports.Regular extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 16
 			fontWeight: 400
@@ -51,6 +57,7 @@ class exports.Regular extends TextLayer
 class exports.Body2 extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 14
 			fontWeight: 500
@@ -59,6 +66,7 @@ class exports.Body2 extends TextLayer
 class exports.Menu extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 14
 			fontWeight: 500
@@ -67,6 +75,7 @@ class exports.Menu extends TextLayer
 class exports.Body1 extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 14
 			fontWeight: 400
@@ -75,6 +84,7 @@ class exports.Body1 extends TextLayer
 class exports.Caption extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 12
 			fontWeight: 400
@@ -83,6 +93,7 @@ class exports.Caption extends TextLayer
 class exports.Button extends TextLayer
 	constructor: (options) ->
 		super _.defaults options,
+			name: '.'
 			fontFamily: 'Roboto'
 			fontSize: 14
 			fontWeight: 500

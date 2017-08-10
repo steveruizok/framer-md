@@ -49,10 +49,9 @@ source =
 theme = 
 	tint: source.colors.secondary.main
 	primary: source.colors.primary.main
-	primaryInvert: primaryInvert
 	secondary: source.colors.secondary.main
 	menu: source.colors.menu.light
-	menuInvert: source.colors.menu.invert
+	colors: source.colors
 
 	user:
 		image: undefined
@@ -124,6 +123,9 @@ theme =
 	dialog: 
 		backgroundColor:'#FAFAFA'
 	
+	divider:
+		backgroundColor: 'rgba(0,0,0,.12)'
+
 	text: 
 		primary: source.colors.primary.text
 		secondary: source.colors.secondary.text

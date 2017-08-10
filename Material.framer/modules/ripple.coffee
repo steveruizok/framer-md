@@ -52,9 +52,9 @@ ripple = (layer, point, placeBehind, color) ->
 	else 
 		rippleCircle.props = 
 			backgroundColor: layer.backgroundColor
-			saturate: 150
+			saturate: 120
 			brightness: 120
-			opacity: .3
+			opacity: .5
 	
 	# ANIMATIONS CIRCLE
 	

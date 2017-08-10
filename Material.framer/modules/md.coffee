@@ -17,7 +17,7 @@ Framer.Extras.Preloader.enable()
 exports.theme = theme
 exports.Title = Title = type.Title
 exports.Headline = Headline = type.Headline
-exports.SubheadSecondary = SubheadSecondary = type.SubheadSecondary
+exports.Subhead = Subhead = type.Subhead
 exports.Regular = Regular = type.Regular
 exports.Body2 = Body2 = type.Body2
 exports.Body1 = Body1 = type.Body1
@@ -53,6 +53,7 @@ exports.App = class App extends Layer
 		@theme = theme
 		@views = options.views ? []
 		@current = {i: 0}
+		@notifications = []
 
 		super _.defaults options,
 			name: 'App'
@@ -307,9 +308,6 @@ exports.Header = class Header extends Layer
 			shadowY: 2, shadowBlur: 3, shadowColor: 'rgba(0,0,0,.24)'
 			backgroundColor: theme.header.backgroundColor
 
-		@statusBar = new StatusBar
-			name: '.', parent: @
-
 		# TODO: if options.icon is false then no iconLayer, move title left
 
 		@titleLayer = new type.Title
@@ -327,8 +325,11 @@ exports.Header = class Header extends Layer
 
 		@icon = options.icon ? 'menu'
 
+		@statusBar = new StatusBar
+			name: '.', parent: @
+
 		@iconLayer.onTap => @_iconAction()
-		@iconLayer.onTouchStart (event) -> ripple(app.header, event.point)
+		@iconLayer.onTouchStart (event) => ripple(@, event.point, @titleLayer)
 
 
 	@define "title",
@@ -716,7 +717,8 @@ exports.Dialog = class Dialog extends Layer
 	constructor: (options = {}) ->
 
 		super _.defaults options,
-			name: '.', size: Screen.size, color: theme.tint
+			name: '.', parent: app
+			size: Screen.size
 			backgroundColor: 'rgba(0, 0, 0, .5)'
 			opacity: 0
 			
@@ -744,7 +746,7 @@ exports.Dialog = class Dialog extends Layer
 			fontSize: 16, fontWeight: 500, color: theme.text.title
 			text: @_title
 		
-		@body = new type.SubheadSecondary
+		@body = new type.Subhead
 			name: 'body', parent: @container
 			x: 24, y: 52
 			width: @container.width - 42
@@ -1070,12 +1072,337 @@ exports.Tile = Tile = class Tile extends Layer
 
 		@i = undefined
 		@gridList.addTile(@)
+
+
+
+
+
+
+
+
+
+
+# 	888888ba             dP   oo .8888b oo                     dP   oo
+# 	88    `8b            88      88   "                        88
+# 	88     88 .d8888b. d8888P dP 88aaa  dP .d8888b. .d8888b. d8888P dP .d8888b. 88d888b.
+# 	88     88 88'  `88   88   88 88     88 88'  `"" 88'  `88   88   88 88'  `88 88'  `88
+# 	88     88 88.  .88   88   88 88     88 88.  ... 88.  .88   88   88 88.  .88 88    88
+# 	dP     dP `88888P'   dP   dP dP     dP `88888P' `88888P8   dP   dP `88888P' dP    dP
+
+
+
+exports.Notification = Notification = class Notification extends Layer
+	constructor: (options = {}) ->
+		
+		@_title = options.title ? 'Notification'
+		@_body = options.body ? 'This is a notification.'
+		@_icon = options.icon ? undefined
+		@_iconColor = options.iconColor ? theme.text.secondary
+		@_iconBackgroundColor = options.iconBackgroundColor ? theme.secondary
+		@_time = options.time ? new Date()
+		@_action1 = options.action1
+		@_action2 = options.action2
+		@_timeout = options.timeout ? 5
+
+		# actions should be {title: 'archive', icon: 'archive'}
+		
+		super _.defaults options,
+			name: options.name ? '.', parent: app
+			width: 344, borderRadius: 2
+			x: Align.center, y: if app.notifications.length > 0 then _.last(app.notifications).maxY + 8 else app.header.maxY + 4
+			backgroundColor: theme.dialog.backgroundColor
+			shadowX: 0, shadowY: 2, shadowBlur: 3
+			opacity: 0, shadowColor: 'rgba(0,0,0,.3)'
+			animationOptions: {time: .25}
+
+		app.notifications.push(@)
+
+		@iconLayer = new Layer
+			name: 'Icon Container'
+			parent: @
+			x: 12, y: 12
+			height: 40, width: 40, borderRadius: 20
+			backgroundColor: @_iconBackgroundColor
+
+		if @_icon
+			@icon = new Icon
+				name: 'Icon'
+				parent: @iconLayer
+				x: Align.center, y: Align.center
+				color: @_iconColor
+				icon: @_icon
+
+		@title = new type.Subhead
+			name: 'Title'
+			parent: @ 
+			x: 64, y: 8
+			width: @width - 72
+			color: 'rgba(0,0,0,.87)'
+			text: @_title
+
+		@body = new type.Body1
+			name: 'Body'
+			parent: @
+			x: 64, y: @title.maxY
+			width: @width - 72
+			text: @_body
+
+		@date = new type.Caption
+			name: 'Date'
+			parent: @
+			x: Align.right(-9), y: 15
+			text: @_time.toLocaleTimeString([], hour: "numeric", minute: "2-digit")
+
+		@height = _.clamp(@body.maxY + 13, 64, Infinity)
+
+		if @_action1?
+
+			divider = new Divider
+				name: 'Divider'
+				parent: @
+				x: 64, y: @body.maxY + 11
+				width: @width - 64
+
+			if @_action1?
+				@action1 = new Layer
+					name: 'Action 1', parent: @
+					x: 64, y: divider.maxY + 11
+					width: 80, height: 24, backgroundColor: null
+				
+				@action1.icon = new Icon
+					name: 'Icon', parent: @action1
+					icon: @_action1.icon
+					width: 18, height: 18
+					color: 'rgba(0,0,0,.54)'
+				
+				@action1.label = new type.Caption
+					name: 'Label', parent: @action1
+					x: @action1.icon.maxX + 8
+					fontSize: 13
+					text: @_action1.title.toUpperCase()
+
+				@action1.width = @action1.label.maxX
+
+				#@action1.onTouchStart (event) -> ripple(@, event.point, @icon, new Color(theme.secondary).alpha(.3))
+				@action1.onTap @close
+				if @_action1.action then @action1.onTap => Utils.delay .25, _.bind(@_action1.action, @)
+				
+
+				if @_action2?
+					@action2 = new Layer
+						name: 'Action 2', parent: @
+						x: @action1.maxX + 45, y: divider.maxY + 11
+						width: 80, height: 24, backgroundColor: null
+					
+					@action2.icon = new Icon
+						name: 'Icon', parent: @action2
+						icon: @_action2.icon
+						width: 18, height: 18
+						color: 'rgba(0,0,0,.54)'
+					
+					@action2.label = new type.Caption
+						name: 'Label', parent: @action2
+						x: @action2.icon.maxX + 8
+						fontSize: 13
+						text: @_action2.title.toUpperCase()
+
+					@action2.width = @action2.label.maxX
+
+					#@action2.onTouchStart (event) -> ripple(@, event.point, @icon, new Color(theme.secondary).alpha(.3))
+					@action2.onTap @close
+					if @_action2.action then @action2.onTap => Utils.delay .25, _.bind(@_action2.action, @)
+					
+
+				@height = divider.maxY + 47
+
+		@open()
+
+		@onSwipeLeftEnd => @close('left')
+		@onSwipeRightEnd => @close('right')
+		Utils.delay @_timeout, => if not @closed then @close('right')
+
+	open: => 
+		@animate {opacity: 1}
+
+	close: (direction) =>
+		_.pull(app.notifications, @)
+
+		@animate
+			x: if direction is 'left' then -Screen.width else Screen.width
+			opacity: 0
+
+		for notification in app.notifications
+			if notification.y > @maxY
+				notification.animate {y: notification.y - @height}
+		
+		@closed = true
+
+		Utils.delay .5, => @destroy()
+
+
+
+
+# 	888888ba  oo          oo       dP
+# 	88    `8b                      88
+# 	88     88 dP dP   .dP dP .d888b88 .d8888b. 88d888b.
+# 	88     88 88 88   d8' 88 88'  `88 88ooood8 88'  `88
+# 	88    .8P 88 88 .88'  88 88.  .88 88.  ... 88
+# 	8888888P  dP 8888P'   dP `88888P8 `88888P' dP
+
+
+exports.Divider = Divider = class Divider extends Layer
+	constructor: (options = {}) ->
+		super _.defaults options,
+			name: '.'
+			width: 200, height: 1,
+			backgroundColor: theme.divider.backgroundColor
+
+
+
+
+
+
+# 	.d88888b             oo   dP            dP
+# 	88.    "'                 88            88
+# 	`Y88888b. dP  dP  dP dP d8888P .d8888b. 88d888b.
+# 	      `8b 88  88  88 88   88   88'  `"" 88'  `88
+# 	d8'   .8P 88.88b.88' 88   88   88.  ... 88    88
+# 	 Y88888P  8888P Y8P  dP   dP   `88888P' dP    dP
+
+
+exports.Switch = Switch = class Switch extends Layer
+	constructor: (options = {}) ->
+
+		@_isOn = undefined
+
+		super _.defaults options,
+			name: '.'
+			width: 34, height: 14, borderRadius: 7
+			backgroundColor: 'rgba(34, 31, 31, .26)'
+			animationOptions: {time: .15}
+
+		@knob = new Layer
+			name: '.', parent: @
+			x: 0, y: Align.center
+			width: 20, height: 20, borderRadius: 10
+			backgroundColor: 'F1F1F1'
+			shadowY: 2, shadowBlur: 3
+			animationOptions: {time: .15}
+
+		@isOn = options.isOn ? false
+		@onTap -> @isOn = !@isOn
+
+	@define "isOn",
+		get: -> return @_isOn
+		set: (bool) ->
+			return if bool is @_isOn
 			
+			@_isOn = bool
+			@emit("change:isOn", @_isOn, @)
+			@update()
+
+	update: ->
+		if @_isOn
+			@knob.animate {x: Align.right(), backgroundColor: theme.colors.primary.main}
+			@animate {backgroundColor: theme.colors.primary.light}
+		else 
+			@knob.animate {x: 0, backgroundColor: 'F1F1F1'}
+			@animate {backgroundColor: 'rgba(34, 31, 31, .26)'}
 
 
 
 
 
+# 	 a88888b. dP                         dP       dP
+# 	d8'   `88 88                         88       88
+# 	88        88d888b. .d8888b. .d8888b. 88  .dP  88d888b. .d8888b. dP.  .dP
+# 	88        88'  `88 88ooood8 88'  `"" 88888"   88'  `88 88'  `88  `8bd8'
+# 	Y8.   .88 88    88 88.  ... 88.  ... 88  `8b. 88.  .88 88.  .88  .d88b.
+# 	 Y88888P' dP    dP `88888P' `88888P' dP   `YP 88Y8888' `88888P' dP'  `dP
+
+
+
+exports.Checkbox = CheckBox = class Checkbox extends Icon
+	constructor: (options = {}) ->
+
+		@_isOn = undefined
+
+		super _.defaults options,
+			name: '.'
+			animationOptions: {time: .15}
+			icon: 'checkbox-blank-outline'
+			color: 'rgba(0,0,0,.54)'
+
+		@isOn = options.isOn ? false
+		@onTap -> @isOn = !@isOn
+
+	@define "isOn",
+		get: -> return @_isOn
+		set: (bool) ->
+			return if bool is @_isOn
+			
+			@_isOn = bool
+			@emit("change:isOn", @_isOn, @)
+			@update()
+
+	update: ->
+		if @_isOn
+			@icon = 'checkbox-marked'
+			@color = theme.colors.primary.main
+		else 
+			@icon = 'checkbox-blank-outline'
+			@color = 'rgba(0,0,0,.54)'
+
+
+
+
+
+
+# 	 888888ba                 dP oo           888888ba             dP     dP
+# 	 88    `8b                88              88    `8b            88     88
+# 	a88aaaa8P' .d8888b. .d888b88 dP .d8888b. a88aaaa8P' dP    dP d8888P d8888P .d8888b. 88d888b.
+# 	 88   `8b. 88'  `88 88'  `88 88 88'  `88  88   `8b. 88    88   88     88   88'  `88 88'  `88
+# 	 88     88 88.  .88 88.  .88 88 88.  .88  88    .88 88.  .88   88     88   88.  .88 88    88
+# 	 dP     dP `88888P8 `88888P8 dP `88888P'  88888888P `88888P'   dP     dP   `88888P' dP    dP
+# 	
+# 	
+
+
+exports.Radiobox = Radiobox = class Radiobox extends Icon
+	constructor: (options = {}) ->
+
+		@_isOn = undefined
+		@_group = options.group ? []
+
+		super _.defaults options,
+			name: '.'
+			animationOptions: {time: .15}
+			icon: 'radiobox-blank'
+			color: 'rgba(0,0,0,.54)'
+
+		@isOn = options.isOn ? false
+		@onTap -> @isOn = !@isOn
+
+		@_group.push(@)
+
+	@define "isOn",
+		get: -> return @_isOn
+		set: (bool) ->
+			return if bool is @_isOn
+			
+			@_isOn = bool
+			@emit("change:isOn", @_isOn, @)
+			@update()
+
+	update: ->
+		if @_isOn
+			@icon = 'radiobox-marked'
+			@color = theme.colors.primary.main
+
+			radiobox.isOn = false for radiobox in _.without(@_group, @)
+		else 
+			@icon = 'radiobox-blank'
+			@color = 'rgba(0,0,0,.54)'
 
 
 

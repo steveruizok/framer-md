@@ -197,7 +197,43 @@ fab = new md.Fab
 	name: 'fab'
 	parent: buttons.home
 	icon: 'plus'
-	action: -> resultText.template = 'Fab tapped.'
+	action: -> 
+		resultText.template = 'Fab tapped.'
+		showFirstNotification()
+
+showFirstNotification = ->
+	new md.Notification
+		title: 'New Notification'
+		body: 'Notfiications can be swiped away or set with a timeout. The buttons below are optional. Tap Next to proceed.'
+		icon: 'email'
+		timeout: 5
+		action1:
+			icon: 'archive'
+			title: 'Archive'
+			action: -> resultText.template = 'Notification Archived.'
+		action2:
+			icon: 'alert-circle'
+			title: 'Next'
+			action: -> 
+				resultText.template = 'More notifications shown.'
+				showNextNotifications()
+
+showNextNotifications = ->
+	first = new md.Notification
+		title: 'Another Notification'
+		body: 'Notifications stack like thi and position automatically.'
+		icon: 'emoticon-happy'
+		iconBackgroundColor: 'rgba(0, 152, 168, 1)'
+		timeout: 5
+	Utils.delay 1, ->
+		second = new md.Notification
+			title: 'A third notification.'
+			body: 'They reposition automatically, too.'
+			icon: 'emoticon-cool'
+			iconBackgroundColor: 'rgba(255, 233, 149, 1)'
+			iconColor: '#000'
+			timeout: 5
+
 
 
 # --- secondPage (page of buttons view)
@@ -246,15 +282,43 @@ tip = new md.Regular
 	text: "Pages are modified scroll components. Fixed content can be added to the page, and scrolling content (like this) to the page.content."
 
 
+
 # --- form (view)
 
 # Text layer to register our actions.
-welcomeProfile = new md.Regular
+formResults = new md.Regular
 	name: '.', parent: form.home
-	x: Align.center, y: 150
+	x: Align.center, y: 32
 	width: Screen.width
 	textAlign: 'center'
-	text: 'Welcome to the Form Page!'
+	text: 'Results: {results}'
+	
+formResults.template =
+	results: 'None yet.'
+	
+uiswitch = new md.Switch
+	name: 'switch', parent: form.home
+	x: Align.center, y: formResults.maxY + 32
+
+uiswitch.on "change:isOn", (isOn) -> formResults.template = "Switch's isOn property is #{isOn}."
+
+for i in [0..3]
+	checkbox = new md.Checkbox
+		name: 'switch', parent: form.home
+		x: Align.center(-64), y: 180 + (i * 32)
+	
+	checkbox.on "change:isOn", (isOn) -> formResults.template = "Checkbox's isOn property is #{isOn}."
+
+radioboxGroup = []
+
+for i in [0..3]
+	radiobox = new md.Radiobox
+		name: 'switch', parent: form.home
+		x: Align.center(64), y: 180 + (i * 32)
+		group: radioboxGroup
+	
+	radiobox.on "change:isOn", (isOn) -> formResults.template = "Radiobox's isOn property is #{isOn}."
+
 
 # --- gallery (view)
 

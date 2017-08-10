@@ -193,12 +193,12 @@ showKeyboard = new md.Button
 		resultText.template = 'Keyboard opened.'
 
 # fab to... do nothing yet
-fab = new md.Fab
-	name: 'fab'
+actionButton = new md.ActionButton
+	name: 'Action Button'
 	parent: buttons.home
 	icon: 'plus'
 	action: -> 
-		resultText.template = 'Fab tapped.'
+		resultText.template = 'Action button tapped.'
 		showFirstNotification()
 
 showFirstNotification = ->
@@ -234,7 +234,20 @@ showNextNotifications = ->
 			iconColor: '#000'
 			timeout: 5
 
-
+# button to open the keyboard
+showKeyboard = new md.Button 
+	name: 'keyboard button'
+	parent: buttons.home
+	x: Align.center, y: showKeyboard.maxY + 16
+	text: 'show snackbar'
+	action: -> 
+		new md.Snackbar
+			parent: buttons.home
+			name: 'snackbar'
+			title: 'This is a snackbar. It has a timeout and one action.'
+			action:
+				title: 'undo'
+				action: -> null
 
 # --- secondPage (page of buttons view)
 

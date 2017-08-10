@@ -143,6 +143,10 @@ theme =
 				backgroundColor: source.colors.secondary.dark
 				borderColor: null
 
+	snackbar:
+		backgroundColor: 'rgba(51, 51, 51, 1)'
+		color: 'rgba(255, 255, 255, 1)'
+
 	slider:
 		knob: source.colors.primary.light
 		fill: source.colors.primary.dark

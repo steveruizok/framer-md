@@ -1,5 +1,6 @@
 {ripple} = require 'ripple'
 {theme} = require 'theme'
+{Icon} = require 'icon'
 type = require 'type'
 icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
 
@@ -211,48 +212,6 @@ exports.View = class View extends FlowComponent
 
 
 
-# 	dP
-# 	88
-# 	88 .d8888b. .d8888b. 88d888b.
-# 	88 88'  `"" 88'  `88 88'  `88
-# 	88 88.  ... 88.  .88 88    88
-# 	dP `88888P' `88888P' dP    dP
-# 	
-# 	
-
-exports.Icon = class Icon extends Layer
-	constructor: (options = {}) ->
-
-		@_icon = options.icon ? 'menu'
-		@_color = options.color ? '#00000'
-		@_backgroundColor = options.backgroundColor ? null
-
-		super _.defaults options,
-			name: '.'
-			height: 24, width: 24
-			backgroundColor: @_backgroundColor
-
-		# @icon = @_icon
-
-	@define "icon",
-		get: -> return @_icon
-		set: (name) ->
-			@_icon = name
-
-			svg = if icons[@_icon] then "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
-			else throw "Error: icon '#{name}' was not found. See https://materialdesignicons.com/ for full list of icons."
-
-			@html = svg
-
-	@define "color",
-		get: -> return @_color
-		set: (color) ->
-			@_color = new Color(color)
-
-			svg = if icons[@_icon] then "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
-			else throw "Error: icon '#{name}' was not found. See https://materialdesignicons.com/ for full list of icons."
-
-			@html = svg
 
 
 

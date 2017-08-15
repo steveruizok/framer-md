@@ -343,6 +343,7 @@ slider = new md.Slider
 	parent: form.home
 	x: Align.center, y: 280
 	
+	
 slider.onValueChange -> 
 	formResults.template = "Slider's value is #{@value.toFixed(2)}"
 	

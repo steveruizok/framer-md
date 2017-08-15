@@ -18,7 +18,7 @@
 #	placeBehind (Layer), a child of layer behind which the ripple should appear
 #	color (string or color object), a custom color for the ripple
 
-ripple = (layer, point, placeBehind, color) ->
+Ripple = (layer, point, placeBehind, color) ->
 	
 	if !layer? then throw 'Ripple requires a Layer. Try myLayer.onTouchStart (event) -> ripple(@, event.point)'
 	if !point? then throw 'Ripple requires a point. Try myLayer.onTouchStart (event) -> ripple(@, event.point)'
@@ -81,4 +81,4 @@ ripple = (layer, point, placeBehind, color) ->
 			opacity: 0
 		mask.onAnimationEnd mask.destroy
 
-exports.ripple = ripple
+exports.Ripple = Ripple

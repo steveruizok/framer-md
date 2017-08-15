@@ -5,15 +5,17 @@ home=new Layer
 	size:Screen.size
 	backgroundColor: "#fff"
 home.bringToFront()	
-customSlider = new md.Slider
+
+
+themeSlider=new md.Slider
+	x:30
+	y:30
 	width:300
-	parent:home
+
+
+customSlider=new md.Slider
+	x:30
+	y:200
+	width:300
 	custom:true
-	x:20
-	y:20
-themedlider = new md.Slider
-	width:300
-	parent:home
-	x:20
-	y:120
 

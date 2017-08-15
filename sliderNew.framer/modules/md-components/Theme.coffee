@@ -1,23 +1,23 @@
+# 	d888888P dP
+# 	   88    88
+# 	   88    88d888b. .d8888b. 88d8b.d8b. .d8888b.
+# 	   88    88'  `88 88ooood8 88'`88'`88 88ooood8
+# 	   88    88    88 88.  ... 88  88  88 88.  ...
+# 	   dP    dP    dP `88888P' dP  dP  dP `88888P'
 
-#   dP   dP
-#   88   88
-# d8888P 88d888b. .d8888b. 88d8b.d8b. .d8888b. .d8888b.
-#   88   88'  `88 88ooood8 88'`88'`88 88ooood8 Y8ooooo.
-#   88   88    88 88.  ... 88  88  88 88.  ...       88
-#   dP   dP    dP `88888P' dP  dP  dP `88888P' `88888P'
 
-# When loaded, this module will attempt to create a new theme based on
-# the Design Mode template. Its default values will be for a "Light" theme.
+# When loaded, this module will attempt to create a new theme based on 
+# the Design Mode template.
 
 modifyColor = (color, h, s, l) ->
 	clip = _.replace(_.replace(color.toHslString().slice(4, -1), '%', ''), '%', '') .split(', ')
 
 	newColor = new Color(
-		h: _.parseInt(clip[0]) + h,
-		s: (_.parseInt(clip[1]) + s)/100,
-		l: (_.parseInt(clip[2]) + l)/100,
+		h: _.parseInt(clip[0]) + h, 
+		s: (_.parseInt(clip[1]) + s)/100, 
+		l: (_.parseInt(clip[2]) + l)/100, 
 		a: 1)
-
+	
 	return newColor
 
 primaryColor = primary_color.backgroundColor
@@ -46,7 +46,7 @@ source =
 			text: menuTextColor
 			invert: menuInvert
 
-theme =
+Theme = 
 	tint: source.colors.secondary.main
 	primary: source.colors.primary.main
 	secondary: source.colors.secondary.main
@@ -56,7 +56,7 @@ theme =
 	user:
 		image: undefined
 
-	header:
+	header: 
 		backgroundColor: source.colors.primary.main
 		title: source.colors.primary.text
 		invert: primaryInvert
@@ -66,17 +66,26 @@ theme =
 			backgroundColor: source.colors.primary.light
 			color: source.colors.primary.text
 			selector: source.colors.secondary.main
-
-	statusBar:
-		image: 'images/status_bar.png'
+	
+	statusBar: 
+		image: 'modules/md-images/status_bar.png'
 		backgroundColor: source.colors.primary.dark
 		invert: primaryInvert
-
+	
 	bottomNav:
 		backgroundColor: '#FFFFFF'
 		shadowY: -2
 		shadowBlur: 6
 		shadowColor: 'rgba(0,0,0,.1)'
+	
+	navBar:
+		backgroundColor: '#000000'
+	
+	keyboard:
+		image: 'modules/md-images/keyboard.png'
+
+	footer:
+		image: 'modules/md-images/nav_bar.png'
 
 	page:
 		primary:
@@ -95,9 +104,8 @@ theme =
 			icon: source.colors.secondary.text
 		backgroundColor: source.colors.menu.light
 		text: source.colors.menu.text
-
-		slider:
-			# knob: source.colors.secondary.light
+		slider: 
+			knob: source.colors.secondary.light
 			fill: source.colors.secondary.dark
 		invert: source.colors.menu.invert
 
@@ -121,16 +129,16 @@ theme =
 		color: source.colors.secondary.text
 		invert: primaryInvert
 
-	dialog:
+	dialog: 
 		backgroundColor:'#FAFAFA'
-
+	
 	divider:
 		backgroundColor: 'rgba(0,0,0,.12)'
 
-	text:
+	text: 
 		primary: source.colors.primary.text
 		secondary: source.colors.secondary.text
-
+	
 	table:
 		backgroundColor: '#FFFFFF'
 		text: source.colors.primary.text
@@ -155,12 +163,7 @@ theme =
 	card:
 		header: source.colors.secondary.dark
 
-	navBar:
-		backgroundColor: '#000000'
-
-	keyboard:
-		image: 'images/keyboard.png'
 
 color_pallete.destroy()
 
-exports.theme = theme
+exports.Theme = Theme

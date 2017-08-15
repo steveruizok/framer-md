@@ -157,24 +157,32 @@ Theme =
 		color: 'rgba(255, 255, 255, 1)'
 
 	slider:
-		fill: slider_fill?.backgroundColor ? source.colors.primary.dark
-		backgroundColor: slider_background?.backgroundColor ? 'rgba(0,0,0,.2)'
+		fill: slider_fill?.backgroundColor
+		backgroundColor: slider_background?.backgroundColor
 		knob: 
-			size: slider_knob?.size ? 12
-			backgroundColor: slider_knob?.backgroundColor ? source.colors.primary.light
-			radius: slider_knob?.borderRadius ? 12
+			size: slider_knob?.size
+			backgroundColor: slider_knob?.backgroundColor
+			radius: slider_knob?.borderRadius
 		notch:
-			width: 2
-			height: 2
-			borderRadius: 2
+			width: undefined
+			height: undefined
+			borderRadius: undefined
 			backgroundColor: source.colors.primary.text
 		tip:
-			backgroundColor: source.colors.primary.light
+			backgroundColor: undefined
 			value: 
-				color: source.colors.primary.text
+				color: undefined
 
 	card:
 		header: source.colors.secondary.dark
+
+	designMode: true
+
+	getStyle: (object) -> 
+		if @designMode
+			return this[object]
+		else
+			return {}
 
 
 color_pallete.destroy()

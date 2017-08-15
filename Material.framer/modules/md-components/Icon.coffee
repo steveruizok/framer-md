@@ -1,5 +1,3 @@
-icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
-
 # 	dP
 # 	88
 # 	88 .d8888b. .d8888b. 88d888b.
@@ -19,6 +17,7 @@ icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
 #
 #
 #--	Usage:
+#
 #	To create an icon, type:
 #
 #		myIcon = new Icon
@@ -36,9 +35,22 @@ icons = JSON.parse Utils.domLoadDataSync "modules/icons.json"
 #
 #	Apart from that, you can use the Icon instance just like any other Layer instance.
 #
-#	Enjoy! @steveruiok
+#
+#-- Troubleshooting
+#
+#	Q.	Why do I keep getting the "Icon not found?" error?
+#
+#	A.	The icon names used by this module are not always standard to Google's listings. 
+#		If you're getting errors, search for the icon at https://materialdesignicons.com/.
+#		It may be listed there under a different name. If that's the case, use their
+#		name for the icon instead when creating your Icon instance.
+#
+#		A common example: icon: "search" won't work, but icon: "magnify" will. ¯\_(ツ)_/¯
+#	
+#-- Enjoy! @steveruiok
 
 
+icons = JSON.parse Utils.domLoadDataSync "modules/md-components/icons.json"
 
 exports.Icon = class Icon extends Layer
 	constructor: (options = {}) ->

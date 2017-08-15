@@ -1,6 +1,6 @@
 {
   "orientation" : 0,
-  "updateDelay" : 5,
+  "updateDelay" : 0.3,
   "designModeSelected" : 0,
   "cachedDeviceHeight" : 640,
   "contentScale" : 1,
@@ -11,15 +11,12 @@
   "propertyPanelToggleStates" : {
 
   },
-  "projectId" : "4D0B2EAC-2748-4F58-8567-D210BD4FCD22",
+  "projectId" : "0E3CA559-2B57-44BD-8D14-7973A9BC6E68",
   "deviceOrientation" : 0,
   "selectedHand" : "",
   "showBezel" : true,
   "foldedCodeRanges" : [
-    "{0, 1274}",
-    "{2217, 4405}",
-    "{6623, 1332}",
-    "{7956, 552}"
+
   ],
   "deviceScale" : "fit"
 }

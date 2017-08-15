@@ -168,7 +168,7 @@ dialog = new md.Button
 	raised: true
 	x: Align.center, y: resultText.maxY + 32
 	text: 'Dialog'
-	color: md.theme.tint
+	color: md.Theme.tint
 	action: ->	
 		resultText.template = 'Dialog opened.'
 		new md.Dialog
@@ -195,6 +195,7 @@ showKeyboard = new md.Button
 # fab to... do nothing yet
 actionButton = new md.ActionButton
 	name: 'Action Button'
+	app: app
 	parent: buttons.home
 	icon: 'plus'
 	action: -> 
@@ -203,6 +204,7 @@ actionButton = new md.ActionButton
 
 showFirstNotification = ->
 	new md.Notification
+		app: app
 		title: 'New Notification'
 		body: 'Notfiications can be swiped away or set with a timeout. The buttons below are optional. Tap Next to proceed.'
 		icon: 'email'
@@ -220,6 +222,7 @@ showFirstNotification = ->
 
 showNextNotifications = ->
 	first = new md.Notification
+		app: app
 		title: 'Another Notification'
 		body: 'Notifications stack like this and position automatically.'
 		icon: 'emoticon-happy'
@@ -227,6 +230,7 @@ showNextNotifications = ->
 		timeout: 5
 	Utils.delay 1, ->
 		second = new md.Notification
+			app: app
 			title: 'A third notification.'
 			body: 'They reposition automatically, too.'
 			icon: 'emoticon-cool'
@@ -243,6 +247,7 @@ showKeyboard = new md.Button
 	action: -> 
 		new md.Snackbar
 			parent: buttons.home
+			app: app
 			name: 'snackbar'
 			title: 'This is a snackbar. It has a timeout and one action.'
 			action:
@@ -310,14 +315,14 @@ formResults.template =
 	results: 'None yet.'
 	
 uiswitch = new md.Switch
-	name: 'switch', parent: form.home
+	parent: form.home
 	x: Align.center, y: formResults.maxY + 32
 
 uiswitch.on "change:isOn", (isOn) -> formResults.template = "Switch's isOn property is #{isOn}."
 
 for i in [0..3]
 	checkbox = new md.Checkbox
-		name: 'switch', parent: form.home
+		parent: form.home
 		x: Align.center(-64), y: 120 + (i * 32)
 	
 	checkbox.on "change:isOn", (isOn) -> formResults.template = "Checkbox's isOn property is #{isOn}."
@@ -326,7 +331,7 @@ radioboxGroup = []
 
 for i in [0..3]
 	radiobox = new md.Radiobox
-		name: 'switch', parent: form.home
+		parent: form.home
 		x: Align.center(64), y: 120 + (i * 32)
 		group: radioboxGroup
 		
@@ -366,7 +371,7 @@ for i in _.range(20)
 		title: 'Tile ' + i
 		support: 'A nice image!'
 		icon: Utils.randomChoice(['coffee', 'emoticon', 'cup', 'flask'])
-		rippleColor: new Color(app.theme.primary).alpha(.3)
+		rippleColor: new Color(app.Theme.primary).alpha(.3)
 		action: ->
 			@animate {rotation: 360}
 		footerAction: ->

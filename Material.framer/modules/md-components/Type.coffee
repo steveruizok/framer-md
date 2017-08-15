@@ -1,4 +1,4 @@
-theme = require 'theme'
+Theme = require 'md-components/Theme'
 
 # 	d888888P                                                                dP
 # 	   88                                                                   88
@@ -13,7 +13,7 @@ Utils.insertCSS(
 	"""
     @font-face {
       font-family: "Roboto";
-      src: url("fonts/Roboto-Regular.ttf");
+      src: url("modules/md-fonts/Roboto-Regular.ttf");
     """)
 
 class exports.Headline extends TextLayer

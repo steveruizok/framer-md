@@ -157,8 +157,21 @@ Theme =
 		color: 'rgba(255, 255, 255, 1)'
 
 	slider:
-		knob: source.colors.primary.light
-		fill: source.colors.primary.dark
+		fill: slider_fill?.backgroundColor ? source.colors.primary.dark
+		backgroundColor: slider_background?.backgroundColor ? 'rgba(0,0,0,.2)'
+		knob: 
+			size: slider_knob?.size ? 12
+			backgroundColor: slider_knob?.backgroundColor ? source.colors.primary.light
+			radius: slider_knob?.borderRadius ? 12
+		notch:
+			width: 2
+			height: 2
+			borderRadius: 2
+			backgroundColor: source.colors.primary.text
+		tip:
+			backgroundColor: source.colors.primary.light
+			value: 
+				color: source.colors.primary.text
 
 	card:
 		header: source.colors.secondary.dark

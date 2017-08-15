@@ -15,24 +15,13 @@ exports.Slider = class Slider extends SliderComponent
 
 		@_notched = options.notched ? false
 
-
 		super _.defaults options,
 			name: '.', height: 2
-			knobSize: 12
+			knobSize: 32
 			backgroundColor: 'rgba(0,0,0,.26)'
 			min: 1, max: 10
 
-		if options.custom and sliderRegularHightlight? and sliderRegularKnob?
-				trackColor=sliderRegularHightlight.backgroundColor ? Theme.colors.primary.main
-				knobColor=sliderRegularKnob.backgroundColor ? Theme.colors.primary.main
-				knobSize= sliderRegularKnob.size ? @knobSize
-				knobRadius=sliderRegularKnob.borderRadius ? @knobSize
-		else
-				trackColor=Theme.colors.primary.main
-				knobColor=Theme.colors.primary.main
-				knobSize=@knobSize
-				knobRadius=@knobSize
-		@fill.backgroundColor = trackColor
+		@fill.backgroundColor = Theme.slider.fill
 
 		@knob.props =
 			name: 'Knob'
@@ -44,8 +33,8 @@ exports.Slider = class Slider extends SliderComponent
 		@thumb = new Layer
 			name: 'Thumb', parent: @knob
 			x: Align.center, y: Align.center
-			size:knobSize, borderRadius: knobRadius
-			backgroundColor: knobColor
+			size: Theme.slider.knob.size, borderRadius: Theme.slider.knob.radius
+			backgroundColor: Theme.slider.knob.backgroundColor
 			animationOptions: {time: .15}
 
 		if @_notched
@@ -54,21 +43,21 @@ exports.Slider = class Slider extends SliderComponent
 				notch = new Layer
 					name: '.', parent: @
 					x: i * @width/(@max-@min)
-					width: 2, height: 2, borderRadius: 2,
-					backgroundColor: Theme.colors.primary.text
+					width: Theme.slider.notch.width, height: Theme.slider.notch.height, borderRadius: Theme.slider.notch.borderRadius,
+					backgroundColor: Theme.slider.notch.backgroundColor
 
 			@tip = new Layer
 				name: 'Tip', parent: @knob
 				x: Align.center, y: -24
 				width: 26, height: 32
-				html: '<svg width="26px" height="32px" viewBox="0 0 26 32"><path d="M13,0.1 C20.2,0.1 26,6 26,13.3 C26,17 24,20.9 18.7,26.2 L13,32 L7.2,26.2 C2,20.8 0,16.9 0,13.3 C-3.55271368e-15,6 5.8,0.1 13,0.1 L13,0.1 Z" fill="' + knobColor + '"></path></svg>'
+				html: '<svg width="26px" height="32px" viewBox="0 0 26 32"><path d="M13,0.1 C20.2,0.1 26,6 26,13.3 C26,17 24,20.9 18.7,26.2 L13,32 L7.2,26.2 C2,20.8 0,16.9 0,13.3 C-3.55271368e-15,6 5.8,0.1 13,0.1 L13,0.1 Z" fill="' + Theme.slider.tip.backgroundColor + '"></path></svg>'
 				backgroundColor: null, opacity: 0
 				animationOptions: {time: .15}
 
 			@tipValue = new TextLayer
 				name: 'Tip Value', parent: @tip
 				y: 5, width: 26
-				color: Theme.colors.primary.text
+				color: Theme.slider.tip.value.color
 				fontSize: 12, fontFamily: 'Roboto', textAlign: 'center'
 				text: "{value}"
 

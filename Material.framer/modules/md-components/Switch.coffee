@@ -22,14 +22,25 @@ exports.Switch = class Switch extends Layer
 			backgroundColor: 'rgba(34, 31, 31, .26)'
 			animationOptions: {time: .15}
 
-		@knob = new Layer
+		@thumb = new Layer
 			name: '.', parent: @
-			x: 0, y: Align.center
+			y: Align.center
+			height: 44, width: 44, borderRadius: 44
+			backgroundColor: null
+			animationOptions: {time: .15}
+
+		@knob = new Layer
+			name: '.', parent: @thumb
+			x: Align.center, y: Align.center
 			width: 20, height: 20, borderRadius: 10
 			backgroundColor: 'F1F1F1'
 			shadowY: 2, shadowBlur: 3
 			animationOptions: {time: .15}
 
+		@onTouchStart -> 
+			if @isOn then Ripple(@thumb, event.point, @knob, new Color(Theme.primary).alpha(.3))
+			else Ripple(@thumb, event.point, @knob, 'rgba(0,0,0,.1)')
+		
 		@isOn = options.isOn ? false
 		@onTap -> @isOn = !@isOn
 
@@ -44,8 +55,10 @@ exports.Switch = class Switch extends Layer
 
 	update: ->
 		if @_isOn
-			@knob.animate {x: Align.right(), backgroundColor: Theme.colors.primary.main}
+			@thumb.animate {x: Align.right(12)}
+			@knob.animate {backgroundColor: Theme.colors.primary.main}
 			@animate {backgroundColor: Theme.colors.primary.light}
 		else 
-			@knob.animate {x: 0, backgroundColor: 'F1F1F1'}
+			@thumb.animate {x: -12}
+			@knob.animate {backgroundColor: 'F1F1F1'}
 			@animate {backgroundColor: 'rgba(34, 31, 31, .26)'}

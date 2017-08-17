@@ -22,8 +22,10 @@ exports.Radiobox = Radiobox = class Radiobox extends Icon
 			animationOptions: {time: .15}
 			icon: 'radiobox-blank'
 			color: 'rgba(0,0,0,.54)'
+			action: -> null
 
 		@isOn = options.isOn ? false
+
 		@onTap -> if @isOn is false then @isOn = true
 
 		@_group.push(@)
@@ -41,8 +43,6 @@ exports.Radiobox = Radiobox = class Radiobox extends Icon
 		if @_isOn
 			@icon = 'radiobox-marked'
 			@color = Theme.colors.primary.main
-
-			radiobox.isOn = false for radiobox in _.without(@_group, @)
 		else 
 			@icon = 'radiobox-blank'
 			@color = 'rgba(0,0,0,.54)'

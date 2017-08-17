@@ -23,7 +23,7 @@ modifyColor = (color, h, s, l) ->
 primaryColor = primary_color.backgroundColor
 primaryInvert = 100 - (primary_invert.opacity * 100)
 secondaryColor = secondary_color.backgroundColor
-menuColor = menu_color.backgroundColor
+pageColor = page_color.backgroundColor
 menuTextColor = menu_text_color.color
 menuInvert = 100 - (menu_invert.opacity * 100)
 
@@ -42,14 +42,16 @@ source =
 			dark: modifyColor(secondaryColor, -1, -7, -12)
 			text: secondary_text_color.color
 		menu:
-			light: menuColor
+			light: pageColor
 			text: menuTextColor
 			invert: menuInvert
+		page: pageColor
 
 Theme = 
 	tint: source.colors.secondary.main
 	primary: source.colors.primary.main
 	secondary: source.colors.secondary.main
+	page: source.page
 	menu: source.colors.menu.light
 	colors: source.colors
 
@@ -89,7 +91,7 @@ Theme =
 
 	page:
 		primary:
-			backgroundColor: '#E1E2E1'
+			backgroundColor: source.colors.page
 		secondary:
 			backgroundColor: '#F5F5F6'
 

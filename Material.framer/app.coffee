@@ -4,74 +4,6 @@ REFERENCE:
 https://material.io/guidelines/
 https://materialdesignicons.com/
 
-IN PROJECT:
-
-Fonts: 
-TextLayer classes set to Material's default fonts
-
-App:
-A wrapper that includes the header, footer, nav, and menu overlay.
-
-View: 
-A modified FlowComponent that uses themes and has a "smart" header.
-
-Menu Overlay:
-A modal layer for the material side menu.
-
-Page: 
-A modified ScrollComponent that works with App and App's header. Fixed content can be set with the page as parent, or to page.content for scrolling content. When App changes pages, it updates its header using the header properties of that page. These are the header's text, the header's icon, and the action taken when tapping the icon.
-
-IMPLEMENTED:
-
-Button (flat, raised, fab)
-Icon support (using SVGs)
-Header
-Footer
-MenuOverlay
-BottomNav
-Dialogs
-Keyboard
-Ripple effects
-Grid Lists / Tiles
-
-TODO
-
-Forms / Controls:
-	Dropdown selections
-	Time Picker
-	Date Picker
-	Input fields
-	Switches
-	Dividers
-	Steppers
-	Sliders
-	Checkboxes
-	Radio Buttons
-
-Header:
-	Tabs
-
-MenuOverlay:
-	Dividers
-	Subheaders
-	ScrollBar
-	
-Dialogs:
-	Scrollable content
-	Custom content dialogs
-	Full Screen dialogs
-
-Lists:
-	Row items (one line, two line, etc)
-	Toggles
-
-General:
-	Cards
-	Chips
-	Grids
-	Menus
-	Progress Bars
-
 ###
 
 md = require "md"
@@ -133,10 +65,19 @@ app = new md.App
 
 # --- buttons (view)
 
+card = new md.Card
+	parent: buttons.home.content
+	height: 216
+	expand: 220
+	expanded: true
+	actions: [
+		{text: 'see more', action: -> card.expanded = true}
+	]
+
 # Text layer to register our actions.
 welcome = new md.Regular
-	name: 'welcome', parent: buttons.home
-	x: Align.center, y: 32
+	name: 'welcome', parent: card
+	x: Align.center, y: 16
 	width: Screen.width - 64
 	textAlign: 'center'
 	text: 'Welcome to the Material Kit demo. This is the Buttons view. There are two other views: Form and Gallery.'
@@ -144,16 +85,16 @@ welcome = new md.Regular
 # button to go to the second page
 toSecondPage = new md.Button 
 	name: 'to second page'
-	parent: buttons.home
-	x: Align.center, y: 130
+	parent: card
+	x: Align.center, y: 100
 	text: 'go to second page'
 	raised: true
 	action: -> buttons.showNext(secondPage)
 
 # Text layer to register our actions.
 resultText = new md.Regular
-	name: 'results', parent: buttons.home
-	x: Align.center, y: toSecondPage.maxY + 32
+	name: 'results', parent: card
+	x: Align.center, y: 216
 	width: Screen.width
 	textAlign: 'center'
 	text: 'Results: {results}'
@@ -164,7 +105,7 @@ resultText.template =
 # button to create a dialog
 dialog = new md.Button 
 	name: 'dialog button'
-	parent: buttons.home
+	parent: card
 	raised: true
 	x: Align.center, y: resultText.maxY + 32
 	text: 'Dialog'
@@ -182,10 +123,11 @@ dialog = new md.Button
 				resultText.template = 'Dialog declined.'
 
 
+
 # button to open the keyboard
 showKeyboard = new md.Button 
 	name: 'keyboard button'
-	parent: buttons.home
+	parent: card
 	x: Align.center, y: dialog.maxY + 16
 	text: 'show keyboard'
 	action: -> 
@@ -241,7 +183,7 @@ showNextNotifications = ->
 # button to open the keyboard
 showKeyboard = new md.Button 
 	name: 'keyboard button'
-	parent: buttons.home
+	parent: card
 	x: Align.center, y: showKeyboard.maxY + 16
 	text: 'show snackbar'
 	action: -> 
@@ -323,7 +265,7 @@ uiswitch.on "change:isOn", (isOn) -> formResults.template = "Switch's isOn prope
 for i in [0..3]
 	checkbox = new md.Checkbox
 		parent: form.home
-		x: Align.center(-64), y: 120 + (i * 32)
+		x: Align.center(-64), y: 120 + (i * 48)
 	
 	checkbox.on "change:isOn", (isOn) -> formResults.template = "Checkbox's isOn property is #{isOn}."
 
@@ -332,7 +274,7 @@ radioboxGroup = []
 for i in [0..3]
 	radiobox = new md.Radiobox
 		parent: form.home
-		x: Align.center(64), y: 120 + (i * 32)
+		x: Align.center(64), y: 120 + (i * 48)
 		group: radioboxGroup
 		
 	radiobox.i = i
@@ -341,14 +283,14 @@ for i in [0..3]
 
 slider = new md.Slider
 	parent: form.home
-	x: Align.center, y: 280
+	x: Align.center, y: 340
 	
 slider.onValueChange -> 
 	formResults.template = "Slider's value is #{@value.toFixed(2)}"
 	
 notchSlider = new md.Slider
 	parent: form.home
-	x: Align.center, y: 332
+	x: Align.center, y: 400
 	notched: true
 
 notchSlider.onValueChange -> formResults.template = "Notched slider's value is #{Math.round(@value)}"

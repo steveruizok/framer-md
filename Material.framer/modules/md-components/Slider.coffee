@@ -21,6 +21,7 @@ exports.Slider = class Slider extends SliderComponent
 			min: 1, max: 10
 		
 		@fill.backgroundColor = Theme.colors.primary.main
+		@knobSize = 44
 
 		@knob.props =
 			name: 'Knob'
@@ -45,6 +46,8 @@ exports.Slider = class Slider extends SliderComponent
 					width: 2, height: 2, borderRadius: 2,
 					backgroundColor: Theme.colors.primary.text
 
+				notch.placeBehind(@knob)
+
 			@tip = new Layer
 				name: 'Tip', parent: @knob
 				x: Align.center, y: -24
@@ -68,11 +71,12 @@ exports.Slider = class Slider extends SliderComponent
 				@tip.animate {opacity: 1}
 
 			@onTouchEnd ->
+				@animateStop()
 				@thumb.animate {opacity: 1}
 				@tip.animate {opacity: 0}
 
 			round = (number, nearest) ->
-			    Math.round(number / nearest) * nearest
+			    (Math.round(number / nearest) + 1) * nearest
 			 
 			@knob.draggable.updatePosition = (point) =>
 			    point.x = round(point.x, @width / (@max-@min) ) - (@knob.width / 2)
@@ -83,7 +87,9 @@ exports.Slider = class Slider extends SliderComponent
 
 		else 
 			@knob.onTouchStart => 
-				@thumb.animate {width: 18, height: 18, x: 6, y: 6}
+				@thumb.animate {width: 18, height: 18, x: 13, y: 13}
+				Ripple(@knob, event.point, @thumb, new Color(Theme.primary).alpha(.3))
 			@knob.onTouchEnd => 
-				@thumb.animate {width: 12, height: 12, x: 9, y: 9}
+				@animateStop()
+				@thumb.animate {width: 12, height: 12, x: 15, y: 15}
 		

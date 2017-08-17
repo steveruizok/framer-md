@@ -28,6 +28,9 @@ exports.View = class View extends FlowComponent
 	newPage: (options = {}) ->
 		page = new Page _.defaults options,
 			size: @size
+
+		page.load()
+
 		return page 
 
 	linkTo: (page) ->

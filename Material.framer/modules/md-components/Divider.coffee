@@ -11,5 +11,5 @@ exports.Divider = Divider = class Divider extends Layer
 	constructor: (options = {}) ->
 		super _.defaults options,
 			name: '.'
-			width: 200, height: 1,
+			width: options.parent?.width ? 200, height: 1,
 			backgroundColor: Theme.divider.backgroundColor

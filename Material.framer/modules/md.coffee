@@ -23,6 +23,7 @@ Type = require 'md-components/Type'
 { View } = require 'md-components/View'
 { Page } = require 'md-components/Page'
 { BottomNav } = require 'md-components/BottomNav'
+{ Card } = require 'md-components/Card'
 { App } = require 'md-components/App'
 
 # TODO: Change App from master flow component to Screen manager.
@@ -55,6 +56,7 @@ exports.MenuButton = MenuButton
 exports.MenuOverlay = MenuOverlay
 exports.View = View
 exports.Page = Page
+exports.Card = Card
 exports.App = App
 
 exports.Title = Title = Type.Title

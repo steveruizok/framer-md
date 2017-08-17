@@ -45,6 +45,29 @@ exports.App = class App extends Layer
 			image: Theme.footer.image
 			index: 999
 			y: Align.bottom()
+			clip: true
+
+		flash = undefined
+
+		@backButton = new Layer
+			name: 'Back Button', parent: @footer
+			x: 56
+			width: 40, height: 40, borderRadius: 24
+			opacity: 0, backgroundColor: 'rgba(255, 255, 255, .2)'
+			animationOptions: {time: .15}
+
+		@backButton.onTapStart =>
+			flash?.destroy()
+			flash = @backButton.copy()
+			flash.ignoreEvents = true
+			flash.parent = @footer
+			flash.animate {x: 32, width: 100, y: 0, height: 48, opacity: 1}
+
+		@backButton.onTap => 
+			flash?.animateStop()
+			flash?.animate {opacity: 0, options:{time: .5}}
+			@current.showPrevious()
+
 
 		if @_bottomNav
 			@bottomNav = new BottomNav
@@ -90,6 +113,7 @@ exports.App = class App extends Layer
 	addView: (view, i) ->
 		view.i = i
 		view.parent = @
+		view._app = @
 		view.y = @header.maxY
 		view.height = Screen.height - @header.height - @footer.height
 
@@ -132,4 +156,4 @@ exports.App = class App extends Layer
 		@header.icon = page._header.icon
 		@header.iconAction = page._header.iconAction
 		@header.visible = page._header.visible
-		page._onLoad()
+		page.update()

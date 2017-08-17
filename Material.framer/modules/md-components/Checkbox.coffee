@@ -20,8 +20,10 @@ exports.Checkbox = CheckBox = class Checkbox extends Icon
 			animationOptions: {time: .15}
 			icon: 'checkbox-blank-outline'
 			color: 'rgba(0,0,0,.54)'
+			action: -> null
 
 		@isOn = options.isOn ? false
+
 		@onTap -> @isOn = !@isOn
 
 	@define "isOn",

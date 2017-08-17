@@ -21,7 +21,8 @@ exports.Page = class Page extends ScrollComponent
 
 		@_template = options.template
 		@_templateOpacity = options.templateOpacity ? .5
-		@_onLoad = options.onLoad ? -> null
+		@_load = options.load ? -> null
+		@_update = options.update ? -> null
 
 		if @_header.iconAction then @_header.iconAction = _.bind(@_header.iconAction, @)
 		if @_onLoad then @_onLoad = _.bind(@_onLoad, @)
@@ -44,4 +45,6 @@ exports.Page = class Page extends ScrollComponent
 
 		@sendToBack()
 
-	update: -> return null
+	update: -> @_update()
+
+	load: -> @_load()

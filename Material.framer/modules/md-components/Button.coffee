@@ -42,16 +42,11 @@ exports.Button = class Button extends Layer
 		@size = @labelLayer.size
 		@x = options.x
 
-		@onTouchStart (event) -> 
-			@showTouched()
-			Utils.delay 1, => @reset()
-		
-		@onTouchEnd (event) -> 
-			@_action()
-			@reset()
-
+		@onTapStart @showTouched
+		@onTapEnd -> @_action(); @reset()
 
 	showTouched: -> 
+
 		@labelLayer.animate {brightness: 110, saturate: 110}
 		
 		switch @_type
@@ -61,6 +56,7 @@ exports.Button = class Button extends Layer
 				@animate {shadowY: 3, shadowSpread: 1}
 
 	reset: ->
+		@animateStop()
 		@labelLayer.animate {brightness: 100, saturate: 100}
 		@backgroundColor = Theme.button[@_type].backgroundColor
 		@animate 

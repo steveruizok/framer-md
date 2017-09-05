@@ -313,11 +313,19 @@ inputs = form.newPage
 		title: "Inputs"
 		icon: 'arrow-left'
 		iconAction: -> form.showPrevious()
-
+	
+textField = new md.TextField
+	parent: inputs
+	x: Align.center, y: 32
+	point: Align.center
+	labelText: 'Label'
+	helperText: 'Helper text'
+	
 textarea = new md.TextArea
 	parent: inputs
 	labelText: 'Text Area'
-	x: Align.center, y: 32
+	x: Align.center, y: textField.maxY + 32
+
 
 # Gallery
 
@@ -347,6 +355,4 @@ for i in _.range(20)
 			
 	tile.onLongPress ->
 		gridList.removeTile(@)
-
-
 

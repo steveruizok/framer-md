@@ -1,9 +1,12 @@
+
+
 Type = require 'md-components/Type'
 { Ripple } = require 'md-components/Ripple'
 { Theme } = require 'md-components/Theme'
 { Icon } = require 'md-components/Icon'
 { Button } = require 'md-components/Button'
 { TextArea } = require 'md-components/TextArea'
+{ TextField } = require 'md-components/TextField'
 { Slider } = require 'md-components/Slider'
 { Radiobox } = require 'md-components/Radiobox'
 { Checkbox } = require 'md-components/Checkbox'
@@ -38,6 +41,7 @@ exports.Theme = Theme
 exports.Icon = Icon
 exports.Button = Button
 exports.TextArea = TextArea
+exports.TextField = TextField
 exports.Slider = Slider
 exports.Radiobox = Radiobox
 exports.Checkbox = Checkbox

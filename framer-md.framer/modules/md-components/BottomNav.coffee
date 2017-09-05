@@ -32,6 +32,7 @@ exports.BottomNav = class BottomNav extends Layer
 			clip: true
 
 		for destination, i in @_destinations
+			
 			item = new Layer
 				name: '.', parent: @
 				x: @width/@_destinations.length * i
@@ -82,7 +83,7 @@ exports.BottomNav = class BottomNav extends Layer
 
 			@_items.push(item)
 
-			@showActive(@_items[0])
+		@showActive(@_items[0])
 
 	@define "activeDestination",
 		get: -> return @_activeDestination

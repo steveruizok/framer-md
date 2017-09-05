@@ -39,7 +39,7 @@ exports.TextArea = class TextArea extends Type.Regular
 		# Summary: Use a hidden input field (@_textarea) to set the content of a TextLayer (@).
 
 		super _.defaults options,
-			name: 'Input Field'
+			name: 'Text Area'
 			width: 300
 			borderRadius: 4
 			color: '#333'

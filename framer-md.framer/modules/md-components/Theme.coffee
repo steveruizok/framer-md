@@ -26,6 +26,7 @@ primaryColor = primary_color.backgroundColor
 primaryInvert = 100 - (primary_invert.opacity * 100)
 secondaryColor = secondary_color.backgroundColor
 pageColor = page_color.backgroundColor
+pageTextColor = page_text_color.color
 menuTextColor = menu_text_color.color
 menuInvert = 100 - (menu_invert.opacity * 100)
 
@@ -47,7 +48,9 @@ source =
 			light: pageColor
 			text: menuTextColor
 			invert: menuInvert
-		page: pageColor
+		page: 
+			main: pageColor
+			text: pageTextColor
 
 Theme = 
 	tint: source.colors.secondary.main
@@ -93,7 +96,8 @@ Theme =
 
 	page:
 		primary:
-			backgroundColor: source.colors.page
+			backgroundColor: source.colors.page.main
+			text: source.colors.page.text
 		secondary:
 			backgroundColor: '#F5F5F6'
 

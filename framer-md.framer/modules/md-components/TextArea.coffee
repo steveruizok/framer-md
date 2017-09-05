@@ -45,7 +45,7 @@ exports.TextArea = class TextArea extends Type.Regular
 			color: '#333'
 			fontSize: 16
 			text: "{value}"
-			color: Theme.colors.primary.text
+			color: Theme.colors.page.text
 			borderWidth: 2,
 			borderColor: options.tint
 			padding: if @_labelText? then {top: 39, bottom: 8, right: 8, left: 8} else {top: 16, bottom: 8, right: 8, left: 8}

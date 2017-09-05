@@ -22,110 +22,22 @@
           "start" : "black"
         },
         "children" : [
-          {
-            "__class" : "TextNode",
-            "locked" : false,
-            "centerAnchorX" : 0.5013888888888889,
-            "parentid" : "y3Qn!)>G",
-            "rotation" : 0,
-            "top" : 200,
-            "right" : null,
-            "styledText" : {
-              "blocks" : [
-                {
-                  "depth" : 0,
-                  "inlineStyleRanges" : [
-                    {
-                      "length" : 7,
-                      "style" : "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
-                      "offset" : 0
-                    },
-                    {
-                      "length" : 7,
-                      "style" : "COLOR:#000000",
-                      "offset" : 0
-                    },
-                    {
-                      "length" : 7,
-                      "style" : "SIZE:16",
-                      "offset" : 0
-                    },
-                    {
-                      "length" : 7,
-                      "style" : "LETTERSPACING:0",
-                      "offset" : 0
-                    },
-                    {
-                      "length" : 7,
-                      "style" : "LINEHEIGHT:1.2",
-                      "offset" : 0
-                    }
-                  ],
-                  "entityRanges" : [
 
-                  ],
-                  "data" : {
-                    "emptyStyle" : [
-                      "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
-                      "COLOR:#000000",
-                      "SIZE:16",
-                      "LETTERSPACING:0",
-                      "LINEHEIGHT:1.2"
-                    ]
-                  },
-                  "text" : "Loading",
-                  "key" : "bk6du",
-                  "type" : "unstyled"
-                }
-              ],
-              "__class" : "StyledTextDraft",
-              "entityMap" : {
-
-              }
-            },
-            "name" : null,
-            "shadows" : [
-              {
-                "y" : 2,
-                "enabled" : false,
-                "blur" : 5,
-                "x" : 0,
-                "__class" : "Shadow",
-                "color" : "rgba(0,0,0,0.25)"
-              }
-            ],
-            "id" : "I-!TtBOY",
-            "x" : 133,
-            "constraintsLocked" : false,
-            "left" : null,
-            "bottom" : null,
-            "height" : 19,
-            "opacity" : 1,
-            "width" : 61,
-            "widthFactor" : null,
-            "targetName" : null,
-            "heightFactor" : null,
-            "editable" : false,
-            "visible" : true,
-            "centerAnchorY" : 0.32734375,
-            "autoSize" : true,
-            "y" : 284
-          }
         ],
         "height" : 640,
         "fillType" : "color",
         "targetName" : null,
-        "fillColor" : "#ffffff",
+        "fillColor" : "rgb(0, 0, 0)",
         "name" : null
       },
       {
         "id" : "biEKH@iK",
         "aspectRatioLocked" : false,
         "__class" : "FrameNode",
-        "x" : 430,
+        "x" : 0,
         "parentid" : "i+o|Nj3?",
         "width" : 622,
-        "y" : 0,
+        "y" : 734,
         "deviceType" : null,
         "fillGradient" : {
           "end" : "rgba(0,0,0,0)",

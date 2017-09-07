@@ -39,6 +39,7 @@ exports.Page = class Page extends ScrollComponent
 			top: 0, bottom: 160
 
 		@content.backgroundColor = null
+		@content._app = @_app
 
 		if @_template?
 			@_template.props =
@@ -50,3 +51,5 @@ exports.Page = class Page extends ScrollComponent
 	update: -> @_update()
 
 	load: -> @_load()
+
+	build: (func) -> do _.bind(func, @)

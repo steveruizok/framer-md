@@ -17,66 +17,67 @@ Type = require 'md-components/Type'
 exports.TextField = class TextField extends Type.Regular
 	constructor: (options = {}) ->
 		
-		@_app = options.app ? options.parent?._app
-		@_tint = options.tint ? Theme.primary
-		@_box = options.box ? false
-		@_selectColor = options.selectColor ? new Color(@_tint).desaturate(-20).alpha(.5)
+		@_app = options.app ? options.parent?._app ? options.parent?.parent?._app # lol
+		@_color = options.color ? 'rgba(0,0,0,.87)'
+		@_inputType = options.inputType ? 'input'
+		@_inputMode = options.inputMode ? 'latin'
 		@_maxLength = options.maxLength
-		
-		@_labelText
-		@_value
+		@_placeholder = options.placeholder ? ''
+		@_readOnly = options.readOnly
+		@_value = ''
+
+		@tint = options.tint ? Theme.primary
+		@selectionColor = options.selectionColor ? new Color(@tint).desaturate(-20).alpha(.5)
+		@pattern = options.pattern ? (value) -> null
+		@matches = false
+
 		@_disabled
 		@_focused
 		@_color
 		@_helperText
 		@_helperTextColor
-				
-		# Summary: Use a hidden input field (@_input) to set the content of a TextLayer (@).
+		@_labelText
+		@_labelTextColor
+
+		options.value ?= ''
+		options.labelText ?= ''
+		options.labelTextColor ?= 'rgba(0, 0, 0, .54)'
+		options.helperText ?= ''
+		options.helperTextColor ?= 'rgba(0, 0, 0, .54)'
+		options.focused ?= false
 
 		super _.defaults options,
 			name: 'Input Field'
 			width: 300, height: 72
-			text: ''
+			text: '', color: 'rgba(0,0,0,.87)'
 			backgroundColor: null
+			padding: {top: 22}
 			animationOptions: {time: .15, colorModel: "rgb"}
-		
-		# store default color
-		@_color = 'rgba(0,0,0,.87)'
+			text: '{placeholder}'
 
-		# create label
-		@labelTextLayer = new TextLayer
+		@template = @_placeholder
+		
+
+		# Label Text
+
+		@labelTextLayer = new Type.Regular
 			name: 'LabelTextLayer', parent: @
-			y: 22, height: 73
-			fontSize: 16, color: 'rgba(0,0,0,.54)'
+			x: 0, y: 22
 			animationOptions: @animationOptions
 			text: "{labelText}"
 		
-		@labelTextLayer.template = options.labelText ? ''
-		@labelTextLayer.visible = options.labelText?
-	
 
-		# create textarea html element and append to '.framerLayer'
-		@_input = document.createElement('input')
-		@_element.appendChild(@_input)
+		# Helper Text
 
-		# turn off focus styling
-		Utils.insertCSS( "*:focus { outline: 0; } ::selection { background: #{@_selectColor}; /* WebKit/Blink Browsers */ } ")
-				
-		# turn off element attributes
-		for attribute in ['spellcheck', 'autocapitalize', 'autocomplete', 'autofocus']
-			@setTextFieldAttribute(attribute, "false")
-		
-		# set max length
-		if @_maxLength? then @setTextFieldAttribute('maxLength', @_maxLength)
+		@helperTextLayer = new Type.Caption
+			name: 'Helper Text', parent: @
+			x: 0, y: Align.bottom
+			animationOptions: @animationOptions
+			text: "{helper}"
 
-		# set input style
-		@setStyle()
-		@_input.style['-webkit-text-fill-color'] = @_color
 
-		# set layer height
-		# @height = @_input.clientHeight
+		# Input Line
 
-		# input line
 		@inputLine = new Layer
 			name: 'Input Line', parent: @
 			height: 1, width: @width
@@ -84,197 +85,237 @@ exports.TextField = class TextField extends Type.Regular
 			backgroundColor: 'rgba(0, 0, 0, .42)'
 			animationOptions: {time: .05, colorModel: "rgb"}
 		
-		@on "change:width", => @inputLine.width = @width
 
-		# helper text
-		@helperTextLayer = new Type.Caption
-			name: 'Helper Text', parent: @
-			y: Align.bottom
-			text: "{helper}"
-			animationOptions: @animationOptions
-		
-		@helperTextLayer.template = options.helperText ? ''
-		@helperTextLayer.color = options.helperTextColor ? 'rgba(0, 0, 0, .42)'
+		# Input Element
 
-		# set event listeners
-		@onTap => @showFocus(true)
-		@_input.onblur  = => @showFocus(false)
-		@_input.oninput = => @setValue()
-		@onMouseOver => @showHovered(true)
-		@onMouseOut => @showHovered(false)
+		@_input = document.createElement(@_inputType, {'autofocus': false})
+
+		@_input.spellcheck 		= false
+		@_input.autocapitalize  = false
+		@_input.autocomplete 	= false
+
+		if @_inputMode?   then @setInputAttribute('inputmode', @_inputMode)
+		if @_maxLength?   then @setInputAttribute('maxlength', @_maxLength)
+		if @_readOnly? 	  then @setInputAttribute('readonly',  @_readOnly )
+
+		Utils.insertCSS( """
+			*:focus { outline: 0; }
+			textarea { resize: none; } 
+			::selection { background: #{@selectionColor}; } 
+			""" )
+
+		@_element.appendChild(@_input)
+		@setStyle()
 		
-		# refresh colors and style for current state
-		@showFocus()
+
+		# Event Listeners
+
+		# @onTap => @focused = true
+		@onMouseOver => @hovered = true
+		@onMouseOut => @hovered = false
+		@on "change:width", => @inputLine?.width = @width
+
+		@_input.onfocus = => @focused = true; @setScroll(false)
+		@_input.onblur = => @focused = false; @setScroll(true)
+		@_input.oninput = @setValue
+
+		# now that we have our layers, set options properties again
+
+		@labelText = options.labelText
+		@labelTextColor = options.labelTextColor
+		@helperText = options.helperText
+		@helperTextColor = options.helperTextColor
+		@focused = options.focused
+		@value = options.value
+
+		if @parent?.name is "content"
+			@scrollLayer = @parent.parent
+			@scrollLayer?.onScrollStart => @disabled = true
+			@scrollLayer?.onScrollEnd => @disabled = false
 	
-	# change input label and border on focus or unfocus
-	showFocus: (focused) =>
+	setScroll: (scroll) => 
+		@scrollLayer?.scrollVertical = scroll
+		@_input.readonly = scroll
+
+	showFocused: =>
 		return if @disabled
 
-		@_focused = focused
+		baseY = if @_inputType is 'textarea' then 8 else 0
 
-		if focused
+		if @focused
 			@animateStop()
 
+			@_app?.focused = @
+
+			if @screenFrame.y + @height > Screen.height - 222
+				@scrollLayer?.scrollToLayer(@, 0, .45)
+			else if @screenFrame.y < Screen.height * .15
+				@scrollLayer?.scrollToLayer(@, 0, .15)
+
 			@labelTextLayer?.animate
-				y: 0
+				y: baseY
 				fontSize: 12
 				color: @tint
 
-			@inputLine.animate
+			@inputLine?.animate
 				height: 1
 				backgroundColor: @tint
-			
+
+			if @_inputType is 'textarea'
+				@animate
+					borderWidth: 2
+					borderColor: @tint
+
 			@_app?.showKeyboard()
 
 		else
 			@animateStop()
 
-			if @_input.value is ''
+			if this.hasTextContent()
+				@labelTextLayer?.animate
+					y: baseY
+					fontSize: 12
+					color: @labelTextColor
+			else
 				@labelTextLayer?.animate
 					y: 22
 					fontSize: 16
-					color: 'rgba(0, 0, 0, .54)'
-			else
-				@labelTextLayer?.animate
-					y: 0
-					fontSize: 12
-					color: 'rgba(0, 0, 0, .54)'
+					color: @labelTextColor
 
-			@inputLine.animate
+			@inputLine?.animate
 				height: 1
 				backgroundColor: 'rgba(0, 0, 0, .42)'
-				
-			@_app?.hideKeyboard()
+			
+			if @_inputType is 'textarea'
+				@animate
+					borderWidth: 1
+					borderColor: 'rgba(0, 0, 0, .42)'
 
+			if @_app?.focused is @
+				@_app?.focused = undefined
+				@_app?.hideKeyboard()
 
-	# shor disabled status
+		@setPlaceholder()
+
 	showDisabled: =>
 		@animateStop()
-		@showFocus()
-		if @disabled
-			if @_box then @borderWidth = 0
-			@opacity = .5
-		else
-			if @_box then @borderWidth = 1
-			@opacity = 1
+		@opacity = if @disabled is true then .5 else 1
 	
-
-	# if text box, set display properties on hover
-	showHovered: (hovered) =>
+	showHovered: =>
 		return if @disabled
-		return if @_focused
-
-		if hovered 
-			@inputLine.animate
+		return if @focused
+		
+		if @hovered
+			@inputLine?.animate
 				height: 2
 				backgroundColor: @_color
-		else
-			@showFocus()
+			if @_inputType is 'textarea'
+				@animate 
+					borderWidth: 2
+		
+		else @showFocused()
 	
+	hasTextContent : -> @value.length  		> 0
+	hasHelperText  : -> @helperText?.length  > 0
+	hasLabelText   : -> @labelText?.length   > 0
+	hasPlaceholder : -> @_placeholder?.length > 0
 
 	# get selection info - start index, end index, and direction
-	getSelected: => 
-		return {
-			start: @_input.selectionStart, 
-			end: @_input.selectionEnd, 
-			direction: @_input.selectionDirection
-		}
+	getSelected: => {start: @_input.selectionStart, end: @_input.selectionEnd, direction: @_input.selectionDirection}
 	
-
 	# return selected text as a string
 	getSelection: =>
-		selected = @getSelected()		
-		return if selected.end > selected.start then @value[selected.start...selected.end] else ''
-	
+		selected = @getSelected()
+		start = selected.start
+		end = selected.end
+		
+		return if @focused and end > start then @value[start...end]
 
 	# set value of textlayer using textarea value
-	setValue: => 
-		@value = @_input.value
+	setValue: => @value = @_input.value
+
+	setPlaceholder: => 
+		if @hasTextContent() or not @focused
+			@color = null 
+		else if @focused
+			@color = 'rgba(0,0,0,.42)'
 
 	# set style of textarea 
 	setStyle: ->
 		@_input.style.cssText = """
+			z-index:5;
 			zoom: #{@context.scale};
-			font-size: 16px;
-			font-weight: 400;
-			font-family: "Roboto";
-			color: #{@_tint};
+			font-size: #{@fontSize}px;
+			font-weight: #{@fontWeight};
+			font-family: #{@fontFamily};
+			color: #{@tint};
+			-webkit-text-fill-color: #{@_color};
 			background-color: transparent;
 			position: absolute;
 			top: 0px;
 			left: 0px;
+			resize: none;
 			width: #{@width}px;
-			padding-top: 22px;
+			padding: #{@padding.top}px #{@padding.right}px #{@padding.bottom}px #{@padding.left}px;
 			outline: 0px none transparent !important;
-			line-height: 20px;
+			line-height: #{@lineHeight};
 			-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 			-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 			box-sizing: border-box; 
 		"""
-	
 
 	# set individual attribute of textarea
-	setTextFieldAttribute: (attribute, value) ->
+	setInputAttribute: (attribute, value) ->
 		@_input.setAttribute(attribute, value)
-
-
-	@define "tint",
-		get: -> return @_tint
-		set: (value) ->
-			return if @_tint is value
-			
-			@_tint = value
-			@showFocused()
-	
 
 	@define "value",
 		get: -> return @_value
 		set: (value) ->
 			return if @_value is value
-
-			@_value = value
-	
-
-	@define "selection",
-		get: -> return @getSelection()
-		
-
-	@define "focused",
-		get: -> return @_focused
-		set: (value) ->
-			return if @_focused is value
-			return if typeof value isnt 'boolean'
 			
-			@_focused = value
+			@_value = value
+			
+			@matches = @pattern(value)
+			@emit("change:value", @value, @matches, @)
+
+			@setPlaceholder()
 
 	@define "labelText",
 		get: -> return @_labelText
 		set: (value) ->
+			return if not @labelTextLayer?
 			return if @_labelText is value
 			@_labelText = value
 
-			return if not @labelTextLayer?
 			@labelTextLayer.template = @_labelText
-			@labelTextLayer.visible = @_labelText?.length > 0
+			@labelTextLayer.visible = this.hasLabelText()
+
+	@define "labelTextColor",
+		get: -> return @_labelTextColor
+		set: (value) ->
+			return if not @labelTextLayer?
+			return if @_labelTextColor is value
+			@_labelTextColor = value
+
+			@labelTextLayer.color = value
 
 	@define "helperText",
 		get: -> return @_helperText
 		set: (value) ->
+			return if not @helperTextLayer?
 			return if @_helperText is value
 			@_helperText = value
 
-			return if not @helperTextLayer?
 			@helperTextLayer.template = @_helperText
-			@helperTextLayer.visible = @_helperText.length > 0
-
+			@helperTextLayer.visible = this.hasHelperText()
 
 	@define "helperTextColor",
 		get: -> return @_helperTextColor
 		set: (value) ->
+			return if not @helperTextLayer?
 			return if @_helperTextColor is value
 			@_helperTextColor = value
 
-			return if not @helperTextLayer?
 			@helperTextLayer.color = value
 
 
@@ -282,8 +323,42 @@ exports.TextField = class TextField extends Type.Regular
 		get: -> return @_disabled
 		set: (value) ->
 			return if @_disabled is value
-			return if typeof value isnt 'boolean'
+			if typeof value isnt 'boolean' then throw 'Disabled must be either true or false.'
 			
 			@_disabled = value
+			@_input.blur()
 			@_input.disabled = value
-			Utils.delay 0, => @showDisabled()
+
+			@emit("change:disabled", value, @)
+
+			@showDisabled()
+		
+	@define "focused",
+		get: -> return @_focused
+		set: (value) ->
+			return if @_focused is value
+			if typeof value isnt 'boolean' then throw 'Focused must be either true or false.'
+			
+			@_focused = value
+
+			# blur or focus text area if set programmaically
+			if value is true and document.activeElement isnt @_input 
+				@_input.focus()
+			else if value is false and document.activeElement is @_input
+				@_input.blur()
+
+			@emit("change:focused", value, @)
+
+			@showFocused()
+
+	@define "hovered",
+		get: -> return @_hovered
+		set: (value) ->
+			return if @_hovered is value
+			if typeof value isnt 'boolean' then throw 'Hovered must be either true or false.'
+			
+			@_hovered = value
+
+			@emit("change:hovered", value, @)
+
+			@showHovered()

@@ -37,3 +37,5 @@ exports.View = class View extends FlowComponent
 	linkTo: (page) ->
 		if page? and @current isnt page
 			@showNext(page)
+
+	build: (func) -> do _.bind(func, @home)

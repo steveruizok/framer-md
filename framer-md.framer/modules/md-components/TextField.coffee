@@ -13,6 +13,7 @@ Type = require 'md-components/Type'
 # 	
 # 	
 
+# TODO: clear value
 
 exports.TextField = class TextField extends Type.Regular
 	constructor: (options = {}) ->
@@ -88,8 +89,15 @@ exports.TextField = class TextField extends Type.Regular
 
 		# Input Element
 
-		@_input = document.createElement(@_inputType, {'autofocus': false})
+		@inputLayer = new Layer
+			name: 'Input'
+			parent: @
+			size: @size
+			backgroundColor: null
 
+		@_input = document.createElement(@_inputType, {'autofocus': false})
+		@inputLayer._element.appendChild(@_input)
+		
 		@_input.spellcheck 		= false
 		@_input.autocapitalize  = false
 		@_input.autocomplete 	= false
@@ -104,13 +112,12 @@ exports.TextField = class TextField extends Type.Regular
 			::selection { background: #{@selectionColor}; } 
 			""" )
 
-		@_element.appendChild(@_input)
+		
 		@setStyle()
 		
 
 		# Event Listeners
 
-		# @onTap => @focused = true
 		@onMouseOver => @hovered = true
 		@onMouseOut => @hovered = false
 		@on "change:width", => @inputLine?.width = @width
@@ -274,7 +281,7 @@ exports.TextField = class TextField extends Type.Regular
 			return if @_value is value
 			
 			@_value = value
-			
+
 			@matches = @pattern(value)
 			@emit("change:value", @value, @matches, @)
 

@@ -55,7 +55,7 @@ exports.Button = class Button extends Layer
 
 		switch @_type
 			when 'flat'
-				@ripple = new Rippple( @mask, null, @colorOverride = 'rgba(0,0,0,.05)' )
+				@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
 			when 'raised'  
 				@ripple = new Rippple( @mask, null )
 				@onTapStart @showRaised 

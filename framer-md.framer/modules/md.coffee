@@ -1,76 +1,73 @@
 
-
 Type = require 'md-components/Type'
-{ Ripple } = require 'md-components/Ripple'
-{ Theme } = require 'md-components/Theme'
-{ Icon } = require 'md-components/Icon'
+
+{ ActionButton } = require 'md-components/ActionButton'
+{ App } = require 'md-components/App'
+{ BottomNav } = require 'md-components/BottomNav'
 { Button } = require 'md-components/Button'
+{ Card } = require 'md-components/Card'
+{ Checkbox } = require 'md-components/Checkbox'
+{ Dialog } = require 'md-components/Dialog'
+{ Divider } = require 'md-components/Divider'
+{ Dropdown } = require 'md-components/Dropdown'
+{ GridList } = require 'md-components/GridList'
+{ Header } = require 'md-components/Header'
+{ Icon } = require 'md-components/Icon'
+{ MenuButton } = require 'md-components/MenuButton'
+{ MenuOverlay } = require 'md-components/MenuOverlay'
+{ Notification } = require 'md-components/Notification'
+{ Page } = require 'md-components/Page'
+{ Radiobox } = require 'md-components/Radiobox'
+{ Ripple } = require 'md-components/Ripple'
+{ RowItem } = require 'md-components/RowItem'
+{ Select } = require 'md-components/Select'
+{ Slider } = require 'md-components/Slider'
+{ Snackbar } = require 'md-components/Snackbar'
+{ StatusBar } = require 'md-components/StatusBar'
+{ Switch } = require 'md-components/Switch'
 { TextArea } = require 'md-components/TextArea'
 { TextField } = require 'md-components/TextField'
-{ Slider } = require 'md-components/Slider'
-{ Radiobox } = require 'md-components/Radiobox'
-{ Checkbox } = require 'md-components/Checkbox'
-{ Switch } = require 'md-components/Switch'
-{ Divider } = require 'md-components/Divider'
-{ GridList } = require 'md-components/GridList'
+{ Theme } = require 'md-components/Theme'
 { Tile } = require 'md-components/Tile'
-{ Dialog } = require 'md-components/Dialog'
-{ StatusBar } = require 'md-components/StatusBar'
-{ Header } = require 'md-components/Header'
-{ Notification } = require 'md-components/Notification'
-{ Snackbar } = require 'md-components/Snackbar'
-{ RowItem } = require 'md-components/RowItem'
-{ MenuOverlay } = require 'md-components/MenuOverlay'
-{ MenuButton } = require 'md-components/MenuButton'
-{ ActionButton } = require 'md-components/ActionButton'
 { View } = require 'md-components/View'
-{ Page } = require 'md-components/Page'
-{ BottomNav } = require 'md-components/BottomNav'
-{ Card } = require 'md-components/Card'
-{ App } = require 'md-components/App'
 
-# TODO: Change App from master flow component to Screen manager.
-# App shouldn't directly manage pages: a new class, 'screen' will manage Pages.
-# Tabs allow navigation between Screens. Content is still added to Pages.
-
-# Our goal is to require only one require in Framer project, so this 
-# is a clunky way of letting user create text using md.Title, etc.
-
-exports.Ripple = Ripple
-exports.Theme = Theme
-exports.Icon = Icon
-exports.Button = Button
-exports.TextArea = TextArea
-exports.TextField = TextField
-exports.Slider = Slider
-exports.Radiobox = Radiobox
-exports.Checkbox = Checkbox
-exports.Switch = Switch
-exports.Divider = Divider
-exports.GridList = GridList
-exports.Tile = Tile
-exports.Dialog = Dialog
-exports.StatusBar = StatusBar
-exports.Header = Header
-exports.Notification = Notification
-exports.Snackbar = Snackbar
-exports.RowItem = RowItem
 exports.ActionButton = ActionButton
+exports.App = App
+exports.Button = Button
+exports.Card = Card
+exports.Checkbox = Checkbox
+exports.Dialog = Dialog
+exports.Divider = Divider
+exports.Dropdown = Dropdown
+exports.GridList = GridList
+exports.Header = Header
+exports.Icon = Icon
 exports.MenuButton = MenuButton
 exports.MenuOverlay = MenuOverlay
-exports.View = View
+exports.Notification = Notification
 exports.Page = Page
-exports.Card = Card
-exports.App = App
+exports.Radiobox = Radiobox
+exports.Ripple = Ripple
+exports.RowItem = RowItem
+exports.Select = Select
+exports.Slider = Slider
+exports.Snackbar = Snackbar
+exports.StatusBar = StatusBar
+exports.Switch = Switch
+exports.TextArea = TextArea
+exports.TextField = TextField
+exports.Theme = Theme
+exports.Tile = Tile
+exports.View = View
 
-exports.Title = Title = Type.Title
-exports.Headline = Headline = Type.Headline
-exports.Subhead = Subhead = Type.Subhead
-exports.Regular = Regular = Type.Regular
-exports.Body2 = Body2 = Type.Body2
 exports.Body1 = Body1 = Type.Body1
+exports.Body2 = Body2 = Type.Body2
 exports.Caption = Caption = Type.Caption
 exports.DialogAction = DialogAction = Type.DialogAction
+exports.Headline = Headline = Type.Headline
+exports.Regular = Regular = Type.Regular
+exports.Subhead = Subhead = Type.Subhead
+exports.Title = Title = Type.Title
 
 Framer.Extras.Hints.disable()
 

@@ -37,9 +37,9 @@ class exports.Rippple extends Layer
 			@mask.onTapStart ( event ) => @show( event.point )
 			@mask.onTapEnd @hide
 			@mask.onPanEnd @hide
-
-
-	# Add color source. Function? e.g. -> return @knob.color
+			@mask.onPan (event, layer) => 
+				isTooFar = (num) -> Math.abs(num) >= 24
+				@hide() if isTooFar(event.offset.x) or isTooFar(event.offset.y)
 
 	show: (point = @point) =>
 		@animateStop()

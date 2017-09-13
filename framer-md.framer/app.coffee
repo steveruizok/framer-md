@@ -66,8 +66,9 @@ app = new md.App
 # welcome (buttons page 1)
 
 buttons.build ->
-
+		
 	card = new md.Card
+		name: 'Card'
 		parent: @content
 		height: 216
 		expand: 220
@@ -76,7 +77,15 @@ buttons.build ->
 			{text: 'see more', action: -> card.expanded = true}
 		]
 	
-	# Text layer to register our actions.
+		
+	dropdown = new md.Select 
+		parent: @content,
+		x: Align.center, y: 270
+		options: ['Red', 'Yellow', 'Blue', 'Green', 'Orange', 'Purple', 'Black', 'White']
+		rows: 6
+		labelText: 'Color'
+	
+	# Text layer to register our actions.	
 	welcome = new md.Regular
 		name: 'welcome', parent: card
 		x: Align.center, y: 16
@@ -181,22 +190,6 @@ buttons.build ->
 				iconBackgroundColor: 'rgba(255, 233, 149, 1)'
 				iconColor: '#000'
 				timeout: 5
-	
-	# button to open the keyboard
-	showKeyboard = new md.Button 
-		name: 'keyboard button'
-		parent: card
-		x: Align.center, y: showKeyboard.maxY + 16
-		text: 'show snackbar'
-		action: -> 
-			new md.Snackbar
-				parent: buttons.home
-				app: app
-				name: 'snackbar'
-				title: 'This is a snackbar. It has a timeout and one action.'
-				action:
-					title: 'undo'
-					action: -> null
 
 # --- secondPage (buttons page 2)
 
@@ -345,16 +338,22 @@ inputs.build ->
 	
 	textfield = new md.TextField
 		parent: @content
-		x: 16, y: selectionLayer.maxY + 16
+		x: 16, y: selectionLayer.maxY + 32
 		width: @width - 32
 		point: Align.center
 		labelText: 'Label'
 		helperText: 'Helper text'
 		placeholder: 'Test placeholder'
+# 	
+# 	select = new md.Select
+# 		parent: @content
+# 		x: 16, y:  textfield.maxY + 32
+# 		options: ['Baseball', 'Football', 'Boxing', 'Tennis']
+# 		labelText: 'Favorite Sport'
 	
 	startsWithS = new md.TextField
 		parent: @content
-		x: 16, y: textfield.maxY + 16
+		x: 16, y: textfield.maxY + 32
 		width: @width - 32
 		point: Align.center
 		labelText: 'Favorite S Word'
@@ -372,7 +371,7 @@ inputs.build ->
 	textarea = new md.TextArea
 		parent: @content
 		labelText: 'Text Area'
-		x: 16, y: startsWithS.maxY + 21
+		x: 16, y: startsWithS.maxY + 40
 		width: @width - 32
 		rows: 3
 		placeholder: 'Overflow filter coming soon!'

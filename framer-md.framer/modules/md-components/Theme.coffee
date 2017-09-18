@@ -22,13 +22,13 @@ modifyColor = (color, h, s, l) ->
 	
 	return newColor
 
-primaryColor = primary_color.backgroundColor
-primaryInvert = 100 - (primary_invert.opacity * 100)
-secondaryColor = secondary_color.backgroundColor
-pageColor = page_color.backgroundColor
-pageTextColor = page_text_color.color
-menuTextColor = menu_text_color.color
-menuInvert = 100 - (menu_invert.opacity * 100)
+primaryColor = primary_color?.backgroundColor ? new Color('blue')
+primaryInvert = 100 - (primary_invert?.opacity * 100)
+secondaryColor = secondary_color?.backgroundColor ? new Color('green')
+pageColor = page_color?.backgroundColor ? new Color('white')
+pageTextColor = page_text_color?.color ? new Color('black')
+menuTextColor = menu_text_color?.color ? new Color('black')
+menuInvert = 100 - (menu_invert?.opacity * 100) ? 0
 
 
 source =
@@ -37,13 +37,13 @@ source =
 			main: primaryColor
 			light: modifyColor(primaryColor, 13, -5, 15)
 			dark: modifyColor(primaryColor, -1, -7, -12)
-			text: primary_text_color.color
+			text: primary_text_color?.color ? new Color('#000')
 			invert: primaryInvert
 		secondary:
 			main: secondaryColor
 			light: modifyColor(secondaryColor, 13, -5, 15)
 			dark: modifyColor(secondaryColor, -1, -7, -12)
-			text: secondary_text_color.color
+			text: secondary_text_color?.color ? new Color('#000')
 		menu:
 			light: pageColor
 			text: menuTextColor

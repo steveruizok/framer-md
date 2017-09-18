@@ -40,10 +40,9 @@ exports.Button = class Button extends Layer
 				left: 16.5, right: 16.5
 				top: 9, bottom: 11
 
-		print @labelLayer.frame
+		@width = @labelLayer.width
+		@height = @labelLayer.height
 
-		#@width = @labelLayer.width
-		#@height = @labelLayer.height
 		@x = options.x
 
 		@mask = new Layer

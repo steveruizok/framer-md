@@ -40,31 +40,31 @@ exports.Button = class Button extends Layer
 				left: 16.5, right: 16.5
 				top: 9, bottom: 11
 
-		@width = @labelLayer.width
-		@height = @labelLayer.height
+		Utils.delay 0, => # lame fix
+			@width = @labelLayer.width
+			@height = @labelLayer.height
+			@x = options.x
 
-		@x = options.x
+			@mask = new Layer
+				parent: @
+				size: @size
+				backgroundColor: null
+				borderRadius: 2
+				clip: true
+				opacity: 1
 
-		@mask = new Layer
-			parent: @
-			size: @size
-			backgroundColor: null
-			borderRadius: 2
-			clip: true
-			opacity: 1
+			@mask.placeBehind @labelLayer
 
-		@mask.placeBehind @labelLayer
+			switch @_type
+				when 'flat'
+					@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
+				when 'raised'  
+					@ripple = new Rippple( @mask, null )
+					@onTapStart @showRaised 
 
-		switch @_type
-			when 'flat'
-				@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
-			when 'raised'  
-				@ripple = new Rippple( @mask, null )
-				@onTapStart @showRaised 
-
-		@onTapEnd -> 
-			@_action()
-			@reset()
+			@onTapEnd -> 
+				@_action()
+				@reset()
 
 
 	showRaised: => @animate {shadowY: 3, shadowSpread: 1}

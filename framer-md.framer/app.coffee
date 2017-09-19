@@ -77,14 +77,6 @@ buttons.build ->
 			{text: 'see more', action: -> card.expanded = true}
 		]
 	
-		
-	dropdown = new md.Select 
-		parent: @content,
-		x: Align.center, y: 270
-		options: ['Red', 'Yellow', 'Blue', 'Green', 'Orange', 'Purple', 'Black', 'White']
-		rows: 6
-		labelText: 'Color'
-	
 	# Text layer to register our actions.	
 	welcome = new md.Regular
 		name: 'welcome', parent: card
@@ -321,7 +313,7 @@ inputs.build ->
 		parent: @content
 		x: 16, y: 16
 		text: 'Selected Text:'
-		
+	
 	selectionLayer = new md.Regular
 		parent: @content
 		x: 16, y: selectionCaption.maxY
@@ -336,12 +328,19 @@ inputs.build ->
 			selection = focused.getSelection()
 			selectionLayer.template = selection ? 'none'	
 	
+	select = new md.Select 
+		parent: @content,
+		x: Align.center, y: selectionLayer.maxY + 32
+		options: ['Red', 'Yellow', 'Blue', 'Green', 'Orange', 'Purple', 'Black', 'White']
+		rows: 6
+		labelText: 'Dropdown Select'
+	
 	textfield = new md.TextField
 		parent: @content
-		x: 16, y: selectionLayer.maxY + 32
+		x: 16, y: select.maxY + 32
 		width: @width - 32
 		point: Align.center
-		labelText: 'Label'
+		labelText: 'Text Field'
 		helperText: 'Helper text'
 		placeholder: 'Test placeholder'
 # 	
@@ -375,6 +374,8 @@ inputs.build ->
 		width: @width - 32
 		rows: 3
 		placeholder: 'Overflow filter coming soon!'
+		
+	
 	
 	
 

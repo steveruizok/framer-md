@@ -1,6 +1,6 @@
 {
   "orientation" : 0,
-  "updateDelay" : 0,
+  "updateDelay" : 0.3,
   "designModeSelected" : 0,
   "cachedDeviceHeight" : 640,
   "contentScale" : 1,
@@ -11,17 +11,12 @@
   "propertyPanelToggleStates" : {
 
   },
-  "projectId" : "530A290B-C5A1-44E8-9154-21C641A0D5F3",
+  "projectId" : "5F20D61B-6F35-47BC-B1D4-959256D73C9C",
   "deviceOrientation" : 0,
   "selectedHand" : "",
   "showBezel" : 0,
   "foldedCodeRanges" : [
-    "{928, 3018}",
-    "{3947, 809}",
-    "{4758, 520}",
-    "{5287, 1488}",
-    "{6776, 1938}",
-    "{8726, 586}"
+
   ],
   "deviceScale" : "fit"
 }

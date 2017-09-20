@@ -22,7 +22,7 @@ exports.Tile = Tile = class Tile extends Layer
 		if @_header and @_footer then throw 'Tile cannot have both a header and a footer.'
 		
 		@_icon = options.icon
-		@gridList = options.gridList ? throw 'Tile needs a grid property.'
+		@gridList = options.gridList # ? throw 'Tile needs a grid property.'
 		
 		super _.defaults options,
 			name: '.', parent: @gridList

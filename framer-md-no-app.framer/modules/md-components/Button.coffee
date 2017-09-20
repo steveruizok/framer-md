@@ -14,14 +14,18 @@ Type = require 'md-components/Type'
 exports.Button = class Button extends Layer 
 	constructor: (options = {}) ->
 
+		@_text = undefined
+		@_baseX = options.x
+
 		@_raised = options.raised ? false
-		@_type = if @_raised then 'raised' else 'flat'
+		@_type = options.type ? if @_raised then 'raised' else 'flat'
 		@_action = options.action ? -> null
 
 		super _.defaults options,
 			name: '.'
 			width: 0, height: 36
 			borderRadius: 2
+			color: Theme.button[@_type].color
 			backgroundColor: Theme.button[@_type].backgroundColor
 			shadowY: Theme.button[@_type].shadowY
 			shadowBlur: Theme.button[@_type].shadowBlur
@@ -31,17 +35,14 @@ exports.Button = class Button extends Layer
 		
 		@labelLayer = new Type.Button
 			name: '.', parent: @
-			color: Theme.button[@_type].color
-			text: options.text ? 'button'
+			color: @color
+			text: '{labelText}'
 			textTransform: 'uppercase'
 			textAlign: 'center'
 			animationOptions: {time: .15}
 			padding: 
 				left: 16.5, right: 16.5
 				top: 9, bottom: 11
-
-		@size = @labelLayer.size
-		@x = options.x
 
 		@mask = new Layer
 			parent: @
@@ -64,6 +65,8 @@ exports.Button = class Button extends Layer
 			@_action()
 			@reset()
 
+		@text = options.text
+
 
 	showRaised: => @animate {shadowY: 3, shadowSpread: 1}
 
@@ -72,3 +75,16 @@ exports.Button = class Button extends Layer
 		@animate 
 			shadowY: Theme.button[@_type].shadowY
 			shadowSpread: 0
+
+	@define "text",
+		get: -> return @_labelText
+		set: (text) ->
+			if not text? then text = 'Button'
+			@_labelText = text
+
+			@labelLayer?.visible = @text.length > 0
+			@labelLayer?.template = @text
+
+			@size = @labelLayer.size
+			@mask.size = @size
+			@x = @_baseX

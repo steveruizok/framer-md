@@ -38,6 +38,8 @@ class Page extends ScrollComponent
 		# collapsing header related
 		@_startScroll = undefined
 		@onScrollStart => @_startScroll = @scrollPoint
+		
+		
 	
 	# add a layer to the stack
 	addToStack: (layers = []) =>
@@ -48,6 +50,8 @@ class Page extends ScrollComponent
 			layer.x = @padding.left ? 0
 			layer.y = @padding.top ? 0
 			@stack.push(layer)
+			
+			layer.on "change:height", => @moveStack(@)
 		
 		@stackView()
 	
@@ -79,6 +83,14 @@ class Page extends ScrollComponent
 				
 		@updateContent()
 	
+	# move stack when layer height changes
+	moveStack: (layer) =>
+		index = _.indexOf(@stack, layer)
+		for layer, i in @stack
+			if i > 0 and i > index
+				layer.y = @stack[i - 1].maxY + @padding.stack
+				
+	
 	# build with page as bound object
 	build: (func) -> do _.bind(func, @)
 
@@ -97,7 +109,17 @@ class Page extends ScrollComponent
 
 page = new Page
 
-page.stack = [
+# ####################################
+# Type
+
+page.addToStack(divider2 = new md.Divider
+	width: Screen.width - 32
+	text: 'Type'
+	backgroundColor: Screen.backgroundColor
+	)
+
+# Type
+page.addToStack([
 	headline = new md.Headline,
 	subhead = new md.Subhead,
 	title = new md.Title,
@@ -106,6 +128,191 @@ page.stack = [
 	body1 = new md.Body1,
 	body2 = new md.Body2,
 	caption = new md.Caption,
-]
+])
 
-page.addToStack(new md.Card)
+# ####################################
+# Buttons
+
+page.addToStack(new md.Divider
+	width: Screen.width - 32
+	text: 'Buttons'
+	backgroundColor: Screen.backgroundColor
+	)
+
+# Action Button
+actionButton = new md.ActionButton
+
+# Button
+page.addToStack button = new md.Button
+
+page.addToStack button = new md.Button
+	raised: true
+	action: -> @text = 'Tapped'
+
+# ####################################
+# Cards
+
+page.addToStack(new md.Divider
+	width: Screen.width - 32
+	text: 'Cards'
+	backgroundColor: Screen.backgroundColor
+	)
+
+# Card (rising)
+card = new md.Card
+	width: Screen.width - 32
+
+card.onMouseOver -> @raised = true
+card.onMouseOut  -> @raised = false
+
+# Expanding Card
+expandCard = new md.Card
+	width: Screen.width - 32
+	expand: 60
+	
+expandCardSecret = new md.Regular
+	parent: expandCard
+	y: 200, x: Align.center
+	text: 'Secret!'
+	
+# Card with Actions
+actionCard = new md.Card
+	width: Screen.width - 32
+	expand: 32
+	actions: [
+		{text: 'Button', action: -> @text = 'Tapped'}
+		{text: 'Button', action: -> @text = 'Tapped'}
+	]
+	
+page.addToStack([
+	card,
+	expandCard,
+	actionCard
+	])
+
+# ####################################
+# GridList
+
+page.addToStack(new md.Divider
+	width: Screen.width - 32
+	text: 'GridList'
+	backgroundColor: Screen.backgroundColor
+	)
+
+# GridList - needs work
+gridList = new md.GridList
+	width: Screen.width - 32
+
+page.addToStack(gridList)
+
+# Tile
+for i in _.range(2)
+	new md.Tile
+		gridList: gridList
+		image: Utils.randomImage()
+
+# Tile with Header
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	header: true
+	title: 'Tile'
+
+# Tile with Header and Icon
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	header: true
+	title: 'Tile'
+	icon: 'settings'
+	
+# Tile with Header and Support
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	header: true
+	title: 'Tile'
+	support: 'Support Text'
+
+# Tile with Header, Support and Icon
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	header: true
+	title: 'Tile'
+	support: 'Support Text'
+	icon: 'settings'
+
+# Tile with Footer
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	footer: true
+	title: 'Tile'
+
+# Tile with Footer and Icon
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	footer: true
+	title: 'Tile'
+	icon: 'settings'
+
+# Tile with Header and Support
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	footer: true
+	title: 'Tile'
+	support: 'Support Text'
+
+# Tile with Header, Support and Icon
+new md.Tile
+	gridList: gridList
+	image: Utils.randomImage()
+	footer: true
+	title: 'Tile'
+	support: 'Support Text'
+	icon: 'settings'
+
+# ####################################
+# Selectors
+
+page.addToStack(new md.Divider
+	width: Screen.width - 32
+	text: 'Selectors'
+	backgroundColor: Screen.backgroundColor
+	)
+	
+checkboxes = new md.Card
+
+for i in _.range(5)
+	checkbox = new md.Checkbox 
+		parent: checkboxes
+		x: 32 + (i * 32)
+		y: 32
+		
+page.addToStack(checkboxes)
+
+# actionButton = new Checkbox
+# actionButton = new Dialog
+# actionButton = new GridList
+# actionButton = new Header
+# actionButton = new Icon
+# actionButton = new MenuButton
+# actionButton = new MenuOverlay
+# actionButton = new Notification
+# actionButton = new Page
+# actionButton = new Radiobox
+# actionButton = new Ripple
+# actionButton = new RowItem
+# actionButton = new Select
+# actionButton = new Slider
+# actionButton = new Snackbar
+# actionButton = new StatusBar
+# actionButton = new Switch
+# actionButton = new TextArea
+# actionButton = new TextField
+# actionButton = new Theme
+# actionButton = new Tile
+# actionButton = new View

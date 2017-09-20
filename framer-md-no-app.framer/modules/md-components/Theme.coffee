@@ -22,11 +22,11 @@ modifyColor = (color, h, s, l) ->
 	
 	return newColor
 
-primaryColor = new Color('#7dddff')
+primaryColor = new Color('#7701D5')
 primaryTextColor = new Color('#FFFFFF')
 
-secondaryColor = new Color('#ffc413')
-secondaryTextColor = new Color('#333333')
+secondaryColor = new Color('#1B9DFF')
+secondaryTextColor = new Color('#FFFFFF')
 
 menuColor = new Color ('#CCCCCC')
 menuTextColor = new Color('#000000')

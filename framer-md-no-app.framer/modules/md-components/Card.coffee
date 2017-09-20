@@ -29,7 +29,7 @@ exports.Card = class Card extends Layer
 
 		@_baseY = options.y ? 8
 		@_expand = options.expand
-		@_actions = options.actions ? []
+		@_actions = options.actions ? [] # [{text: "", action: ->}]
 		@_verticalActions = options.verticalActions ? false
 
 		
@@ -82,8 +82,9 @@ exports.Card = class Card extends Layer
 				button = new Button
 					name: "#{action.text} Button", parent: @footer
 					x: startX, y: Align.bottom(-startY)
-					text: action.text
 					action: action.action
+
+				button.text = action.text
 
 				if !@_verticalActions then startX = button.maxX
 				if @_verticalActions
@@ -110,6 +111,8 @@ exports.Card = class Card extends Layer
 				@expandIcon.animate {rotation: 0}
 				@animate {height: @_baseHeight}
 				@footer.animate {height: @_baseFooterHeight}
+
+			@emit "change:expanded", @_expanded, @
 
 	@define "raised",
 		get: -> return @_raised

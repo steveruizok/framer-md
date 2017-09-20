@@ -27,6 +27,7 @@ exports.GridList = class GridList extends Layer
 		
 	addTile: (tile) ->
 		tile.i = @tiles.length
+		tile.gridList = @
 		@tiles.push(tile)
 		
 		tile.x = 8 + (@tileWidth + 8) * (tile.i % @_columns)

@@ -61,7 +61,7 @@ app = new md.App
 
 # Views
 
-# Buttons
+# Buttons 
 
 # welcome (buttons page 1)
 

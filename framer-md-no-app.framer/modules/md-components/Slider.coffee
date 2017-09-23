@@ -33,6 +33,8 @@ exports.Slider = class Slider extends SliderComponent
 			shadowBlur: 0
 			color: Theme.primary
 
+		@knob.draggable.propagateEvents = false
+
 		@thumb = new Layer
 			name: 'Thumb', parent: @knob
 			x: Align.center, y: Align.center

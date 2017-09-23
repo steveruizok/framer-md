@@ -85,7 +85,6 @@ exports.TextField = class TextField extends Type.Regular
 			y: Align.bottom(-22)
 			backgroundColor: 'rgba(0, 0, 0, .42)'
 			animationOptions: {time: .05, colorModel: "rgb"}
-		
 
 		# Input Element
 

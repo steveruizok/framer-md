@@ -15,8 +15,17 @@ Type = require 'md-components/Type'
 
 exports.Card = class Card extends Layer
 	constructor: (options = {}) ->
+		showLayers = options.showLayers ? true
 
 		@_raised = undefined
+
+		@_stack = []
+
+		@padding = options.padding ? {
+			top: 16, right: 0, 
+			bottom: 16, left: 16
+			stack: 16
+			}
 
 		_initExpand = options.expanded
 		options.expanded = undefined
@@ -33,9 +42,8 @@ exports.Card = class Card extends Layer
 		@_verticalActions = options.verticalActions ? false
 
 		
-
 		super _.defaults options,
-			name: '.'
+			name: 'Card'
 			x: Align.center, y: 8
 			width: Screen.width - 16
 			borderRadius: 2
@@ -55,7 +63,6 @@ exports.Card = class Card extends Layer
 		@divider = new Divider
 			name: 'Divider', parent: @footer
 			visible: false
-
 
 		if @_expand?
 
@@ -95,6 +102,80 @@ exports.Card = class Card extends Layer
 				@actionButtons.push(button)
 
 			@_baseFooterHeight = @footer.height
+
+	# add a layer to the stack
+	addToStack: (layers = []) =>
+		if not _.isArray(layers) then layers = [layers]
+		
+		for layer in layers
+			last = _.last(@stack)
+			if last?
+				startY = last.maxY + (@padding.stack ? 0)
+			else
+				startY = @padding.top ? 0
+
+			layer.parent = @
+			layer.x = @padding.left ? 0
+			layer.y = startY
+			do (layer) =>
+				layer.on "change:height", => @moveStack(layer)
+
+			@stack.push(layer)
+			
+		@setHeight()
+	
+	# pull a layer from the stack
+	removeFromStack: (layer) =>
+		_.pull(@stack, layer)
+		@stackView()
+	
+	# stack layers in stack, with optional padding and animation
+	stackView: (
+		animate = false, 
+		padding = @padding.stack, 
+		top = @padding.top, 
+		animationOptions = {time: .25}
+	) =>
+	
+		for layer, i in @stack
+			
+			if animate is true
+				if i is 0 then layer.animate
+					y: top
+					options: animationOptions
+					
+				else layer.animate
+					y: @stack[i - 1].maxY + padding
+					options: animationOptions
+			else
+				if i is 0 then layer.y = top
+				else layer.y = @stack[i - 1].maxY + padding
+				
+		@setHeight()
+	
+	# move stack when layer height changes
+	moveStack: (layer) =>
+		index = _.indexOf(@stack, layer)
+		for layer, i in @stack
+			if i > 0 and i > index
+				layer.y = @stack[i - 1].maxY + @padding.stack
+
+		@setHeight()
+	
+	setHeight: ->
+		@height = _.last(@stack).maxY + (@padding.bottom ? 16)		
+	
+	# build with page as bound object
+	build: (func) -> do _.bind(func, @)
+
+	# refresh page
+	refresh: -> null
+	
+	@define "stack",
+		get: -> return @_stack
+		set: (layers) ->
+			layer.destroy() for layer in @stack
+			@addToStack(layers)
 
 	@define "expanded",
 		get: -> return @_expanded

@@ -8,18 +8,17 @@
 # 	                                   d8888P
 
 Type = require 'md-components/Type'
-{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 { Button } = require 'md-components/Button'
 
+# simplify: create an actions array, with text, action, color?
+# this needs to be standardized across apis
+
 exports.Dialog = class Dialog extends Layer
 	constructor: (options = {}) ->
-		super _.defaults options,
-			name: '.'
-			size: Screen.size
-			backgroundColor: 'rgba(0, 0, 0, .5)'
-			opacity: 0
+
+		showLayers = options.showLayers ? false
 			
 		@_title = options.title ? 'Default Title'
 		@_body = options.body ? 'Body text goes here.'
@@ -27,7 +26,13 @@ exports.Dialog = class Dialog extends Layer
 		@_acceptAction = options.acceptAction ? -> null
 		@_declineText = options.declineText ? ''
 		@_declineAction = options.declineAction ? -> null
-		
+
+		super _.defaults options,
+			name: if showLayers then 'Dialog' else '.'
+			size: Screen.size
+			backgroundColor: 'rgba(0, 0, 0, .5)'
+			opacity: 0
+
 		@on Events.Tap, (event) -> event.stopPropagation()
 		
 		@container = new Layer
@@ -73,7 +78,7 @@ exports.Dialog = class Dialog extends Layer
 		
 		# add close actions to confirm and cancel
 		for button in [@accept, @decline]
-			button?.onTap @close
+			button?.onTap => Utils.delay .25, @close
 		
 		# ON LOAD
 		@open()
@@ -88,7 +93,7 @@ exports.Dialog = class Dialog extends Layer
 			opacity: 1
 			options:
 				time: .25
-				delay: .05
+				delay: .15
 
 	close: =>
 		@container.animate

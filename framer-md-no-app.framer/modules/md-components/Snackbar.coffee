@@ -10,7 +10,7 @@ Type = require 'md-components/Type'
 { Theme } = require 'md-components/Theme'
 { Button } = require 'md-components/Button' 
 
-exports.Snackbar = Snackbar = class Snackbar extends Layer
+class exports.Snackbar extends Layer
 	constructor: (options = {}) ->
 
 		@_title = options.title ? 'Snackbar'
@@ -20,6 +20,7 @@ exports.Snackbar = Snackbar = class Snackbar extends Layer
 
 		super _.defaults options,
 			name: '.'
+			y: Screen.maxY
 			width: Screen.width
 			clip: true
 			backgroundColor: Theme.snackbar.backgroundColor

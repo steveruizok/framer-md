@@ -18,7 +18,7 @@ Type = require 'md-components/Type'
 class exports.Select extends TextField
 	constructor: (options = {}) ->
 		
-		@_options = options.options ? []
+		@_options = options.options ? ['Select Menu']
 
 		# TODO
 		# add an explicit width prop to textfield and use this prop instead of useMenuWidth

@@ -14,12 +14,16 @@ Type = require 'md-components/Type'
 exports.Button = class Button extends Layer 
 	constructor: (options = {}) ->
 
-		@_text = undefined
 		@_baseX = options.x
 
 		@_raised = options.raised ? false
 		@_type = options.type ? if @_raised then 'raised' else 'flat'
 		@_action = options.action ? -> null
+
+		@_explicitWidth = options.width? ? false
+
+		@_labelText = options.text
+		options.text = undefined
 
 		super _.defaults options,
 			name: '.'
@@ -32,7 +36,6 @@ exports.Button = class Button extends Layer
 			shadowColor: Theme.button[@_type].shadowColor
 			animationOptions: {time: .15}
 
-		
 		@labelLayer = new Type.Button
 			name: '.', parent: @
 			color: @color
@@ -65,10 +68,29 @@ exports.Button = class Button extends Layer
 			@_action()
 			@reset()
 
-		@text = options.text
-
+		@text = @_labelText
 
 	showRaised: => @animate {shadowY: 3, shadowSpread: 1}
+
+	setRipple: ->
+		@mask?.destroy()
+
+		@mask = new Layer
+			parent: @
+			size: @size
+			backgroundColor: null
+			borderRadius: 2
+			clip: true
+			opacity: 1
+
+		@mask.placeBehind @labelLayer
+
+		switch @_type
+			when 'flat'
+				@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
+			when 'raised'  
+				@ripple = new Rippple( @mask, null )
+				@onTapStart @showRaised 
 
 	reset: =>
 		@animateStop()
@@ -79,12 +101,15 @@ exports.Button = class Button extends Layer
 	@define "text",
 		get: -> return @_labelText
 		set: (text) ->
-			if not text? then text = 'Button'
+			if not text? then text = ''
 			@_labelText = text
 
-			@labelLayer?.visible = @text.length > 0
-			@labelLayer?.template = @text
+			@labelLayer.visible = @_labelText.length > 0
+			@labelLayer.template = @_labelText
 
-			@size = @labelLayer.size
-			@mask.size = @size
+			if not @_explicitWidth
+				@size = @labelLayer.size
+				@mask.size = @size
+			
 			@x = @_baseX
+			@setRipple()

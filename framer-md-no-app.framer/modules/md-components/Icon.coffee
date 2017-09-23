@@ -17,6 +17,7 @@ class Icon extends Layer
 
 		@_disabled = false
 		@_toggle = false
+		@_toggleLock = options.toggleLock ? false
 		@_isOn = false
 
 		@_color = Theme.primary
@@ -26,8 +27,10 @@ class Icon extends Layer
 
 		@_ripple = options.ripple ? true
 
-		@_icon = options.icon ? 'checkbox-marked'
+		@_icon = undefined
 		@_action = options.action ? undefined
+
+		options.icon ?= _.sample(_.keys(icons))
 
 		super _.defaults options,
 			name: 'Icon'
@@ -52,11 +55,12 @@ class Icon extends Layer
 		# when tap ends, turn on / off
 		@mask.onTapEnd (event) =>
 			return if not @action or not @ripple
+			return if @_toggleLock and @isOn
 
 			if @_toggle then @isOn = !@isOn
 			if @action then @action()
 
-		@updateColor()
+		@refresh()
 
 
 	@define "icon",
@@ -64,13 +68,14 @@ class Icon extends Layer
 		set: (icon) ->
 			return if @_icon is icon
 			@_icon = icon
-			@html = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
+			@refresh()
 
 	@define "color",
 		get: -> return @_color
 		set: (color) ->
+			return if @_color is color
 			@_color = color
-			@html = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
+			@refresh()
 
 	@define "onColor",
 		get: -> return @_onColor
@@ -96,7 +101,7 @@ class Icon extends Layer
 			return if bool is @_disabled
 			@_disabled = bool
 			@emit("change:disabled", @_disabled, @)
-			@updateColor()
+			@refresh()
 
 	@define "isOn",
 		get: -> return @_isOn
@@ -104,7 +109,7 @@ class Icon extends Layer
 			return if bool is @_isOn
 			@_isOn = bool
 			@emit("change:isOn", @_isOn, @)
-			@updateColor()
+			@refresh()
 
 	@define "toggle",
 		get: -> return @_toggle
@@ -122,5 +127,11 @@ class Icon extends Layer
 			@color = @_disabledColor 
 		else if @action? and @toggle
 			@color = if @isOn then @_onColor else @_offColor
+
+	refresh: ->
+		return if not @_color? or not @_icon? 
+		@updateColor()
+		@html = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='#{icons[@_icon]}' fill='#{@_color}'/></svg>"
+
 
 exports.Icon = Icon

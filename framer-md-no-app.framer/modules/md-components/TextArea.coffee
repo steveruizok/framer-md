@@ -30,6 +30,8 @@ exports.TextArea = class TextArea extends TextField
 
 		@labelTextLayer.props =
 			x: 16, y: 16
+
+		@helperTextLayer.visible = false
 		
 		# Input Line
 

@@ -34,6 +34,7 @@ exports.Page = class Page extends ScrollComponent
 			size: Screen.size
 			scrollHorizontal: false
 			backgroundColor: Theme.page.primary.backgroundColor
+			contentInset: { bottom: 16 }
 		
 		@contentInset =
 			top: 0, bottom: 160

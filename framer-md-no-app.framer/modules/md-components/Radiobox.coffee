@@ -20,6 +20,7 @@ exports.Radiobox = Radiobox = class Radiobox extends Icon
 			icon: 'radiobox-blank'
 			color: Theme.primary
 			toggle: true
+			toggleLock: true
 			action: -> null
 
 		@on "change:isOn", ->

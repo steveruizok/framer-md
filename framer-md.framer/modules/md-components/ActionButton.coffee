@@ -5,22 +5,19 @@
 # 	88     88  88.  ...   88   88 88.  .88 88    88  88    .88 88.  .88   88     88   88.  .88 88    88
 # 	88     88  `88888P'   dP   dP `88888P' dP    dP  88888888P `88888P'   dP     dP   `88888P' dP    dP
 
-Type = require 'md-components/Type'
-{ Ripple } = require 'md-components/Ripple'
+{ Rippple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
-{ MenuButton } = require 'md-components/MenuButton'
 
 exports.ActionButton = class ActionButton extends Layer 
 	constructor: (options = {}) ->
 
-		@_raised = options.raised ? false
 		@_action = options.action ? -> null
 		@_icon = options.icon ? 'plus'
 		@_app = options.app
 
 		super _.defaults options,
-			name: '.'
+			name: 'Action Button'
 			x: Align.right(-16), y: Align.bottom(-17)
 			width: 64, height: 64, borderRadius: 32
 			backgroundColor: Theme.fab.backgroundColor
@@ -32,10 +29,28 @@ exports.ActionButton = class ActionButton extends Layer
 			if @_app.bottomNav? then @y -= @_app.bottomNav.height
 			@_app.actionButton = @
 
+		# icon
+		
 		@iconLayer = new Icon
 			name: '.', parent: @
 			x: Align.center, y: Align.center
-			icon: @_icon, color: Theme.fab.color
+			icon: @_icon, 
+			color: Theme.fab.color
+
+		# mask
+		
+		@mask = new Layer
+			parent: @
+			size: @size
+			backgroundColor: null
+			borderRadius: @borderRadius
+			clip: true
+			opacity: 1
+
+		@mask.placeBehind @iconLayer
+		@ripple = new Rippple( @mask, null )
+
+		# events
 
 		@onTouchStart (event) -> 
 			@showTouched()
@@ -46,7 +61,6 @@ exports.ActionButton = class ActionButton extends Layer
 			@reset()
 
 	showTouched: -> 
-		Ripple(@, event.point, @iconLayer)
 		@animate {shadowY: 3, shadowSpread: 1}
 
 	reset: ->

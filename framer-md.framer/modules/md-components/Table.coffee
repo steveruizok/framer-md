@@ -1,58 +1,13 @@
-{ Icon } = require 'md-components/Icon'
-
-
-# 	 a88888b. dP                         dP       dP
-# 	d8'   `88 88                         88       88
-# 	88        88d888b. .d8888b. .d8888b. 88  .dP  88d888b. .d8888b. dP.  .dP
-# 	88        88'  `88 88ooood8 88'  `"" 88888"   88'  `88 88'  `88  `8bd8'
-# 	Y8.   .88 88    88 88.  ... 88.  ... 88  `8b. 88.  .88 88.  .88  .d88b.
-# 	 Y88888P' dP    dP `88888P' `88888P' dP   `YP 88Y8888' `88888P' dP'  `dP
-
-
-class Checkbox extends Icon
-	constructor: (options = {}) ->
-
-		super _.defaults options,
-			name: 'Checkbox'
-			animationOptions: {time: .15}
-			toggle: true
-			color: 'rgba(117, 117, 117, 1.000)'
-			onColor: 'rgba(67, 133, 244, 1.000)'
-			action: => @update()
-
-		@on "change:disabled", @update
-		@on "change:isOn", @update
-
-		@update()
-
-	update: ->
-		
-		if @_isOn
-			@icon = 'checkbox-marked'
-		else 
-			@icon = 'checkbox-blank-outline'
-
-		if @_disabled
-			@opacity = .3
-		else
-			@opacity = 1
-
-
-
-
-
-
-
-
 # 	dP     dP                          dP
 # 	88     88                          88
 # 	88aaaaa88a .d8888b. .d8888b. .d888b88 .d8888b. 88d888b.
 # 	88     88  88ooood8 88'  `88 88'  `88 88ooood8 88'  `88
 # 	88     88  88.  ... 88.  .88 88.  .88 88.  ... 88
 # 	dP     dP  `88888P' `88888P8 `88888P8 `88888P' dP
-# 	
-# 	
 
+{ Icon } = require 'md-components/Icon'
+{ Theme } = require 'md-components/Theme'
+{ Checkbox } = require 'md-components/Checkbox'
 
 class Header extends TextLayer
 	constructor: (options = {}) ->
@@ -68,12 +23,17 @@ class Header extends TextLayer
 		@_hovered = false
 		@_align = @_source.align ? if @i is 0 then 'left' else 'right'
 
+		@_colors =
+			bright: new Color(@_table.color).alpha(.87)
+			dim: new Color(@_table.color).alpha(.54)
+			low: new Color(@_table.color).alpha(.38)
+
 		super _.defaults options,
 			name: @_source.title
 			y: Align.center
 			textAlign: @_align
 			fontSize: 12, 
-			color: @_table._colors.dim
+			color: @_colors.dim
 			padding: {top: 12, bottom: 12}
 			fontWeight: 600
 			text: @_source.title
@@ -89,7 +49,7 @@ class Header extends TextLayer
 				x: if @_align is 'left' then Align.right(24) else -24
 				y: Align.center()
 				animationOptions: @animationOptions
-				color: @_table._colors.bright
+				color: @_colors.bright
 				scale: .7
 				opacity: 0
 				icon: 'arrow-up'
@@ -108,7 +68,7 @@ class Header extends TextLayer
 
 		if @_key is column and @_table._sorted
 			@_sorted = true
-			@animate { color: @_table._colors.bright }
+			@animate { color: @_colors.bright }
 			@icon.animateStop()
 			@icon.animate
 				opacity: 1, 
@@ -117,7 +77,7 @@ class Header extends TextLayer
 
 		else 
 			@_sorted = false
-			@animate { color: @_table._colors.dim }
+			@animate { color: @_colors.dim }
 			@icon?.animate { opacity: 0, scale: .7 }
 			Utils.delay .25, => @icon?.rotation = 0
 
@@ -129,20 +89,23 @@ class Header extends TextLayer
 
 			if @_hovered 
 
-				if not @_sorted
-					@icon.animate { opacity: 1, color: @_table._colors.low }
-					
-					siblings = _.without(@_table.headers, @)
-					
-					for sib in siblings
-						sib.hovered = false
-						if sib._sorted is false
-							sib.icon.animate { opacity: 0, color: @_table._colors.low }		
-			
-			else
-				@icon?.animate
-					opacity: if @_sorted then 1 else 0 
-					color: @_table._colors.bright
+				if @_source.tooltip? and not @tooltip?
+					@tooltip = new TextLayer
+						name: 'Tooltip'
+						y: @_table.screenFrame.y + 56
+						fontSize: 9, color: '#FFF'
+						padding: {top: 6, bottom: 6, left: 6, right: 6}
+						backgroundColor: 'rgba(112, 112, 112, 1.000)'
+						text: @_source.tooltip
+
+					@tooltip.midX = @screenFrame.x + @_baseWidth
+
+				if @_sorted
+					@icon.animate { color: @_colors.low }
+					sib.hovered = false for sib in _.without(@_table.headers, @)
+				
+			else 
+				@icon?.animate { color: @_colors.bright }
 
 
 
@@ -181,12 +144,19 @@ class Row extends Layer
 		@_hoverable = @_table._hoverable
 		@_hovered = false
 
+		@_colors =
+			bright: new Color(@_table.color).alpha(.87)
+			dim: new Color(@_table.color).alpha(.54)
+			low: new Color(@_table.color).alpha(.38)
+			hover: new Color(@_table._onColor).alpha(.1)
+			select: new Color(@_table._onColor).alpha(.2)
+
 		super _.defaults options,
 			name: if @_table._showNames then 'Row' else '.', 
 			parent: if @_table._scrollable then @_table.content else @_table
 			height: @_table._rowHeight, width: @_table.width
 			y: 56 + ( @_table.rows.length * @_table._rowHeight)
-			color: @_table._colors.bright
+			color: @_colors.bright
 			shadowY: -1, shadowColor: 'rgba(0,0,0,.15)'
 			backgroundColor: @_table.backgroundColor
 			animationOptions: @_table.animationOptions
@@ -198,11 +168,11 @@ class Row extends Layer
 			@checkbox = new Checkbox
 				name: 'Checkbox', parent: @
 				x: 20, y: Align.center
-				color: @_table._colors.high
-				onColor: @_onColor
+				color: @_colors.low
+				onColor: @_table._onColor
 				disabled: false
 
-			@checkbox.ignoreEvents = true
+			# @checkbox.ignoreEvents = true
 
 		# build cells
 
@@ -218,19 +188,21 @@ class Row extends Layer
 
 		@onMouseOver -> Utils.delay 0, => @hovered = true
 		@onMouseOut ->  @hovered = false
-		@onTapEnd -> 	@selected = !@selected
+		@onTapEnd ->
+			if @item.isEmpty then @_table.deselectAll() 
+			else @selected = !@selected
 
 	reset: ->
 
 		@item.hovered = @hovered
 		@item.selected = @selected
-		@checkbox.isOn = @selected
+		@checkbox?.isOn = @selected
 		@_selectable = !@item.isEmpty
 		
 		# check hovered status
 
 		if @hovered
-			@backgroundColor = @_table._colors.hover
+			@backgroundColor = @_colors.hover ? 'rgba(238, 238, 238, 1.000)'
 			sib.hovered = false for sib in _.without(@_rows, @)
 		
 		else 
@@ -250,7 +222,7 @@ class Row extends Layer
 			# update display if item is selected
 
 			if @selected
-				@backgroundColor = @_table._colors.select
+				@backgroundColor = @_colors.select ? 'rgba(245, 245, 245, 1.000)'
 				
 
 	fill: (item) ->
@@ -269,7 +241,8 @@ class Row extends Layer
 	@define "selected",
 		get: -> return @_selected
 		set: (bool) ->
-			return if bool is @_selected or not @_selectable
+			return if bool is @_selected
+			return if not @_selectable
 
 			@_selected = bool
 
@@ -279,10 +252,6 @@ class Row extends Layer
 			@reset()
 
 			@_table.emit "change:selected", @_table.getSelected()
-
-			# if @_selected then @emit "select", @item
-			# else @emit "deselect", @item
-
 			
 
 	@define "hovered",
@@ -327,9 +296,9 @@ class Cell extends TextLayer
 			name: 'Cell', parent: @_row
 			x: @_table.headers[@i].x
 			y: Align.center
-			textAlign: @_table.headers[@i]._align
+			textAlign: @_table._headers[@i]._align
 			fontSize: 13
-			color: @_table._colors.bright
+			color: 'rgba(0,0,0,.84)'
 			textTransform: "capitalize"
 			animationOptions: @_table.animationOptions
 			text: "{data}"
@@ -340,17 +309,13 @@ class Cell extends TextLayer
 
 	fill: (item) ->
 		# fill cells with data
-		@data = item[@_key]
-
-	@define "data",
-		get: -> return @_data
-		set: (data) ->
-
-			if @_sortdata then @_data = @_sortdata
-			else @_data = if data or data is 0 then @_data = _.defaultTo(@_format(data, @_table), '') else ''
-
-			@template = @_data
-
+		if @_sortdata then @_data = @_sortdata
+		
+		else
+			data = item[@_key]
+			@_data = if data or data is 0 then @_data = _.defaultTo(@_format(data, item, @_table), '') else ''
+		
+		@template = @_data
 
 
 
@@ -372,10 +337,9 @@ class Cell extends TextLayer
 class exports.Table extends ScrollComponent
 	constructor: (options = {}) ->
 		
-		
 		@_headers = options.headers ? [
 			{title: 'Title', key: 'title', width: 200},
-			{title: 'Author', key: 'author', width: 100},
+			# {title: 'Author', key: 'author', width: 100},
 			{title: 'Year', key: 'year', width: 100}
 			]
 		@_items = options.items ? [
@@ -391,8 +355,10 @@ class exports.Table extends ScrollComponent
 		@_selectable = options.selectable ? true
 		@_multiselect = options.multiselect ? false
 
+		@_columnPadding = options.columnPadding ? 56
 		@_rowHeight = options.rowHeight ? 48
 		@_rowsPerPage = options.rowsPerPage ? 6
+		@_rowStyle = options.rowStyle ? {}
 
 		@_start = 0
 		@_totalItems = undefined
@@ -422,18 +388,7 @@ class exports.Table extends ScrollComponent
 			color: '#000'
 
 		@content.backgroundColor = null
-
-		# Colors
-
-		@_colors =
-			bright: new Color(@color).alpha(.87)
-			high: new Color(@color).alpha(.58)
-			dim: new Color(@color).alpha(.54)
-			low: new Color(@color).alpha(.38)
-			hover: new Color(@_onColor).alpha(.07).desaturate(100)
-			select: new Color(@_onColor).alpha(.04).desaturate(100)
-			tint: new Color(@_onColor).alpha(.13)
-			contrast: new Color(@backgroundColor).alpha(.87)
+		@content.draggable.propagateEvents = false
 
 		# make headers
 		@_makeHeaders()
@@ -446,7 +401,7 @@ class exports.Table extends ScrollComponent
 		@_addRow(i) for i in [0 ... totalRows]
 
 		# set max for items, to prevent crashes and extremely long load times
-		items = if @_items?.length > 50 then @_items[0 ... @_rowsPerPage] else @_items
+		items = if @_items?.length > 50 and @_scrollable then @_items[0 ... 20] else @_items
 
 		# add items
 		@addItem(item, false) for item in items
@@ -485,7 +440,7 @@ class exports.Table extends ScrollComponent
 				name: 'Checkbox', parent: @header
 				x: 20, y: Align.center
 				onColor: @_onColor
-				color: @_colors.high ? 'rgba(117, 117, 117, 1.000)'
+				color: @color ? 'rgba(117, 117, 117, 1.000)'
 				disabled: !@_multiselect
 
 			@checkbox.on "change:isOn", (isOn) =>
@@ -506,7 +461,7 @@ class exports.Table extends ScrollComponent
 				table: @, 
 				i: i
 
-			startX += @headers[i]._baseWidth + 56
+			startX += @headers[i]._baseWidth + @_columnPadding
 			
 			if header.sort?
 				@_sortColumn = header.key
@@ -555,10 +510,15 @@ class exports.Table extends ScrollComponent
 
 	_fillCells: (items) ->
 		for row, i in @rows
-			item = items[@_start + i] ? {isEmpty: true}
-			row.fill(item)
+			item = items[ @_start + i ]
 
-			row.checkbox.visible = items[@_start + i]?
+			if item? then item.isEmpty = false 
+			else item = { isEmpty: true }
+
+			row.fill( item )
+
+			# hide checkbox if no content
+			row.checkbox?.visible = !item.isEmpty
 
 
 	_setWidths: ->
@@ -586,7 +546,7 @@ class exports.Table extends ScrollComponent
 
 		for header, i in _.reverse(_.tail(@headers))
 			header.maxX = startX
-			startX -= header.width + 56
+			startX -= header.width + @_columnPadding
 
 		# second loop through columns:
 		for header, i in @headers
@@ -596,10 +556,10 @@ class exports.Table extends ScrollComponent
 				cell = row._cells[i]
 
 				# position cells
-				if i > 0 then cell.maxX = @headers[i].maxX
-				else cell.x = @headers[i].x
+				if header._align is 'left' or i is 0 then cell.x = @headers[i].x
+				else cell.maxX = @headers[i].maxX
 
-	_testCheckbox: ->
+	_testCheckbox: =>
 		return if not @_multiselect or not @_selectable
 
 		if @items.length is 0
@@ -635,7 +595,7 @@ class exports.Table extends ScrollComponent
 	# get minimum width
 	getMinimumWidth: ->
 		minWidth = if @_selectable then 82 else 48
-		minWidth += (@headers.length - 1) * 56
+		minWidth += (@headers.length - 1) * @_columnPadding
 		for header, i in @_headers
 			minWidth += header.colWidth
 
@@ -727,354 +687,9 @@ class exports.Table extends ScrollComponent
 			@_start = 0
 
 			@update()
-
-
-
-
-
-
-
-
-
-# 	dP     dP                          dP                    a88888b.                     dP                     dP
-# 	88     88                          88                   d8'   `88                     88                     88
-# 	88aaaaa88a .d8888b. .d8888b. .d888b88 .d8888b. 88d888b. 88        .d8888b. 88d888b. d8888P 88d888b. .d8888b. 88 .d8888b.
-# 	88     88  88ooood8 88'  `88 88'  `88 88ooood8 88'  `88 88        88'  `88 88'  `88   88   88'  `88 88'  `88 88 Y8ooooo.
-# 	88     88  88.  ... 88.  .88 88.  .88 88.  ... 88       Y8.   .88 88.  .88 88    88   88   88       88.  .88 88       88
-# 	dP     dP  `88888P' `88888P8 `88888P8 `88888P' dP        Y88888P' `88888P' dP    dP   dP   dP       `88888P' dP `88888P'
-# 	
-# 	
-
-class HeaderControls extends Layer
-	constructor: (options = {}) ->
-
-		@_tableCard = options.tableCard
-		@_table = @_tableCard._table
-
-
-		super _.defaults options,
-			name: if @_tableCard._showNames then 'Header' else '.'
-			height: 64
-			parent: @_tableCard
-			width: @_tableCard.width
-			controls: @_tableCard._headerControls
-			backgroundColor: @_tableCard.backgroundColor
-
-
-		# title and header buttons for unselected state
-
-		@menu = new Layer
-			name: if @_tableCard._showNames then 'Menu' else '.'
-			parent: @
-			size: @size
-			backgroundColor: @backgroundColor
-
-		@title = new TextLayer
-			name: 'Title', parent: @menu
-			x: 24, y: 24
-			fontSize: 20
-			color: @_table._colors.bright
-			text: @_tableCard._title
-
-		startX = undefined
-
-		if @_tableCard._headerButtons.length > 0
-			@title.visible = false
-
-		for button, i in @_tableCard._headerButtons
-			newButton = new TextLayer
-				parent: @menu
-				x: startX ? 8, y: 24
-				fontSize: 14, fontWeight: 500
-				padding: {right: 16, left: 16, top: 9, bottom: 9}
-				backgroundColor: @backgroundColor
-				textTransform: 'uppercase'
-				borderRadius: 2
-				color: @_table._onColor
-				text: button.text
-			
-			newButton.action = button.action
-
-			newButton.onTap newButton.action
-
-			startX = newButton.maxX + 8
-
-		# header controls
-
-		startX = undefined
-
-		for control, i in _.reverse(@_tableCard._headerControls)
-			newControl = new Icon
-				parent: @menu
-				x: startX ? Align.right(-14)
-				y: 24
-				color: @_table._colors.dim
-				icon: control.icon
-				action: control.action
-
-			startX = newControl.x - 48
-
-
-		# Selected Menu - contextual header for selected items
-
-		@selectedMenu = new Layer
-			name: if @_tableCard._showNames then 'Selected Menu' else '.'
-			parent: @
-			size: @size
-			backgroundColor: @_table._colors.tint
-
-		@selectedLabel = new TextLayer
-			name: 'Selected'
-			parent: @selectedMenu
-			y: 24, x: 24
-			fontSize: 14, color: @_table._onColor
-			text: '{selected} item{plural} selected'
-
-		startX = undefined
-
-		for control, i in _.reverse(@_tableCard._selectedControls)
-			newControl = new Icon
-				parent: @selectedMenu
-				x: startX ? Align.right(-14)
-				y: Align.center
-				icon: control.icon
-				action: control.action
-				color: @_table._colors.dim
-
-			startX = newControl.x - 48
-
-
-	update: =>
-		selected = @_table.getSelected().length
-
-		@selectedLabel.template = 
-			selected: @_table.getSelected().length
-			plural: if selected > 1 then 's' else ''
-
-		isSelected = selected > 0 and @_tableCard._selectedControls.length > 0
-
-		@selectedMenu.visible = isSelected
-		@menu.visible = !isSelected
-		
-
-
-
-
-
-
-
-
-
-# 	 88888888b                     dP                      a88888b.                     dP                     dP
-# 	 88                            88                     d8'   `88                     88                     88
-# 	a88aaaa    .d8888b. .d8888b. d8888P .d8888b. 88d888b. 88        .d8888b. 88d888b. d8888P 88d888b. .d8888b. 88 .d8888b.
-# 	 88        88'  `88 88'  `88   88   88ooood8 88'  `88 88        88'  `88 88'  `88   88   88'  `88 88'  `88 88 Y8ooooo.
-# 	 88        88.  .88 88.  .88   88   88.  ... 88       Y8.   .88 88.  .88 88    88   88   88       88.  .88 88       88
-# 	 dP        `88888P' `88888P'   dP   `88888P' dP        Y88888P' `88888P' dP    dP   dP   dP       `88888P' dP `88888P'
-# 	
-# 	
-
-class FooterControls extends Layer
-	constructor: (options = {}) ->
-
-		@_tableCard = options.tableCard
-		@_table = @_tableCard._table
-
-		super _.defaults options,
-			name: if @_tableCard._showNames then 'Footer' else '.'
-			y: Align.bottom
-			height: 48
-			parent: @_tableCard
-			width: @_tableCard.width
-			title: @_tableCard._title
-			controls: @_tableCard._headerControls
-			backgroundColor: @_tableCard.backgroundColor
-
-		@next = new Icon
-			parent: @
-			x: Align.right(-14), y: Align.center
-			icon: 'chevron-right'
-			color: @_table._colors.high
-			onColor: @_table._colors.high
-			action: => @_tableCard.nextPage()
-
-		@prev = new Icon
-			parent: @
-			x: @next.x - 48, y: Align.center
-			icon: 'chevron-left'
-			color: @_table._colors.high
-			onColor: @_table._colors.high
-			action: => @_tableCard.prevPage()
-
-		@currentPage = new TextLayer
-			name: 'Current Page', parent: @
-			y: Align.center, textAlign: 'right'
-			fontSize: 12, color: @_table._colors.high
-			text: '{start}-{last} of {total}'
-
-		@rowsPerPageIcon = new Icon
-			parent: @
-			y: Align.center
-			icon: 'menu-down'
-			disabled: true
-			color: @_table._colors.high
-			onColor: @_table._colors.high
-			action: => @_tableCard.prevPage()
-
-		@rowsPerPage = new TextLayer
-			name: 'Rows Per Page', parent: @
-			y: Align.center, textAlign: 'right'
-			fontSize: 12, color: @_table._colors.high
-			text: '{rowsPerPage}'
-
-		@rowsPerPageLabel = new TextLayer
-			name: 'Current Page', parent: @
-			y: Align.center, textAlign: 'right'
-			fontSize: 12, color: @_table._colors.high
-			text: 'Rows per Page:'
-
-		for button in [@next, @prev]
-			button.on "change:disabled", (isDisabled) ->
-				if isDisabled then @opacity = .5
-				else @opacity = 1
-
-		@update(true)
-
-
-	update: (initial = false) ->
-		start = @_table._start
-		rowsPerPage = @_table._rowsPerPage
-		last = start + rowsPerPage
-		total = @_table._totalItems
-
-		if last > total then last = total
-
-		@currentPage.template =
-			start: start + 1
-			last: last
-			total: total
-
-		@rowsPerPage.template = rowsPerPage
-
-		@currentPage.maxX = @prev.x - 32
-		
-		if initial
-			@rowsPerPageIcon.maxX = @currentPage.x - 32
-			@rowsPerPage.maxX = @rowsPerPageIcon.x
-			@rowsPerPageLabel.maxX = @rowsPerPageIcon.x - 40
-
-		@prev.disabled = start is 0
-		@next.disabled = last is total
-
-		
-
-
-
-
-
-
-# 	d888888P          dP       dP           a88888b.                         dP
-# 	   88             88       88          d8'   `88                         88
-# 	   88    .d8888b. 88d888b. 88 .d8888b. 88        .d8888b. 88d888b. .d888b88
-# 	   88    88'  `88 88'  `88 88 88ooood8 88        88'  `88 88'  `88 88'  `88
-# 	   88    88.  .88 88.  .88 88 88.  ... Y8.   .88 88.  .88 88       88.  .88
-# 	   dP    `88888P8 88Y8888' dP `88888P'  Y88888P' `88888P8 dP       `88888P8
-# 	
-# 	
-
-class exports.TableCard extends Layer
-	constructor: (options = {}) ->
-		
-		# table defined using @define method
-		@_table = undefined
-
-		@_title = options.title ? 'Table Card'
-		@_headerControls = options.headerControls ? []
-		@_selectedControls = options.selectedControls ? []
-		@_headerButtons = options.headerButtons ? []
-		
-		# an option:
-		# {name: 'Filter', 'icon': 'filter-menu', action: filterList}
-
-		@_footer = options.footer ? true
-
-		@_showNames = options.showNames ? true
-		
-		@_rawX = options.x
-		@_rawY = options.y
-
-		super _.defaults options,
-			name: 'Table Card', 
-			x: 16, y: 16
-			height: 280, width: 512
-			color: 'rgba(67, 133, 244, 1.000)'
-			backgroundColor: '#FFF'
-			borderRadius: 3
-			shadowY: 1, shadowBlur: 5,
-			shadowColor: 'rgba(0,0,0,.3)'
-			animationOptions: {time: .15}
-
-
-	nextPage: ->
-		@_table.nextPage()
-		@update()
-
-
-	prevPage: ->
-		@_table.prevPage()
-		@update()
-
-
-	# Add new table (and remove existing table, if one exists)
-	@define "table",
-		get: -> return @_table
-		set: (table) ->
-			return if table is @_table
-
-			# clear existing objects
-			@_table?.destroy()
-			@headerControls?.destroy()
-			@footerControls?.destroy()
-
-			# add cross references
-			@_table = table
-			@_table._tableCard = @
-
-			# set table properties
-			@_table.props =
-				parent: @
-				x: 0, y: 64
-
-			# set card properties to fit table
-			@props =
-				height: @_table.height + 64
-				width: @_table.width
-				backgroundColor: @_table.backgroundColor
-				color: @_table.color
-
-			# create header controls
-			@headerControls = new HeaderControls
-				tableCard: @
-
-			# create footer controls
-			if @_footer and not @_table._scrollable
-				@height += 48
-				@footerControls = new FooterControls
-					tableCard: @
-
-			# add event listener
-			@_table.on "change:selected", @headerControls.update
-
-			# reset properties with options properties (fixes align bugs)
-			Utils.delay 0, =>
-				@x = @_rawX
-				@y = @_rawY
-
-			# update everything
-			@update()
-
-
-	update: ->
-		@_table.update()
-		@headerControls?.update()
-		@footerControls?.update()
+			if @_scrollable
+				@scrollToPoint(
+					x: 0, y: 0
+					true
+					time: .2
+					)

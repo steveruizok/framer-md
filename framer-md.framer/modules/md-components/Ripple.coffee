@@ -42,6 +42,8 @@ class exports.Rippple extends Layer
 				@hide() if isTooFar(event.offset.x) or isTooFar(event.offset.y)
 
 	show: (point = @point) =>
+		return if @mask.parent?.disabled
+
 		@animateStop()
 
 		fullWidth = @_fullWidth
@@ -73,12 +75,12 @@ class exports.Rippple extends Layer
 			options: { time: .1 }
 
 		@animate
-			x: point.x - 4 - ( fullWidth / 2 )
-			y: point.y - 4 - ( fullWidth / 2 )
-			height: fullWidth
-			width: fullWidth 
-			borderRadius: ( fullWidth / 2 )
-			options: { time: .45 }
+			x: point.x - 4 - ( fullWidth )
+			y: point.y - 4 - ( fullWidth )
+			height: fullWidth * 2
+			width: fullWidth * 2
+			borderRadius: ( fullWidth )
+			options: { time: .6 }
 
 	hide: =>
 		@animate

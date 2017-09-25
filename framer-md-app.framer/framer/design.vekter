@@ -1,0 +1,1081 @@
+{
+  "version" : 10,
+  "root" : {
+    "id" : "i+o|Nj3?",
+    "__class" : "CanvasNode",
+    "parentid" : null,
+    "children" : [
+      {
+        "id" : "y3Qn!)>G",
+        "aspectRatioLocked" : false,
+        "__class" : "FrameNode",
+        "x" : 0,
+        "parentid" : "i+o|Nj3?",
+        "exportOptions" : [
+
+        ],
+        "width" : 360,
+        "y" : 0,
+        "deviceType" : "google-nexus-5x",
+        "fillGradient" : {
+          "end" : "rgba(0,0,0,0)",
+          "alpha" : 1,
+          "angle" : 0,
+          "__class" : "LinearGradient",
+          "start" : "black"
+        },
+        "exportEnabled" : false,
+        "children" : [
+
+        ],
+        "height" : 640,
+        "fillType" : "color",
+        "targetName" : null,
+        "fillColor" : "rgb(0, 0, 0)",
+        "name" : null
+      },
+      {
+        "id" : "biEKH@iK",
+        "aspectRatioLocked" : false,
+        "__class" : "FrameNode",
+        "x" : 0,
+        "parentid" : "i+o|Nj3?",
+        "exportOptions" : [
+
+        ],
+        "width" : 622,
+        "y" : 734,
+        "deviceType" : null,
+        "fillGradient" : {
+          "end" : "rgba(0,0,0,0)",
+          "alpha" : 1,
+          "angle" : 0,
+          "__class" : "LinearGradient",
+          "start" : "black"
+        },
+        "exportEnabled" : false,
+        "children" : [
+          {
+            "radius" : 0,
+            "children" : [
+              {
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "GgkpP4.F",
+                "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z\"><\/path><\/svg>",
+                "fillColor" : "black",
+                "aspectRatioLocked" : true,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "saturateEnabled" : 0,
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : 6,
+                "__class" : "SVGNode",
+                "fillGradient" : {
+                  "end" : "rgba(0,0,0,0)",
+                  "alpha" : 1,
+                  "angle" : 0,
+                  "__class" : "LinearGradient",
+                  "start" : "black"
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.1040462427745665,
+                "blurEnabled" : 0,
+                "fillType" : "color",
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : "w9'[?^W7",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "menu_invert",
+                "saturate" : 100,
+                "height" : 24,
+                "top" : 9,
+                "intrinsicWidth" : 24,
+                "originalFilename" : "color_lens",
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.1213872832369942,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "intrinsicHeight" : 24,
+                "heightFactor" : null,
+                "hueRotate" : 0,
+                "targetName" : "menu_invert",
+                "bottom" : null,
+                "blur" : 12,
+                "invertEnabled" : 0,
+                "sepiaEnabled" : 0,
+                "width" : 24,
+                "brightness" : 100
+              },
+              {
+                "sepiaEnabled" : 0,
+                "editable" : false,
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "gOLv]G!U",
+                "saturateEnabled" : 0,
+                "x" : 54,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "y" : 87,
+                "__class" : "TextNode",
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : null,
+                "styledText" : {
+                  "blocks" : [
+                    {
+                      "depth" : 0,
+                      "inlineStyleRanges" : [
+                        {
+                          "length" : 14,
+                          "style" : "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "SIZE:16",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "LETTERSPACING:0",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "LINEHEIGHT:1.2",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "COLOR:rgba(0, 0, 0, 0.7)",
+                          "offset" : 0
+                        }
+                      ],
+                      "entityRanges" : [
+
+                      ],
+                      "data" : {
+                        "emptyStyle" : [
+                          "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "SIZE:16",
+                          "LETTERSPACING:0",
+                          "LINEHEIGHT:1.2",
+                          "COLOR:rgba(0, 0, 0, 0.7)"
+                        ]
+                      },
+                      "text" : "Page Body Text",
+                      "key" : "bk6du",
+                      "type" : "unstyled"
+                    }
+                  ],
+                  "__class" : "StyledTextDraft",
+                  "entityMap" : {
+
+                  }
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.5028901734104047,
+                "blurEnabled" : 0,
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : "w9'[?^W7",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "page_body_color",
+                "saturate" : 100,
+                "height" : 19,
+                "top" : null,
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.708092485549133,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "hueRotate" : 0,
+                "heightFactor" : null,
+                "targetName" : "page_body_color",
+                "bottom" : 41,
+                "blur" : 12,
+                "autoSize" : true,
+                "invertEnabled" : 0,
+                "width" : 119,
+                "brightness" : 100
+              },
+              {
+                "sepiaEnabled" : 0,
+                "editable" : false,
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "mj3Yqj4[",
+                "saturateEnabled" : 0,
+                "x" : 54,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "y" : 87,
+                "__class" : "TextNode",
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : null,
+                "styledText" : {
+                  "blocks" : [
+                    {
+                      "depth" : 0,
+                      "inlineStyleRanges" : [
+                        {
+                          "length" : 15,
+                          "style" : "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 15,
+                          "style" : "COLOR:#000000",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 15,
+                          "style" : "SIZE:16",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 15,
+                          "style" : "LETTERSPACING:0",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 15,
+                          "style" : "LINEHEIGHT:1.2",
+                          "offset" : 0
+                        }
+                      ],
+                      "entityRanges" : [
+
+                      ],
+                      "data" : {
+                        "emptyStyle" : [
+                          "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "COLOR:#000000",
+                          "SIZE:16",
+                          "LETTERSPACING:0",
+                          "LINEHEIGHT:1.2"
+                        ]
+                      },
+                      "text" : "Page Title Text",
+                      "key" : "bk6du",
+                      "type" : "unstyled"
+                    }
+                  ],
+                  "__class" : "StyledTextDraft",
+                  "entityMap" : {
+
+                  }
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.5028901734104047,
+                "blurEnabled" : 0,
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : "w9'[?^W7",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "page_text_color",
+                "saturate" : 100,
+                "height" : 19,
+                "top" : null,
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.5,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "hueRotate" : 0,
+                "heightFactor" : null,
+                "targetName" : "page_text_color",
+                "bottom" : null,
+                "blur" : 12,
+                "autoSize" : true,
+                "invertEnabled" : 0,
+                "width" : 113,
+                "brightness" : 100
+              },
+              {
+                "sepiaEnabled" : 0,
+                "editable" : false,
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "g((([3v,",
+                "saturateEnabled" : 0,
+                "x" : 54,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "y" : 87,
+                "__class" : "TextNode",
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : null,
+                "styledText" : {
+                  "blocks" : [
+                    {
+                      "depth" : 0,
+                      "inlineStyleRanges" : [
+                        {
+                          "length" : 9,
+                          "style" : "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 9,
+                          "style" : "COLOR:#000000",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 9,
+                          "style" : "SIZE:16",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 9,
+                          "style" : "LETTERSPACING:0",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 9,
+                          "style" : "LINEHEIGHT:1.2",
+                          "offset" : 0
+                        }
+                      ],
+                      "entityRanges" : [
+
+                      ],
+                      "data" : {
+                        "emptyStyle" : [
+                          "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "COLOR:#000000",
+                          "SIZE:16",
+                          "LETTERSPACING:0",
+                          "LINEHEIGHT:1.2"
+                        ]
+                      },
+                      "text" : "Menu Text",
+                      "key" : "bk6du",
+                      "type" : "unstyled"
+                    }
+                  ],
+                  "__class" : "StyledTextDraft",
+                  "entityMap" : {
+
+                  }
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.5028901734104047,
+                "blurEnabled" : 0,
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : "w9'[?^W7",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "menu_text_color",
+                "saturate" : 100,
+                "height" : 19,
+                "top" : 41,
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.291907514450867,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "hueRotate" : 0,
+                "heightFactor" : null,
+                "targetName" : "menu_text_color",
+                "bottom" : null,
+                "blur" : 12,
+                "autoSize" : true,
+                "invertEnabled" : 0,
+                "width" : 80,
+                "brightness" : 100
+              }
+            ],
+            "centerAnchorX" : 0.8094855305466238,
+            "id" : "w9'[?^W7",
+            "exportOptions" : [
+
+            ],
+            "grayScaleEnabled" : 0,
+            "constraintsLocked" : false,
+            "blurType" : "layer",
+            "fillColor" : "rgb(226, 226, 226)",
+            "widthFactor" : null,
+            "grayscale" : 0,
+            "top" : 24,
+            "saturate" : 100,
+            "left" : null,
+            "locked" : false,
+            "sepiaEnabled" : 0,
+            "fillGradient" : {
+              "end" : "rgba(0,0,0,0)",
+              "alpha" : 1,
+              "angle" : 0,
+              "__class" : "LinearGradient",
+              "start" : "black"
+            },
+            "blur" : 12,
+            "radiusTopLeft" : 0,
+            "sepia" : 0,
+            "borderColor" : "#222",
+            "rotation" : 0,
+            "borderLeft" : 1,
+            "fillEnabled" : true,
+            "right" : 32,
+            "opacity" : 1,
+            "name" : "page_color",
+            "blendingMode" : "normal",
+            "contrast" : 100,
+            "centerAnchorY" : 0.4977477477477478,
+            "height" : 173,
+            "borderWidth" : 1,
+            "exportEnabled" : false,
+            "hueRotate" : 0,
+            "borderStyle" : "solid",
+            "brightnessEnabled" : 0,
+            "borderPerSide" : false,
+            "saturateEnabled" : 0,
+            "aspectRatioLocked" : true,
+            "borderRight" : 1,
+            "parentid" : "biEKH@iK",
+            "radiusBottomLeft" : 0,
+            "boxShadows" : [
+              {
+                "x" : 0,
+                "color" : "rgba(0,0,0,0.25)",
+                "enabled" : false,
+                "y" : 2,
+                "spread" : 0,
+                "__class" : "BoxShadow",
+                "inset" : false,
+                "blur" : 5
+              }
+            ],
+            "contrastEnabled" : 0,
+            "borderEnabled" : 0,
+            "radiusPerCorner" : false,
+            "radiusTopRight" : 0,
+            "invert" : 0,
+            "__class" : "RectangleNode",
+            "clip" : false,
+            "visible" : true,
+            "fillType" : "color",
+            "invertEnabled" : 0,
+            "heightFactor" : null,
+            "width" : 173,
+            "borderBottom" : 1,
+            "blurEnabled" : 0,
+            "brightness" : 100,
+            "bottom" : 25,
+            "borderTop" : 1,
+            "targetName" : "page_color",
+            "radiusBottomRight" : 0,
+            "hueRotateEnabled" : 0
+          },
+          {
+            "radius" : 0,
+            "children" : [
+              {
+                "sepiaEnabled" : 0,
+                "editable" : false,
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "wHgI*^rd",
+                "saturateEnabled" : 0,
+                "x" : 54,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "y" : 87,
+                "__class" : "TextNode",
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : null,
+                "styledText" : {
+                  "blocks" : [
+                    {
+                      "depth" : 0,
+                      "inlineStyleRanges" : [
+                        {
+                          "length" : 14,
+                          "style" : "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "SIZE:16",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "LETTERSPACING:0",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "LINEHEIGHT:1.2",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 14,
+                          "style" : "COLOR:rgb(255, 255, 255)",
+                          "offset" : 0
+                        }
+                      ],
+                      "entityRanges" : [
+
+                      ],
+                      "data" : {
+                        "emptyStyle" : [
+                          "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "SIZE:16",
+                          "LETTERSPACING:0",
+                          "LINEHEIGHT:1.2",
+                          "COLOR:rgb(255, 255, 255)"
+                        ]
+                      },
+                      "text" : "Secondary Text",
+                      "key" : "bk6du",
+                      "type" : "unstyled"
+                    }
+                  ],
+                  "__class" : "StyledTextDraft",
+                  "entityMap" : {
+
+                  }
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.5028901734104047,
+                "blurEnabled" : 0,
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : "*`-c(194",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "secondary_text_color",
+                "saturate" : 100,
+                "height" : 19,
+                "top" : null,
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.5,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "hueRotate" : 0,
+                "heightFactor" : null,
+                "targetName" : "secondary_text_color",
+                "bottom" : null,
+                "blur" : 12,
+                "autoSize" : true,
+                "invertEnabled" : 0,
+                "width" : 118,
+                "brightness" : 100
+              },
+              {
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "XBh@|jQh",
+                "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z\"><\/path><\/svg>",
+                "fillColor" : "black",
+                "aspectRatioLocked" : true,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "saturateEnabled" : 0,
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : 6,
+                "__class" : "SVGNode",
+                "fillGradient" : {
+                  "end" : "rgba(0,0,0,0)",
+                  "alpha" : 1,
+                  "angle" : 0,
+                  "__class" : "LinearGradient",
+                  "start" : "black"
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.1040462427745665,
+                "blurEnabled" : 0,
+                "fillType" : "color",
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : "*`-c(194",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "secondary_invert",
+                "saturate" : 100,
+                "height" : 24,
+                "top" : 9,
+                "intrinsicWidth" : 24,
+                "originalFilename" : "color_lens",
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.1213872832369942,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "intrinsicHeight" : 24,
+                "heightFactor" : null,
+                "hueRotate" : 0,
+                "targetName" : "secondary_invert",
+                "bottom" : null,
+                "blur" : 12,
+                "invertEnabled" : 0,
+                "sepiaEnabled" : 0,
+                "width" : 24,
+                "brightness" : 100
+              }
+            ],
+            "centerAnchorX" : 0.4782958199356913,
+            "id" : "*`-c(194",
+            "exportOptions" : [
+
+            ],
+            "grayScaleEnabled" : 0,
+            "constraintsLocked" : false,
+            "blurType" : "layer",
+            "fillColor" : "rgb(2, 156, 236)",
+            "widthFactor" : null,
+            "grayscale" : 0,
+            "top" : 24,
+            "saturate" : 100,
+            "left" : 211,
+            "locked" : false,
+            "sepiaEnabled" : 0,
+            "fillGradient" : {
+              "end" : "rgba(0,0,0,0)",
+              "alpha" : 1,
+              "angle" : 0,
+              "__class" : "LinearGradient",
+              "start" : "black"
+            },
+            "blur" : 12,
+            "radiusTopLeft" : 0,
+            "sepia" : 0,
+            "borderColor" : "#222",
+            "rotation" : 0,
+            "borderLeft" : 1,
+            "fillEnabled" : true,
+            "right" : null,
+            "opacity" : 1,
+            "name" : "secondary_color",
+            "blendingMode" : "normal",
+            "contrast" : 100,
+            "centerAnchorY" : 0.4977477477477478,
+            "height" : 173,
+            "borderWidth" : 1,
+            "exportEnabled" : false,
+            "hueRotate" : 0,
+            "borderStyle" : "solid",
+            "brightnessEnabled" : 0,
+            "borderPerSide" : false,
+            "saturateEnabled" : 0,
+            "aspectRatioLocked" : true,
+            "borderRight" : 1,
+            "parentid" : "biEKH@iK",
+            "radiusBottomLeft" : 0,
+            "boxShadows" : [
+              {
+                "x" : 0,
+                "color" : "rgba(0,0,0,0.25)",
+                "enabled" : false,
+                "y" : 2,
+                "spread" : 0,
+                "__class" : "BoxShadow",
+                "inset" : false,
+                "blur" : 5
+              }
+            ],
+            "contrastEnabled" : 0,
+            "borderEnabled" : 0,
+            "radiusPerCorner" : false,
+            "radiusTopRight" : 0,
+            "invert" : 0,
+            "__class" : "RectangleNode",
+            "clip" : false,
+            "visible" : true,
+            "fillType" : "color",
+            "invertEnabled" : 0,
+            "heightFactor" : null,
+            "width" : 173,
+            "borderBottom" : 1,
+            "blurEnabled" : 0,
+            "brightness" : 100,
+            "bottom" : 25,
+            "borderTop" : 1,
+            "targetName" : "secondary_color",
+            "radiusBottomRight" : 0,
+            "hueRotateEnabled" : 0
+          },
+          {
+            "radius" : 0,
+            "children" : [
+              {
+                "sepiaEnabled" : 0,
+                "editable" : false,
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "Nw!G*pF^",
+                "saturateEnabled" : 0,
+                "x" : 54,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "y" : 87,
+                "__class" : "TextNode",
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : null,
+                "styledText" : {
+                  "blocks" : [
+                    {
+                      "depth" : 0,
+                      "inlineStyleRanges" : [
+                        {
+                          "length" : 12,
+                          "style" : "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 12,
+                          "style" : "SIZE:16",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 12,
+                          "style" : "LETTERSPACING:0",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 12,
+                          "style" : "LINEHEIGHT:1.2",
+                          "offset" : 0
+                        },
+                        {
+                          "length" : 12,
+                          "style" : "COLOR:rgb(255, 255, 255)",
+                          "offset" : 0
+                        }
+                      ],
+                      "entityRanges" : [
+
+                      ],
+                      "data" : {
+                        "emptyStyle" : [
+                          "FONT:.SFNSText|SFUIText-Regular|.SFUIText",
+                          "SIZE:16",
+                          "LETTERSPACING:0",
+                          "LINEHEIGHT:1.2",
+                          "COLOR:rgb(255, 255, 255)"
+                        ]
+                      },
+                      "text" : "Primary Text",
+                      "key" : "bk6du",
+                      "type" : "unstyled"
+                    }
+                  ],
+                  "__class" : "StyledTextDraft",
+                  "entityMap" : {
+
+                  }
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.5028901734104047,
+                "blurEnabled" : 0,
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : ")HFahQ4u",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "primary_text_color",
+                "saturate" : 100,
+                "height" : 19,
+                "top" : null,
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.5,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "hueRotate" : 0,
+                "heightFactor" : null,
+                "targetName" : "primary_text_color",
+                "bottom" : null,
+                "blur" : 12,
+                "autoSize" : true,
+                "invertEnabled" : 0,
+                "width" : 96,
+                "brightness" : 100
+              },
+              {
+                "rotation" : 0,
+                "blurType" : "layer",
+                "exportEnabled" : false,
+                "id" : "DrO)<|k;",
+                "svg" : "<?xml version=\"1.0\"?><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M12 3a9 9 0 0 0 0 18c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z\"><\/path><\/svg>",
+                "fillColor" : "black",
+                "aspectRatioLocked" : true,
+                "grayscale" : 0,
+                "hueRotateEnabled" : 0,
+                "saturateEnabled" : 0,
+                "widthFactor" : null,
+                "opacity" : 1,
+                "contrastEnabled" : 0,
+                "locked" : false,
+                "left" : 6,
+                "__class" : "SVGNode",
+                "fillGradient" : {
+                  "end" : "rgba(0,0,0,0)",
+                  "alpha" : 1,
+                  "angle" : 0,
+                  "__class" : "LinearGradient",
+                  "start" : "black"
+                },
+                "blendingMode" : "normal",
+                "invert" : 0,
+                "sepia" : 0,
+                "centerAnchorX" : 0.1040462427745665,
+                "blurEnabled" : 0,
+                "fillType" : "color",
+                "shadows" : [
+                  {
+                    "y" : 2,
+                    "enabled" : false,
+                    "blur" : 5,
+                    "x" : 0,
+                    "__class" : "Shadow",
+                    "color" : "rgba(0,0,0,0.25)"
+                  }
+                ],
+                "parentid" : ")HFahQ4u",
+                "brightnessEnabled" : 0,
+                "exportOptions" : [
+
+                ],
+                "name" : "primary_invert",
+                "saturate" : 100,
+                "height" : 24,
+                "top" : 9,
+                "intrinsicWidth" : 24,
+                "originalFilename" : "color_lens",
+                "constraintsLocked" : false,
+                "right" : null,
+                "visible" : true,
+                "centerAnchorY" : 0.1213872832369942,
+                "contrast" : 100,
+                "grayScaleEnabled" : 0,
+                "intrinsicHeight" : 24,
+                "heightFactor" : null,
+                "hueRotate" : 0,
+                "targetName" : "primary_invert",
+                "bottom" : null,
+                "blur" : 12,
+                "invertEnabled" : 0,
+                "sepiaEnabled" : 0,
+                "width" : 24,
+                "brightness" : 100
+              }
+            ],
+            "centerAnchorX" : 0.1631832797427653,
+            "id" : ")HFahQ4u",
+            "exportOptions" : [
+
+            ],
+            "grayScaleEnabled" : 0,
+            "constraintsLocked" : false,
+            "blurType" : "layer",
+            "fillColor" : "rgb(0, 179, 67)",
+            "widthFactor" : null,
+            "grayscale" : 0,
+            "top" : 24,
+            "saturate" : 100,
+            "left" : 15,
+            "locked" : false,
+            "sepiaEnabled" : 0,
+            "fillGradient" : {
+              "end" : "rgba(0,0,0,0)",
+              "alpha" : 1,
+              "angle" : 0,
+              "__class" : "LinearGradient",
+              "start" : "black"
+            },
+            "blur" : 12,
+            "radiusTopLeft" : 0,
+            "sepia" : 0,
+            "borderColor" : "#222",
+            "rotation" : 0,
+            "borderLeft" : 1,
+            "fillEnabled" : true,
+            "right" : null,
+            "opacity" : 1,
+            "name" : "primary_color",
+            "blendingMode" : "normal",
+            "contrast" : 100,
+            "centerAnchorY" : 0.4977477477477478,
+            "height" : 173,
+            "borderWidth" : 1,
+            "exportEnabled" : false,
+            "hueRotate" : 0,
+            "borderStyle" : "solid",
+            "brightnessEnabled" : 0,
+            "borderPerSide" : false,
+            "saturateEnabled" : 0,
+            "aspectRatioLocked" : true,
+            "borderRight" : 1,
+            "parentid" : "biEKH@iK",
+            "radiusBottomLeft" : 0,
+            "boxShadows" : [
+              {
+                "x" : 0,
+                "color" : "rgba(0,0,0,0.25)",
+                "enabled" : false,
+                "y" : 2,
+                "spread" : 0,
+                "__class" : "BoxShadow",
+                "inset" : false,
+                "blur" : 5
+              }
+            ],
+            "contrastEnabled" : 0,
+            "borderEnabled" : 0,
+            "radiusPerCorner" : false,
+            "radiusTopRight" : 0,
+            "invert" : 0,
+            "__class" : "RectangleNode",
+            "clip" : false,
+            "visible" : true,
+            "fillType" : "color",
+            "invertEnabled" : 0,
+            "heightFactor" : null,
+            "width" : 173,
+            "borderBottom" : 1,
+            "blurEnabled" : 0,
+            "brightness" : 100,
+            "bottom" : 25,
+            "borderTop" : 1,
+            "targetName" : "primary_color",
+            "radiusBottomRight" : 0,
+            "hueRotateEnabled" : 0
+          }
+        ],
+        "height" : 222,
+        "fillType" : "color",
+        "targetName" : "color_pallete",
+        "fillColor" : "#ffffff",
+        "name" : "color_pallete"
+      }
+    ]
+  }
+}

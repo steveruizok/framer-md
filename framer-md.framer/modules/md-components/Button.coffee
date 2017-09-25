@@ -13,64 +13,152 @@ Type = require 'md-components/Type'
 
 exports.Button = class Button extends Layer 
 	constructor: (options = {}) ->
+		@__constructor = true
 
-		@_raised = options.raised ? false
-		@_type = if @_raised then 'raised' else 'flat'
-		@_action = options.action ? -> null
+		if options.icon
+			options.action ?= -> null
+			options.color ?= Theme.colors.primary.main
+			return new Icon(options)
 
-		super _.defaults options,
-			name: '.'
-			width: 0, height: 36
-			borderRadius: 2
-			backgroundColor: Theme.button[@_type].backgroundColor
-			shadowY: Theme.button[@_type].shadowY
-			shadowBlur: Theme.button[@_type].shadowBlur
-			shadowColor: Theme.button[@_type].shadowColor
-			animationOptions: {time: .15}
+		showLayers = options.showLayers
 
-		
+		@_disabled
+		@_action
+		@_labelText
+		@_raised
+		@_type 
+		@_base
+		@_explicitWidth = options.width?
+		@_startX = options.x
+
+		@_type = options.type ? if options.raised then 'raised' else 'flat'
+
+		switch @_type
+			when 'flat'
+				@_base =
+					name: 'Flat Button'
+					height: 36
+					width: 999
+					borderRadius: 2
+					backgroundColor: null
+					color: Theme.colors.secondary.main
+					shadowY: 0
+					shadowColor: 'rgba(0,0,0,.26)'
+					shadowBlur: 0
+					animationOptions: {time: .15}
+			when 'raised'
+				@_base =
+					name: 'Raised Button'
+					height: 36
+					width: 999
+					borderRadius: 2
+					backgroundColor: Theme.colors.secondary.main
+					color: Theme.colors.secondary.text
+					shadowY: 2
+					shadowColor: 'rgba(0,0,0,.26)'
+					shadowBlur: 4
+					animationOptions: {time: .15}
+
+		super _.defaults options, @_base
+
 		@labelLayer = new Type.Button
-			name: '.', parent: @
-			color: Theme.button[@_type].color
-			text: options.text ? 'button'
+			name: if showLayers then 'Label' else '.'
+			parent: @
+			height: 36
+			text: '{labelText}'
 			textTransform: 'uppercase'
 			textAlign: 'center'
+			color: @color
 			animationOptions: {time: .15}
 			padding: 
 				left: 16.5, right: 16.5
 				top: 9, bottom: 11
 
-		Utils.delay 0, => # lame fix
-			@width = @labelLayer.width
-			@height = @labelLayer.height
-			@x = options.x
+		@onTapStart ->
+			@showRaised()
 
-			@mask = new Layer
-				parent: @
-				size: @size
-				backgroundColor: null
-				borderRadius: 2
-				clip: true
-				opacity: 1
+		@onTapEnd -> 
+			return if @_disabled
+			@_action()
+			@refresh()
 
-			@mask.placeBehind @labelLayer
+		@action = options.action
+		@disabled = options.disabled ? false
 
-			switch @_type
-				when 'flat'
-					@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
-				when 'raised'  
-					@ripple = new Rippple( @mask, null )
-					@onTapStart @showRaised 
+		delete @__constructor
+		@text = options.text ? 'button'
 
-			@onTapEnd -> 
-				@_action()
-				@reset()
+	showRaised: => 
+		return if @disabled
+		return if @type isnt 'raised'
+		@animate {shadowY: 5, shadowBlur: 8}
 
+	setRipple: ->
+		@mask?.destroy()
 
-	showRaised: => @animate {shadowY: 3, shadowSpread: 1}
+		@mask = new Layer
+			parent: @
+			size: @size
+			backgroundColor: null
+			borderRadius: 2
+			clip: true
+			opacity: 1
 
-	reset: =>
+		@mask.placeBehind @labelLayer
+
+		switch @type
+			when 'flat'
+				@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
+			when 'raised'  
+				@ripple = new Rippple( @mask, null )
+
+	refresh: =>
 		@animateStop()
-		@animate 
-			shadowY: Theme.button[@_type].shadowY
-			shadowSpread: 0
+		if @disabled
+			if @type is 'raised'
+				@animate
+					backgroundColor: 'rgba(0,0,0,.12)'
+					shadowY: 0
+					shadowBlur: 0
+			@labelLayer.animate
+				color: 'rgba(0,0,0,.26)'
+		else
+			@animate @_base
+			@labelLayer.animate
+				color: @_base.color
+
+	@define "type",
+		get: -> return @_type
+
+	@define "disabled",
+		get: -> return @_disabled
+		set: (bool = false) ->
+			return if bool is @_disabled
+			@_disabled = bool
+
+			@emit("change:disabled", @_disabled, @)
+
+			if not @__constructor then @refresh()
+
+	@define "action",
+		get: -> return @_action
+		set: (func = -> null) ->
+			return if func is @_action
+			@_action = func
+
+	@define "text",
+		get: -> return @_labelText
+		set: (text = '') ->
+			return if @__constructor
+			@_labelText = text
+
+			@labelLayer.visible = @text.length > 0
+			@labelLayer.template = @text
+
+			if not @_explicitWidth
+				@width = @labelLayer.width
+				@_base.width = @width
+			
+			@x = @_startX
+			@setRipple()
+			@refresh()

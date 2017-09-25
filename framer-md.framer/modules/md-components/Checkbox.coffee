@@ -11,6 +11,8 @@
 exports.Checkbox = CheckBox = class Checkbox extends Icon
 	constructor: (options = {}) ->
 
+		@_group = undefined
+
 		super _.defaults options,
 			name: '.'
 			animationOptions: {time: .15}
@@ -19,7 +21,16 @@ exports.Checkbox = CheckBox = class Checkbox extends Icon
 			toggle: true
 			action: -> null
 
-		@onTapEnd @updateIcon
+		@on "change:isOn", @updateIcon
 
 	updateIcon: =>
 		@icon = if @isOn then 'checkbox-marked' else 'checkbox-blank-outline' 
+
+	@define "group",
+		get: -> return @_group
+		set: (array) ->
+			return if array is @_group
+			@_group = array
+
+			# add this checkbox to the group array if not in it already
+			if not _.includes(@_group, @) then @_group.push(@)

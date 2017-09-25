@@ -7,112 +7,11 @@ https://materialdesignicons.com/
 ###
 
 md = require "md"
-Screen.backgroundColor = 'efefef'
 
-# Page
-
-# Pages are scroll componets that hold content. They have a stack view, a refresh function that fires when a page becomes a flow component's current view, and instructions for the header - what what title to show, what buttons to show, and what those buttons should do. They also have some functions to work with a collapsing header.
-
-class Pageeee extends ScrollComponent
-	constructor: (options = {}) ->
-		
-		# stack related
-		@_stack = []
-		@padding = options.padding ? {
-			top: 16, right: 0, 
-			bottom: 0, left: 16
-			stack: 16
-			}
-		
-		# header settings
-		@left = options.left
-		@right = options.right
-		@title = options.title
-		
-		super _.defaults options,
-			size: Screen.size
-			scrollHorizontal: false
-			contentInset: { bottom: 16 }
-			
-		@content.clip = false
-		@content.backgroundColor = Screen.backgroundColor
-		
-		# collapsing header related
-		@_startScroll = undefined
-		@onScrollStart => @_startScroll = @scrollPoint
-	
-	# add a layer to the stack
-	addToStack: (layers = []) =>
-		if not _.isArray(layers) then layers = [layers]
-		
-		last = _.last(@stack)
-		if last?
-			startY = last.maxY + (@padding.stack ? 0)
-		else
-			startY = @padding.top ? 0
-		
-		for layer in layers
-			layer.parent = @content
-			layer.x = @padding.left ? 0
-			layer.y = startY
-			@stack.push(layer)
-			
-			layer.on "change:height", => @moveStack(@)
-			
-		@updateContent()
-	
-	# pull a layer from the stack
-	removeFromStack: (layer) =>
-		_.pull(@stack, layer)
-	
-	# stack layers in stack, with optional padding and animation
-	stackView: (
-		animate = false, 
-		padding = @padding.stack, 
-		top = @padding.top, 
-		animationOptions = {time: .25}
-	) =>
-	
-		for layer, i in @stack
-			
-			if animate is true
-				if i is 0 then layer.animate
-					y: top
-					options: animationOptions
-					
-				else layer.animate
-					y: @stack[i - 1].maxY + padding
-					options: animationOptions
-			else
-				if i is 0 then layer.y = top
-				else layer.y = @stack[i - 1].maxY + padding
-				
-		@updateContent()
-	
-	# move stack when layer height changes
-	moveStack: (layer) =>
-		index = _.indexOf(@stack, layer)
-		for layer, i in @stack
-			if i > 0 and i > index
-				layer.y = @stack[i - 1].maxY + @padding.stack
-				
-	
-	# build with page as bound object
-	build: (func) -> do _.bind(func, @)
-
-	# refresh page
-	refresh: -> null
-	
-	@define "stack",
-		get: -> return @_stack
-		set: (layers) ->
-			layer.destroy() for layer in @stack
-			@addToStack(layers)
-			
-	
 # #####################################	
 # Component Tests without App Structure
 
+Screen.backgroundColor = 'efefef'
 page = new md.StackView
 
 # ####################################
@@ -201,16 +100,38 @@ buttonsCard = new md.Card
 
 buttonsCard.build ->
 	# Button
-	@addToStack button = new md.Button
+	@addToStack new md.Button
+		text: 'Flat'
+		
+	# Button
+	@addToStack disFlat = new md.Button
+		disabled: true
 		text: 'Flat'
 	
 	# Raised Button
-	@addToStack button = new md.Button
+	@addToStack new md.Button
 		raised: true
 		text: 'Raised'
+		
+	# Button
+	@addToStack disRaised = new md.Button
+		raised: true
+		disabled: true
+		text: 'Flat'
+		
+	@addToStack new md.Button
+		icon: 'menu'
+	
+	@addToStack disIcon = new md.Button
+		icon: 'heart'
+		disabled: true
 	
 	# Action Button
 	@addToStack new md.ActionButton
+		action: ->
+			disRaised.disabled = !disRaised.disabled
+			disFlat.disabled = !disFlat.disabled
+			disIcon.disabled = !disIcon.disabled
 
 page.addToStack(buttonsCard)
 
@@ -256,7 +177,7 @@ page.addToStack([
 
 page.addToStack(new md.Divider
 	width: Screen.width - 32
-	text: 'Selectors'
+	text: 'Selection Controls'
 	backgroundColor: Screen.backgroundColor
 	)
 
@@ -452,7 +373,6 @@ textFieldsCard = new md.Card
 	width: Screen.width - 32
 	
 textFieldsCard.padding.stack = 32
-textFieldsCard.padding.bottom = 32
 
 textFieldsCard.build ->
 	
@@ -619,6 +539,7 @@ dialogButtonsCard.addToStack( dialogResult = new md.Regular
 dialogResult.template = 'none'
 
 page.addToStack(dialogButtonsCard)
+
 
 
 # ####################################
@@ -799,15 +720,124 @@ new md.Tile
 	icon: 'settings'
 
 
+# ####################################
+# Tables
+
+page.addToStack(new md.Divider
+	width: Screen.width - 32
+	text: 'Tables'
+	backgroundColor: Screen.backgroundColor
+	)
+
+# formats
+
+ratingToStars = ( rating ) ->
+	stars = ''
+	for star in _.range( Math.floor( rating / 2 ) )
+		stars += '★'
+	if ( rating / 2 ) % 1 >= .5 then stars += '½'
+	return stars
+
+# flags
+
+ratingOverSix = 
+	condition: (item) -> item.rating >= 7
+	color: 'rgba(3, 79, 88, 1.000)'
+	backgroundColor: 'rgba(218, 235, 237, 1.000)'
+
+ratingOverSeven = 
+	condition: (item) -> item.rating >= 7.4
+	color: 'rgba(151, 81, 39, 1.000)'
+	backgroundColor: 'rgba(241, 227, 155, 1.000)'
+
+# Filters
 
 
-# actionButton = new Snackbar
+
+
+# Card
+
+tableCard = new md.Card
+	width: Screen.width - 32
+	padding: {top: 0, right: 0, bottom: 0, left: 0}
+
+tableCard.build -> 
+	
+	@addToStack heading = new Layer
+		name: 'Table Heading'
+		height: 64, width: @width
+		backgroundColor: '#FFF'
+				
+	new md.Headline
+		parent: heading
+		x: 16, y: Align.center
+		text: 'Hal Hartley Films'
+	
+	@addToStack table = new md.Table
+		sortable: true
+		multiselect: true
+		striped: 'rgba(250, 250, 250, 1.000)'
+	# 	rowsPerPage: 10
+		scrollable: true
+		showNames: false
+		width: @width
+		
+		headers: [
+			{ title: 'Film', key: 'name' },
+			{ title: 'Rating', key: 'rating', format: ratingToStars }
+			]
+				
+		flags: [ratingOverSix, ratingOverSeven]
+				
+		items: [
+			{ name: 'The Unbelievable Truth', year: '1989', rating: 7.5 },
+			{ name: 'Ned Rifle', year: '2014', rating: 6.3 },
+			{ name: 'Surviving Desire', year: '1992', rating: 7.5 },
+			{ name: 'La Commedia', year: '2014', rating: 6.8 },
+			{ name: 'Henry Fool', year: '1997', rating: 7.3 },
+			{ name: 'Meanwhile', year: '2014', rating: 6.4 },
+			{ name: 'Simple Men', year: '1992', rating: 7.2 },
+			{ name: 'Fay Grim', year: '2006', rating: 6.3 },
+			{ name: 'The Girl From Monday', year: '2005', rating: 5.3 },
+			{ name: 'My America', year: '2014', rating: 5.4 },
+			{ name: 'The Book of Life', year: '1998', rating: 6.7 },
+			{ name: 'Flirt', year: '1995', rating: 6.3 },
+			{ name: 'Trust', year: '1990', rating: 7.5 },
+			{ name: 'Amateur', year: '1994', rating: 7.0 },
+			{ name: 'No Such Thing', year: '2001', rating: 6.2 },
+		]
+		
+	@addToStack filters = new Layer
+		height: 48, width: @width
+		backgroundColor: "#FFF"
+		
+	new md.Button
+		parent: filters
+		x: 16, y: Align.center
+		text: '6+ Stars'
+		action: -> table.filter = (item) -> item.rating >= 6
+	
+	new md.Button
+		parent: filters
+		x: Align.center, y: Align.center
+		text: '7+ Stars'
+		action: -> table.filter = (item) -> item.rating >= 7
+		
+	new md.Button
+		parent: filters
+		x: Align.right(-16), y: Align.center
+		text: 'clear'
+		action: -> table.filter = null
+
+page.addToStack(tableCard)
+
 
 # ####################################
 # Menu Overlay
 
 # actionButton = new MenuButton
 # actionButton = new MenuOverlay
+
 
 # ####################################
 # Whole app related

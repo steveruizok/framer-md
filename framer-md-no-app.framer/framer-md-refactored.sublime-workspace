@@ -39,7 +39,7 @@
 			"file": "modules/md-components/ActionButton.coffee",
 			"settings":
 			{
-				"buffer_size": 1792,
+				"buffer_size": 1888,
 				"line_ending": "Unix"
 			}
 		},
@@ -63,7 +63,8 @@
 			"file": "modules/md-components/Button.coffee",
 			"settings":
 			{
-				"buffer_size": 1845,
+				"buffer_size": 3531,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -71,7 +72,7 @@
 			"file": "modules/md-components/Card.coffee",
 			"settings":
 			{
-				"buffer_size": 2896,
+				"buffer_size": 4857,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -80,7 +81,8 @@
 			"file": "modules/md-components/Checkbox.coffee",
 			"settings":
 			{
-				"buffer_size": 862,
+				"buffer_size": 1123,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -88,7 +90,8 @@
 			"file": "modules/md-components/Dialog.coffee",
 			"settings":
 			{
-				"buffer_size": 2577,
+				"buffer_size": 2736,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -96,7 +99,7 @@
 			"file": "modules/md-components/Divider.coffee",
 			"settings":
 			{
-				"buffer_size": 618,
+				"buffer_size": 1382,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -110,7 +113,23 @@
 			}
 		},
 		{
+			"contents": "# \t 88888888b dP                              dP   oo\n# \t 88        88                              88\n# \ta88aaaa    88 .d8888b. dP   .dP .d8888b. d8888P dP .d8888b. 88d888b.\n# \t 88        88 88ooood8 88   d8' 88'  `88   88   88 88'  `88 88'  `88\n# \t 88        88 88.  ... 88 .88'  88.  .88   88   88 88.  .88 88    88\n# \t 88888888P dP `88888P' 8888P'   `88888P8   dP   dP `88888P' dP    dP\n\n#\tmd.Elevation(layer, animate, animationOptions)\n\n#\tSet a layer's elevation, optionally animating.\n\n#\tthanks to @ma_rylou's (https://github.com/MarieSchweiz/Simple-Elevation)\n#\tfor usage: https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android\n\nexports.Elevation = (layer, elevationnumber = 0, animate = true, animationOptions = {time: .2, curve: 'ease'}) ->\n\t\n\t# Error handling\n\tif typeof elevationnumber isnt \"number\"\n\t\tthrow Error \"Elevation must be a number.\"\n\n\t# Clamp elevation number to between 0 and 24\n\televationnumber = _.clamp(elevationnumber, 0, 24) \n\n\tprops =\n\t\tshadowSpread: 0\n\t\tshadowX: 0\n\t\tshadowY: elevationnumber\n\t\tshadowBlur: elevationnumber\n\t\tshadowColor:\"rgba(0, 0, 0, 0.24)\"\n\n\tanimProps =  _.merge(props, {options: animationOptions})\n\n\t#target layer\n\tif animate then layer.animate animProps\n\telse layer.props = props\n",
+			"file": "modules/md-components/Elevation.coffee",
+			"file_size": 991,
+			"file_write_time": 131507091040000000,
+			"settings":
+			{
+				"buffer_size": 1281,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "Elevation"
+			}
+		},
+		{
+			"contents": "\n# \t888888ba                                   dP\n# \t88    `8b                                  88\n# \t88     88 88d888b. .d8888b. 88d888b. .d888b88 .d8888b. dP  dP  dP 88d888b.\n# \t88     88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88  88  88 88'  `88\n# \t88    .8P 88       88.  .88 88.  .88 88.  .88 88.  .88 88.88b.88' 88    88\n# \t8888888P  dP       `88888P' 88Y888P' `88888P8 `88888P' 8888P Y8P  dP    dP\n# \t                            88\n# \t                            dP\n\nType = require 'md-components/Type'\n{ Theme } = require 'md-components/Theme'\n{ Icon } = require 'md-components/Icon'\n{ Rippple } = require 'md-components/Ripple'\n\nexports.Dropdown = class Dropdown extends ScrollComponent\n\tconstructor: (options = {}) ->\n\n\t\t@_options = options.options ? throw 'Dropdown needs an array of options'\n\t\t@_optionLayers = []\n\t\t@_selectedOption = undefined\n\n\t\t@_open = undefined\n\t\t@_baseY = options.y\n\t\t@_width = options.width\n\t\t@_fullHeight = undefined\n\n\t\toptions.options = null\n\n\t\tsuper _.defaults options,\n\t\t\theight: 48, y: 4\n\t\t\tcolor: Theme.colors.page.text\n\t\t\tbackgroundColor: 'rgba(255, 255, 255, 0)'\n\t\t\tanimationOptions: { time: .15 }\n\t\t\tscrollHorizontal: false\n\t\t\topacity: 0\n\t\t\tvisible: false\n\n\t\t@x -= 16\n\t\t@width += 32\n\n\t\t# Make Options\n\t\tfor option, i in @_options\n\n\t\t\tnewOption = new Type.Regular\n\t\t\t\tname: '.', parent: @content\n\t\t\t\tpadding: {top: 10, left: 16, right: 16, bottom: 20}\n\t\t\t\theight: 48, width: @width\n\t\t\t\tcolor: @color\n\t\t\t\tbackgroundColor: 'rgba(255, 255, 255, 0)'\n\t\t\t\tanimationOptions: @animationOptions\n\t\t\t\ttext: option\n\t\t\t\tclip: true\n\n\t\t\tnewOption.value = option\n\n\t\t\tnewOption.ripple = new Rippple(newOption, null, colorOverride = 'rgba(0,0,0,.05)' )\n\n\t\t\tnewOption.onMouseOver (event, option) => @showOptionHovered(option, true)\n\t\t\tnewOption.onMouseOut  (event, option) => @showOptionHovered(option, false)\n\t\t\tnewOption.onTap (event, option) => @select(option)\n\n\t\t\t@_optionLayers.push(newOption)\n\n\t\t@_fullHeight = (@_options.length * 48) + 16\n\t\t@scrollVertical = @_options.length > @_rows\n\n\t\t# set widths based on widest option\n\t\t@setWidths()\n\n\tshowOptionHovered: (option, hovered) =>\n\t\treturn if not @_open\n\n\t\toption.animateStop()\n\t\toption.backgroundColor = if hovered then 'rgba(238, 238, 238, 1)' else 'rgba(255, 255, 255, 0)'\n\n\topenMenu: =>\n\t\treturn if @_open\n\t\t@_open = true\n\n\t\t@visible = true\n\t\t\n\t\t@animate\n\t\t\theight: @_fullHeight\n\t\t\tbackgroundColor: 'rgba(255, 255, 255, 1)'\n\t\t\tshadowY: 1, shadowSpread: 1, shadowBlur: 3\n\t\t\topacity: 1\n\n\t\tfor option in @_optionLayers\n\t\t\toption.backgroundColor = 'rgba(255, 255, 255, 0)'\n\t\n\tcloseMenu: =>\n\t\treturn if @_open is false\n\t\t@_open = false\n\n\t\t@animate \n\t\t\theight: 48, \n\t\t\tbackgroundColor: 'rgba(255, 255, 255, 0)'\n\t\t\tshadowY: 0, shadowSpread: 0, shadowBlur: 0\n\t\t\topacity: 0\n\n\t\tUtils.delay .15, => @visible = false\n\n\tsetWidths: ->\n\t\tif not @_width?\n\t\t\tbaseWidth = 0\n\n\t\t\tfor option in @_optionLayers\n\t\t\t\tif option.width > baseWidth then baseWidth = option.width \n\n\t\t\t@width = baseWidth + 32\n\n\t\t\t@inputLine?.width = @width - 32\n\n\t\tfor option, i in @_optionLayers\n\t\t\toption.props =\n\t\t\t\ty: 8 + (48 * i)\n\t\t\t\twidth: @width\n\n\tselect: (option) ->\n\t\t# return if not @_open\n\t\t@_selectedOption = option\n\t\t@emit \"change:selected\", option.value, @",
 			"file": "modules/md-components/Dropdown1.coffee",
+			"file_size": 3216,
+			"file_write_time": 131502856290000000,
 			"settings":
 			{
 				"buffer_size": 3216,
@@ -121,7 +140,8 @@
 			"file": "modules/md-components/GridList.coffee",
 			"settings":
 			{
-				"buffer_size": 1530,
+				"buffer_size": 1550,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -137,15 +157,8 @@
 			"file": "modules/md-components/Icon.coffee",
 			"settings":
 			{
-				"buffer_size": 503072,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "modules/md-components/Menu.coffee",
-			"settings":
-			{
-				"buffer_size": 5892,
+				"buffer_size": 503204,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -169,7 +182,8 @@
 			"file": "modules/md-components/Notification.coffee",
 			"settings":
 			{
-				"buffer_size": 5018,
+				"buffer_size": 4247,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -177,7 +191,8 @@
 			"file": "modules/md-components/Page.coffee",
 			"settings":
 			{
-				"buffer_size": 1428,
+				"buffer_size": 1460,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -185,7 +200,8 @@
 			"file": "modules/md-components/Radiobox.coffee",
 			"settings":
 			{
-				"buffer_size": 1195,
+				"buffer_size": 1215,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -193,7 +209,8 @@
 			"file": "modules/md-components/Ripple.coffee",
 			"settings":
 			{
-				"buffer_size": 3634,
+				"buffer_size": 3664,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -206,10 +223,23 @@
 			}
 		},
 		{
+			"contents": "# \t.d88888b           dP                     dP\n# \t88.    \"'          88                     88\n# \t`Y88888b. .d8888b. 88 .d8888b. .d8888b. d8888P\n# \t      `8b 88ooood8 88 88ooood8 88'  `\"\"   88\n# \td8'   .8P 88.  ... 88 88.  ... 88.  ...   88\n# \t Y88888P  `88888P' dP `88888P' `88888P'   dP\n# \t\n# \t\n\nType = require 'md-components/Type'\n{ Theme } = require 'md-components/Theme'\n{ TextField } = require 'md-components/TextField'\n{ Dropdown } = require 'md-components/Dropdown'\n{ Icon } = require 'md-components/Icon'\n\n\nclass exports.Select extends TextField\n\tconstructor: (options = {}) ->\n\t\t\n\t\t@_options = options.options ? ['Select Menu']\n\n\t\t# TODO\n\t\t# add an explicit width prop to textfield and use this prop instead of useMenuWidth\n\n\t\tuseMenuWidth = options.useMenuWidth ? false\n\n\t\tsuper _.defaults options,\n\t\t\tname: 'Downdown Select'\n\t\t\ttype: 'dropdown'\n\t\t\tinputType: 'input'\n\t\t\treadOnly: true\n\t\t\tclip: false\n\n\t\t@dropdown = new Dropdown\n\t\t\tparent: @\n\t\t\tx: 0, y: 4\n\t\t\twidth: if not useMenuWidth then @width\n\t\t\toptions: @_options\n\n\t\tif useMenuWidth then @width = @dropdown.width\n\n\t\t@dropdown.on \"change:selection\", (selection) =>\n\t\t\t@_input.value = selection\n\t\t\t@setValue()\n\n\t\t@dropdown.on \"change:isOpen\", (isOpen) =>\n\t\t\t@focused = isOpen\n\n\tshowFocused: =>\n\t\treturn if @disabled\n\n\t\tbaseY = 0\n\n\t\tif @focused\n\t\t\t@bringToFront()\n\n\t\t\t@animateStop()\n\n\t\t\t@_app?.focused = @\n\n\t\t\tif @screenFrame.y + @height > Screen.height - 222\n\t\t\t\t@scrollLayer?.scrollToLayer(@, 0, .45)\n\t\t\telse if @screenFrame.y < Screen.height * .15\n\t\t\t\t@scrollLayer?.scrollToLayer(@, 0, .15)\n\n\t\t\t@labelTextLayer?.animate\n\t\t\t\ty: baseY\n\t\t\t\tfontSize: 12\n\t\t\t\tcolor: @tint\n\n\t\t\t@inputLine?.animate\n\t\t\t\theight: 1\n\t\t\t\tbackgroundColor: @tint\n\n\t\telse\n\t\t\t@animateStop()\n\n\t\t\tif this.hasTextContent()\n\t\t\t\t@labelTextLayer?.animate\n\t\t\t\t\ty: baseY\n\t\t\t\t\tfontSize: 12\n\t\t\t\t\tcolor: @labelTextColor\n\t\t\telse\n\t\t\t\t@labelTextLayer?.animate\n\t\t\t\t\ty: 22\n\t\t\t\t\tfontSize: 16\n\t\t\t\t\tcolor: @labelTextColor\n\n\t\t\t@inputLine?.animate\n\t\t\t\theight: 1\n\t\t\t\tbackgroundColor: 'rgba(0, 0, 0, .42)'\n\n\t\t\tif @_app?.focused is @\n\t\t\t\t@_app?.focused = undefined\n\n\t\t@setPlaceholder()\n\n\t@define \"focused\",\n\t\tget: -> return @_focused\n\t\tset: (value) ->\n\t\t\treturn if @_focused is value\n\t\t\tif typeof value isnt 'boolean' then throw 'Focused must be either true or false.'\n\t\t\t\n\t\t\t@_focused = value\n\n\t\t\t@emit(\"change:focused\", value, @)\n\n\t\t\t@showFocused()",
 			"file": "modules/md-components/Select.coffee",
+			"file_size": 2362,
+			"file_write_time": 131505786140000000,
 			"settings":
 			{
-				"buffer_size": 2349,
+				"buffer_size": 2361,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "modules/md-components/StackView.coffee",
+			"settings":
+			{
+				"buffer_size": 2046,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -217,7 +247,8 @@
 			"file": "modules/md-components/Slider.coffee",
 			"settings":
 			{
-				"buffer_size": 3450,
+				"buffer_size": 3493,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -225,7 +256,8 @@
 			"file": "modules/md-components/Snackbar.coffee",
 			"settings":
 			{
-				"buffer_size": 2128,
+				"buffer_size": 2124,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -249,7 +281,7 @@
 			"file": "modules/md-components/Table.coffee",
 			"settings":
 			{
-				"buffer_size": 25744,
+				"buffer_size": 16476,
 				"line_ending": "Unix"
 			}
 		},
@@ -257,7 +289,7 @@
 			"file": "modules/md-components/TableCard.coffee",
 			"settings":
 			{
-				"buffer_size": 8383,
+				"buffer_size": 11339,
 				"line_ending": "Unix"
 			}
 		},
@@ -265,7 +297,8 @@
 			"file": "modules/md-components/TextArea.coffee",
 			"settings":
 			{
-				"buffer_size": 1115,
+				"buffer_size": 1151,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -273,7 +306,8 @@
 			"file": "modules/md-components/TextField.coffee",
 			"settings":
 			{
-				"buffer_size": 9226,
+				"buffer_size": 9223,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -281,16 +315,19 @@
 			"file": "modules/md-components/Theme.coffee",
 			"settings":
 			{
-				"buffer_size": 3878,
+				"buffer_size": 3962,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"contents": "# \td888888P oo dP\n# \t   88       88\n# \t   88    dP 88 .d8888b.\n# \t   88    88 88 88ooood8\n# \t   88    88 88 88.  ...\n# \t   dP    dP dP `88888P'\n\nType = require 'md-components/Type'\n{ Ripple } = require 'md-components/Ripple'\n{ Icon } = require 'md-components/Icon'\n{ Theme } = require 'md-components/Theme'\n\nexports.Tile = Tile = class Tile extends Layer\n\tconstructor: (options = {}) ->\n\t\t\n\t\t# {title: '', support: '', icon: ''}\n\n\t\t@_header = options.header ? false\n\t\t@_footer = options.footer ? false\n\t\t@_action = options.action ? -> null\n\t\t@_headerAction = options.headerAction ? -> null\n\t\t@_footerAction = options.footerAction ? -> null\n\t\t\n\t\tif @_header and @_footer then throw 'Tile cannot have both a header and a footer.'\n\t\t\n\t\t@_icon = options.icon\n\t\t@gridList = options.gridList # ? throw 'Tile needs a grid property.'\n\t\t\n\t\tsuper _.defaults options,\n\t\t\tname: '.', parent: @gridList\n\t\t\twidth: @gridList.tileWidth\n\t\t\theight: @gridList.tileHeight\n\t\t\tanimationOptions: {time: .3}\n\t\t\n\t\t@onTouchStart (event) -> \n\t\t\tif @gridList.parent?.parent?.content and @gridList.parent?.parent?.isMoving is false\n\t\t\t\tRipple(@, event.point, @header, options.RippleColor ? 'rgba(0,0,0,.1)')\n\t\t\n\t\t@onTap @_action\n\t\t@onTap (event) -> event.stopPropagation()\n\n\t\tif @_header or @_footer\n\t\t\t@header = new Layer\n\t\t\t\tname: '.', parent: @\n\t\t\t\ty: if @_footer then Align.bottom()\n\t\t\t\twidth: @width\n\t\t\t\theight: if options.support then 68 else 48\n\t\t\t\tbackgroundColor: options.backgroundColor ? 'rgba(0,0,0,.5)'\n\t\t\t\n\t\t\t@header.onTouchStart (event) -> Ripple(@, event.point, @title)\n\t\t\t\n\t\t\tif @_footer then @header.onTap @_footerAction\n\t\t\telse @header.onTap @_headerAction\n\n\t\t\t@header.onTap (event) -> event.stopPropagation()\n\n\t\t\tif options.title\n\t\t\t\t@header.title = new Type.Regular\n\t\t\t\t\tname: '.', parent: @header\n\t\t\t\t\tx: 8, y: if options.support then 12 else Align.center()\n\t\t\t\t\tcolor: @color\n\t\t\t\t\ttext: options.title ? 'Two Line'\n\t\t\t\n\t\t\t\tif options.support\n\t\t\t\t\t@header.support = new TextLayer\n\t\t\t\t\t\tname: '.', parent: @header\n\t\t\t\t\t\tx: 8, y: 35\n\t\t\t\t\t\tfontSize: 12\n\t\t\t\t\t\tfontFamily: 'Roboto'\n\t\t\t\t\t\tcolor: @color\n\t\t\t\t\t\ttext: options.support ? 'Support text'\n\t\t\t\n\t\t\tif options.icon\n\t\t\t\t@header.icon = new Icon\n\t\t\t\t\tname: '.', parent: @header\n\t\t\t\t\tx: Align.right(-12), y: if options.support then 20 else Align.center()\n\t\t\t\t\ticon: options.icon\n\t\t\t\t\tcolor: @color\n\n\t\t@i = undefined\n\t\t@gridList.addTile(@)",
 			"file": "modules/md-components/Tile.coffee",
+			"file_size": 2335,
+			"file_write_time": 131503624620000000,
 			"settings":
 			{
-				"buffer_size": 2333,
+				"buffer_size": 2375,
 				"line_ending": "Unix"
 			}
 		},
@@ -299,6 +336,7 @@
 			"settings":
 			{
 				"buffer_size": 2873,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -314,7 +352,7 @@
 			"file": "modules/md.coffee",
 			"settings":
 			{
-				"buffer_size": 2390,
+				"buffer_size": 2773,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -504,6 +542,8 @@
 	},
 	"file_history":
 	[
+		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/GitHub/framer-md/framer-md-no-app.framer/modules/md-components/Notification.md",
+		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/GitHub/framer-md/framer-md-no-app.framer/modules/md-components/Stackview.coffee",
 		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/GitHub/framer-md/framer-md-no-app.framer/modules/md-components/View.coffee",
 		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/GitHub/framer-md/framer-md-no-app.framer/modules/md-components/ActionButton.coffee",
 		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/GitHub/framer-md/framer-md-no-app.framer/modules/md-components/App.coffee",
@@ -629,9 +669,7 @@
 		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/GitHub/framer-icon/readme.md",
 		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/Framer/Material.framer/modules/ActionButton.coffee",
 		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/Framer/Material.framer/modules/MenuButton.coffee",
-		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/Framer/Material.framer/modules/RowItem.coffee",
-		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/Framer/Material.framer/modules/Header.coffee",
-		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/Framer/Material.framer/modules/Snackbar.coffee"
+		"/Users/steveruiz/Library/Mobile Documents/com~apple~CloudDocs/Framer/Material.framer/modules/RowItem.coffee"
 	],
 	"find":
 	{
@@ -651,6 +689,16 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"_stackView",
+			"stackView",
+			"_stackView",
+			"_",
+			"stackView",
+			"moveStack",
+			"setHe",
+			"print",
+			"@_group.push(@)",
+			"length",
 			"source.",
 			"invert"
 		],
@@ -671,7 +719,7 @@
 	"groups":
 	[
 		{
-			"selected": 34,
+			"selected": 13,
 			"sheets":
 			[
 				{
@@ -680,15 +728,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1792,
+						"buffer_size": 1888,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1381,
+								1381
 							]
 						],
 						"settings":
@@ -697,10 +745,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 243.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 34,
+					"stack_index": 26,
 					"type": "text"
 				},
 				{
@@ -729,7 +777,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 33,
+					"stack_index": 35,
 					"type": "text"
 				},
 				{
@@ -758,7 +806,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 32,
+					"stack_index": 34,
 					"type": "text"
 				},
 				{
@@ -767,15 +815,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1845,
+						"buffer_size": 3531,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2670,
+								2670
 							]
 						],
 						"settings":
@@ -787,7 +835,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 31,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -796,15 +844,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2896,
+						"buffer_size": 4857,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1721,
-								1721
+								2305,
+								2305
 							]
 						],
 						"settings":
@@ -813,10 +861,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 877.0,
+						"translation.y": 1390.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 30,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -825,15 +873,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 862,
+						"buffer_size": 1123,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1114,
+								888
 							]
 						],
 						"settings":
@@ -845,7 +893,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 29,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -854,15 +902,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2577,
+						"buffer_size": 2736,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2574,
+								2574
 							]
 						],
 						"settings":
@@ -871,10 +919,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1292.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 28,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -883,26 +931,26 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 618,
+						"buffer_size": 1382,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								618,
-								618
+								913,
+								868
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax"
 						},
-						"translation.x": 18.0,
+						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 27,
+					"stack_index": 21,
 					"type": "text"
 				},
 				{
@@ -931,11 +979,40 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 26,
+					"stack_index": 33,
 					"type": "text"
 				},
 				{
 					"buffer": 9,
+					"file": "modules/md-components/Elevation.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1281,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								906,
+								906
+							]
+						],
+						"settings":
+						{
+							"auto_name": "Elevation",
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
 					"file": "modules/md-components/Dropdown1.coffee",
 					"semi_transient": false,
 					"settings":
@@ -960,24 +1037,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 25,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 11,
 					"file": "modules/md-components/GridList.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1530,
+						"buffer_size": 1550,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								741,
+								741
 							]
 						],
 						"settings":
@@ -986,14 +1063,14 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 186.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 24,
+					"stack_index": 25,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 12,
 					"file": "modules/md-components/Header.coffee",
 					"semi_transient": false,
 					"settings":
@@ -1018,24 +1095,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 23,
+					"stack_index": 32,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 13,
 					"file": "modules/md-components/Icon.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 503072,
+						"buffer_size": 503204,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								500960,
+								500960
 							]
 						],
 						"settings":
@@ -1046,36 +1123,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 22,
-					"type": "text"
-				},
-				{
-					"buffer": 13,
-					"file": "modules/md-components/Menu.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5892,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 21,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1104,7 +1152,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 20,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1133,7 +1181,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
@@ -1142,15 +1190,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5018,
+						"buffer_size": 4247,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2656,
+								2656
 							]
 						],
 						"settings":
@@ -1162,7 +1210,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1171,15 +1219,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1428,
+						"buffer_size": 1460,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1173,
+								1173
 							]
 						],
 						"settings":
@@ -1188,7 +1236,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 300.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 17,
@@ -1200,15 +1248,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1195,
+						"buffer_size": 1215,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								695,
+								695
 							]
 						],
 						"settings":
@@ -1217,10 +1265,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 11.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 22,
 					"type": "text"
 				},
 				{
@@ -1229,15 +1277,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3634,
+						"buffer_size": 3664,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1193,
+								1193
 							]
 						],
 						"settings":
@@ -1246,10 +1294,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 329.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -1278,7 +1326,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 31,
 					"type": "text"
 				},
 				{
@@ -1287,7 +1335,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2349,
+						"buffer_size": 2361,
 						"regions":
 						{
 						},
@@ -1307,24 +1355,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
 					"buffer": 22,
-					"file": "modules/md-components/Slider.coffee",
+					"file": "modules/md-components/StackView.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3450,
+						"buffer_size": 2046,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								333,
+								333
 							]
 						],
 						"settings":
@@ -1336,24 +1384,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
 					"buffer": 23,
-					"file": "modules/md-components/Snackbar.coffee",
+					"file": "modules/md-components/Slider.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2128,
+						"buffer_size": 3493,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1779,
+								1779
 							]
 						],
 						"settings":
@@ -1365,11 +1413,40 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
 					"buffer": 24,
+					"file": "modules/md-components/Snackbar.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2124,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2091,
+								2091
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 407.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
 					"file": "modules/md-components/StatusBar.coffee",
 					"semi_transient": false,
 					"settings":
@@ -1394,11 +1471,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 30,
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "modules/md-components/Switch.coffee",
 					"semi_transient": false,
 					"settings":
@@ -1423,16 +1500,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 29,
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "modules/md-components/Table.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 25744,
+						"buffer_size": 16476,
 						"regions":
 						{
 						},
@@ -1452,24 +1529,169 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 28,
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "modules/md-components/TableCard.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8383,
+						"buffer_size": 11339,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								10935,
+								10935
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 7459.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "modules/md-components/TextArea.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1151,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1037,
+								1037
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 129.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "modules/md-components/TextField.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9223,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4344,
+								4354
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2846.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "modules/md-components/Theme.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3962,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								684,
+								684
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 60.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"file": "modules/md-components/Tile.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2375,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2183,
+								2183
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 718.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 33,
+					"file": "modules/md-components/Type.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2873,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2508,
+								2508
 							]
 						],
 						"settings":
@@ -1485,152 +1707,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 28,
-					"file": "modules/md-components/TextArea.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1115,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 29,
-					"file": "modules/md-components/TextField.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9226,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 30,
-					"file": "modules/md-components/Theme.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3878,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3852,
-								3852
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2820.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 31,
-					"file": "modules/md-components/Tile.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2333,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 32,
-					"file": "modules/md-components/Type.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2873,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 459.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "modules/md-components/View.coffee",
 					"semi_transient": false,
 					"settings":
@@ -1655,24 +1732,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 27,
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 35,
 					"file": "modules/md.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2390,
+						"buffer_size": 2773,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2365,
-								2365
+								1480,
+								1480
 							]
 						],
 						"settings":
@@ -1680,10 +1757,10 @@
 							"syntax": "Packages/Framer Sublime/Framer CoffeeScript.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1209.0,
+						"translation.y": 319.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -1691,7 +1768,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 29.0
+		"height": 27.0
 	},
 	"input":
 	{
@@ -1744,7 +1821,7 @@
 	"project": "framer-md-refactored.sublime-project",
 	"replace":
 	{
-		"height": 54.0
+		"height": 50.0
 	},
 	"save_all_on_build": true,
 	"select_file":

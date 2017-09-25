@@ -1,19 +1,37 @@
-{ Icon } = require 'md-components/Icon'
-
 # 	dP     dP                          dP                    a88888b.                     dP                     dP
 # 	88     88                          88                   d8'   `88                     88                     88
 # 	88aaaaa88a .d8888b. .d8888b. .d888b88 .d8888b. 88d888b. 88        .d8888b. 88d888b. d8888P 88d888b. .d8888b. 88 .d8888b.
 # 	88     88  88ooood8 88'  `88 88'  `88 88ooood8 88'  `88 88        88'  `88 88'  `88   88   88'  `88 88'  `88 88 Y8ooooo.
 # 	88     88  88.  ... 88.  .88 88.  .88 88.  ... 88       Y8.   .88 88.  .88 88    88   88   88       88.  .88 88       88
 # 	dP     dP  `88888P' `88888P8 `88888P8 `88888P' dP        Y88888P' `88888P' dP    dP   dP   dP       `88888P' dP `88888P'
-# 	
-# 	
+
+{ Icon } = require 'md-components/Icon'
+{ Theme } = require 'md-components/Theme'
+{ Checkbox } = require 'md-components/Checkbox'
+{ Card } = require 'md-components/Card'
+{ Button } = require 'md-components/Button'
 
 class HeaderControls extends Layer
 	constructor: (options = {}) ->
 
 		@_tableCard = options.tableCard
 		@_table = @_tableCard._table
+
+		@selectedButtons = []
+		@selectedIcons = []
+		@menuButtons = []
+		@menuIcons = []
+
+		@headerTitle = options.headerTitle
+
+		@_colors =
+			bright: new Color(@_table.color).alpha(.87)
+			dim: new Color(@_table.color).alpha(.54)
+			low: new Color(@_table.color).alpha(.38)
+			hover: new Color(@_table._onColor).alpha(.1)
+			select: new Color(@_table._onColor).alpha(.2)
+			tint: new Color(@_table._onColor).alpha(.2)
+			contrast: new Color(@_table.backgroundColor).alpha(.87)
 
 		super _.defaults options,
 			name: if @_tableCard._showNames then 'Header' else '.'
@@ -23,88 +41,165 @@ class HeaderControls extends Layer
 			controls: @_tableCard._headerControls
 			backgroundColor: @_tableCard.backgroundColor
 
+
+		# header menu (shown when no items are selected)
+
+		@menu = new Layer
+			name: if @_tableCard._showNames then 'Menu' else '.'
+			parent: @
+			size: @size
+			backgroundColor: @backgroundColor
+
 		@title = new TextLayer
-			name: 'Title', parent: @
+			name: 'Title', parent: @menu
 			x: 24, y: 24
 			fontSize: 20
-			color: 'rgba(33, 33, 33, 1.000)'
-			text: @_tableCard._title
+			textTransform: 'capitalize'
+			color: @_colors.bright
+			text: "{title}"
 
-		# header buttons
+		@title.template = @_tableCard._title
 
+		@buildHeaderIcons(false)
+		@buildHeaderButtons(false)
+
+
+		# contextual header menu (shown when items are selected)
+
+		@selectedMenu = new Layer
+			name: if @_tableCard._showNames then 'Selected Menu' else '.'
+			parent: @
+			size: @size
+			backgroundColor: @_colors.tint
+
+		@selectedLabel = new TextLayer
+			name: 'Selected'
+			parent: @selectedMenu
+			y: 24, x: 24
+			fontSize: 14, color: @_table._onColor
+			text: '{selected} item{plural} selected'
+
+
+		# note: selected controls and selected buttons are both at 
+		# right side of header, so use one or the other
+
+		@buildSelectedIcons(false)
+		@buildSelectedButtons(false)
+
+		@update()
+
+	buildHeaderButtons: (update = true) ->
+		button?.destroy() for button in @selectedButtons
 		startX = undefined
+		
 
-		if @_tableCard._headerButtons.length > 0
-			@title.visible = false
-
-		for button, i in @_tableCard._headerButtons
+		for button, i in @_tableCard.headerButtons
 			newButton = new TextLayer
-				parent: @
+				parent: @menu
 				x: startX ? 8, y: 24
 				fontSize: 14, fontWeight: 500
 				padding: {right: 16, left: 16, top: 9, bottom: 9}
 				backgroundColor: @backgroundColor
 				textTransform: 'uppercase'
 				borderRadius: 2
-				color: @_table.color
+				color: @_table._onColor
+				text: button.text
+			
+			newButton.action = button.action
+
+			@selectedButtons.push(newButton)
+
+			newButton.onTap newButton.action
+
+		if update then @update()
+
+
+	buildHeaderIcons: (update = true) ->
+		button?.destroy() for button in @menuIcons
+		for control, i in _.reverse(@_tableCard.headerIcons)
+			newIcon = new Icon
+				parent: @menu
+				x: startX ? Align.right(-14)
+				y: 24
+				color: @_colors.bright
+				icon: control.icon
+				action: control.action
+
+			@menuIcons.push(newIcon)
+
+			startX = newIcon.x - 48
+
+		if update then @update()
+
+
+	buildSelectedIcons: (update = true) ->
+		button?.destroy() for button in @selectedIcons
+		startX = undefined
+
+		for control, i in _.reverse(@_tableCard.selectedIcons)
+			newIcon = new Icon
+				parent: @selectedMenu
+				x: startX ? Align.right(-14)
+				y: Align.center
+				icon: control.icon
+				action: control.action
+				color: @_colors.contrast
+
+			@selectedIcons.push(newIcon)
+
+			startX = newIcon.x - 48
+
+		if update then @update()
+
+
+	buildSelectedButtons: (update = true) ->
+		button?.destroy() for button in @selectedButtons
+
+		startX = undefined
+
+		for button, i in _.reverse(@_tableCard.selectedButtons)
+			newButton = new TextLayer
+				parent: @selectedMenu
+				x: startX ? Align.right(-14), 
+				y: Align.center
+				fontSize: 14, fontWeight: 500
+				padding: {right: 16, left: 16, top: 9, bottom: 9}
+				backgroundColor: null
+				textTransform: 'uppercase'
+				borderRadius: 2
+				color: @_table._onColor
 				text: button.text
 			
 			newButton.action = button.action
 
 			newButton.onTap newButton.action
 
-			startX = newButton.maxX + 8
+			@selectedButtons.push(newButton)
 
-		# header controls
+			startX = newButton.x - newButton.width
 
-		startX = undefined
+		if update then @update()
 
-		for control, i in _.reverse(@_tableCard._headerControls)
-			newControl = new Icon
-				parent: @
-				x: startX ? Align.right(-14)
-				y: 24
-				icon: control.icon
-				action: control.action
-
-			startX = newControl.x - 48
-
-		# contextual header for selected items
-
-		@selectedMenu = new Layer
-			name: if @_tableCard._showNames then 'Selected Menu' else '.'
-			parent: @
-			size: @size
-			backgroundColor: new Color(@_table.color).lighten(35)
-
-		@selectedLabel = new TextLayer
-			name: 'Selected'
-			parent: @selectedMenu
-			y: 24, x: 24
-			fontSize: 14, color: @_table.color
-			text: '{selected} item{plural} selected'
-
-		startX = undefined
-
-		for control, i in _.reverse(@_tableCard._selectedControls)
-			newControl = new Icon
-				parent: @selectedMenu
-				x: startX ? Align.right(-14)
-				y: Align.center
-				icon: control.icon
-				action: control.action
-
-			startX = newControl.x - 48
 
 	update: =>
+		@title.template = @_tableCard._title
+
+		@title.visible = @_tableCard.headerButtons.length is 0
+
+		# header selected label
+
 		selected = @_table.getSelected().length
 
 		@selectedLabel.template = 
 			selected: @_table.getSelected().length
 			plural: if selected > 1 then 's' else ''
 
-		@selectedMenu.visible = selected > 0 and @_tableCard._headerControls.length > 0
+		# if rows are selected and we have selected controls...
 
+		isSelected = selected > 0 and _.concat(@_tableCard.selectedIcons, @_tableCard.selectedButtons).length  > 0
+
+		@selectedMenu.visible = isSelected
+		@menu.visible = !isSelected
 		
 
 
@@ -131,7 +226,7 @@ class FooterControls extends Layer
 		@_table = @_tableCard._table
 
 		super _.defaults options,
-			name: if @_tableCard._showNames then 'Header' else '.'
+			name: if @_tableCard._showNames then 'Footer' else '.'
 			y: Align.bottom
 			height: 48
 			parent: @_tableCard
@@ -140,52 +235,62 @@ class FooterControls extends Layer
 			controls: @_tableCard._headerControls
 			backgroundColor: @_tableCard.backgroundColor
 
-		@next = new Icon
-			parent: @
-			x: Align.right(-14), y: Align.center
-			icon: 'chevron-right'
-			action: => @_tableCard.nextPage()
+		unless @_tableCard._blankFooter
 
-		@prev = new Icon
-			parent: @
-			x: @next.x - 48, y: Align.center
-			icon: 'chevron-left'
-			action: => @_tableCard.prevPage()
+			@next = new Icon
+				parent: @
+				x: Align.right(-14), y: Align.center
+				icon: 'chevron-right'
+				color: @_table.color
+				onColor: @_table._onColor
+				action: => @_tableCard.nextPage()
 
-		@currentPage = new TextLayer
-			name: 'Current Page', parent: @
-			y: Align.center, textAlign: 'right'
-			fontSize: 12, color: 'rgba(126, 126, 126, 1)'
-			text: '{start}-{last} of {total}'
+			@prev = new Icon
+				parent: @
+				x: @next.x - 48, y: Align.center
+				icon: 'chevron-left'
+				color: @_table.color
+				onColor: @_table._onColor
+				action: => @_tableCard.prevPage()
 
-		@rowsPerPageIcon = new Icon
-			parent: @
-			y: Align.center
-			icon: 'menu-down'
-			disabled: true
-			action: => @_tableCard.prevPage()
+			@currentPage = new TextLayer
+				name: 'Current Page', parent: @
+				y: Align.center, textAlign: 'right'
+				fontSize: 12, color: @_table.color ? 'rgba(126, 126, 126, 1)'
+				text: '{start}-{last} of {total}'
 
-		@rowsPerPage = new TextLayer
-			name: 'Rows Per Page', parent: @
-			y: Align.center, textAlign: 'right'
-			fontSize: 12, color: 'rgba(126, 126, 126, 1)'
-			text: '{rowsPerPage}'
+			@rowsPerPageIcon = new Icon
+				parent: @
+				y: Align.center
+				icon: 'menu-down'
+				disabled: true
+				color: @_table.color
+				onColor: @_table._onColor
+				action: => @_tableCard.prevPage()
 
-		@rowsPerPageLabel = new TextLayer
-			name: 'Current Page', parent: @
-			y: Align.center, textAlign: 'right'
-			fontSize: 12, color: 'rgba(126, 126, 126, 1)'
-			text: 'Rows per Page:'
+			@rowsPerPage = new TextLayer
+				name: 'Rows Per Page', parent: @
+				y: Align.center, textAlign: 'right'
+				fontSize: 12, color: @_table.color ? 'rgba(126, 126, 126, 1)'
+				text: '{rowsPerPage}'
 
-		for button in [@next, @prev]
-			button.on "change:disabled", (isDisabled) ->
-				if isDisabled then @opacity = .5
-				else @opacity = 1
+			@rowsPerPageLabel = new TextLayer
+				name: 'Current Page', parent: @
+				y: Align.center, textAlign: 'right'
+				fontSize: 12, color: @_table.color ? 'rgba(126, 126, 126, 1)'
+				text: 'Rows per Page:'
+
+			for button in [@next, @prev]
+				button.on "change:disabled", (isDisabled) ->
+					if isDisabled then @opacity = .5
+					else @opacity = 1
 
 		@update(true)
 
+		@_table.on "update", @update
 
-	update: (initial = false) ->
+
+	update: (initial = false) =>
 		start = @_table._start
 		rowsPerPage = @_table._rowsPerPage
 		last = start + rowsPerPage
@@ -193,22 +298,24 @@ class FooterControls extends Layer
 
 		if last > total then last = total
 
-		@currentPage.template =
-			start: start + 1
-			last: last
-			total: total
+		unless @_tableCard._blankFooter
 
-		@rowsPerPage.template = rowsPerPage
+			@currentPage.template =
+				start: start + 1
+				last: last
+				total: total
 
-		@currentPage.maxX = @prev.x - 32
-		
-		if initial
-			@rowsPerPageIcon.maxX = @currentPage.x - 32
-			@rowsPerPage.maxX = @rowsPerPageIcon.x
-			@rowsPerPageLabel.maxX = @rowsPerPageIcon.x - 40
+			@rowsPerPage.template = rowsPerPage
 
-		@prev.disabled = start is 0
-		@next.disabled = last is total
+			@currentPage.maxX = @prev.x - 32
+			
+			if initial
+				@rowsPerPageIcon.maxX = @currentPage.x - 32
+				@rowsPerPage.maxX = @rowsPerPageIcon.x
+				@rowsPerPageLabel.maxX = @rowsPerPageIcon.x - 40
+
+			@prev.disabled = start is 0
+			@next.disabled = last is total
 
 		
 
@@ -226,21 +333,24 @@ class FooterControls extends Layer
 # 	
 # 	
 
-class exports.TableCard extends Layer
+class exports.TableCard extends Card
 	constructor: (options = {}) ->
 		
 		# table defined using @define method
 		@_table = undefined
 
 		@_title = options.title ? 'Table Card'
-		@_headerControls = options.headerControls ? []
-		@_selectedControls = options.selectedControls ? []
-		@_headerButtons = options.headerButtons ? []
+		@headerIcons = options.headerIcons ? []
+		@headerButtons = options.headerButtons ? []
+		@selectedIcons = options.selectedIcons ? []
+		@selectedButtons = options.selectedButtons ? []
+		
 		
 		# an option:
 		# {name: 'Filter', 'icon': 'filter-menu', action: filterList}
 
-		@_footer = options.footer
+		@_footer = options.footer ? true
+		@_blankFooter = options.blankFooter ? false
 
 		@_showNames = options.showNames ? true
 		
@@ -249,14 +359,14 @@ class exports.TableCard extends Layer
 
 		super _.defaults options,
 			name: 'Table Card', 
-			x: 16, y: 16
-			height: @_table?.height + 64 ? 280, width: @_table?.width ? 512
-			color: 'rgba(67, 133, 244, 1.000)'
-			backgroundColor: '#FFF'
-			borderRadius: 3
-			shadowY: 1, shadowBlur: 5,
-			shadowColor: 'rgba(0,0,0,.3)'
-			animationOptions: {time: .15}
+			color: Theme.colors.primary.main
+			# x: 16, y: 16
+			# height: 280, width: 512
+			# backgroundColor: '#FFF'
+			# borderRadius: 3
+			# shadowY: 1, shadowBlur: 5,
+			# shadowColor: 'rgba(0,0,0,.3)'
+			# animationOptions: {time: .15}
 
 
 	nextPage: ->
@@ -282,39 +392,42 @@ class exports.TableCard extends Layer
 
 			# add cross references
 			@_table = table
-			@_table._tableCard = @
+
+			@table._tableCard = @
 
 			# set table properties
-			@_table.props =
+			@table.props =
 				parent: @
 				x: 0, y: 64
 
 			# set card properties to fit table
 			@props =
-				height: @_table.height + 64
-				width: @_table.width
+				height: @table.height + 64
+				width: @table.width
+				backgroundColor: @table.backgroundColor
+				color: @table.color
 
 			# create header controls
 			@headerControls = new HeaderControls
 				tableCard: @
 
 			# create footer controls
-			unless @_table._scrollable
+			if @_footer and not @_table._scrollable
 				@height += 48
 				@footerControls = new FooterControls
 					tableCard: @
 
 			# add event listener
-			@_table.on "change:selected", @headerControls.update
+			@table.on "change:selected", @headerControls.update
 
 			# reset properties with options properties (fixes align bugs)
-			@x = @_rawX
-			@y = @_rawY
+			Utils.delay 0, =>
+				@x = @_rawX
+				@y = @_rawY
 
-			# update everything
-			@update()
+				# update everything
+				@update()
 
-			
 
 	update: ->
 		Utils.delay 1, => @_table.update()

@@ -26,15 +26,15 @@ exports.Header = class Header extends Layer
 
 		# TODO: if options.icon is false then no iconLayer, move title left
 
-		@mask = new Layer
-			parent: @
-			size: @size
-			backgroundColor: null
-			clip: true
-			opacity: 1
+		# @mask = new Layer
+		# 	parent: @
+		# 	size: @size
+		# 	backgroundColor: null
+		# 	clip: true
+		# 	opacity: 1
 
-		# give ripple but no don't give events to mask layer
-		@ripple = new Rippple( @mask, undefined, undefined, events = false )
+		# # give ripple but no don't give events to mask layer
+		# @ripple = new Rippple( @mask, undefined, undefined, events = false )
 
 		@titleLayer = new Type.Title
 			name: '.', parent: @
@@ -50,9 +50,9 @@ exports.Header = class Header extends Layer
 			icon: options.icon ? 'menu', color: Theme.header.icon.color
 
 		# set ripple events on icon layer
-		@iconLayer.onTapStart ( event ) => @ripple.show( event.point )
-		@iconLayer.onTapEnd => @ripple.hide(); @_iconAction()
-		@iconLayer.onPanEnd => @ripple.hide()
+		# @iconLayer.onTapStart ( event ) => @ripple.show( event.point )
+		@iconLayer.onTapEnd => @_iconAction()#; @ripple.hide()
+		@iconLayer.onPanEnd => null #@ripple.hide()
 
 		@statusBar = new StatusBar
 			name: '.', parent: @

@@ -12,6 +12,7 @@ Framer.Extras.Hints.disable()
 { Divider } = require 'md-components/Divider'
 { Dropdown } = require 'md-components/Dropdown'
 { Elevation } = require 'md-components/Elevation'
+Flow = require 'md-components/Flow'
 { GridList } = require 'md-components/GridList'
 { Header } = require 'md-components/Header'
 { Icon } = require 'md-components/Icon'
@@ -47,6 +48,8 @@ exports.Dialog = Dialog
 exports.Divider = Divider
 exports.Dropdown = Dropdown
 exports.Elevation = Elevation
+exports.Flow = Flow.Flow
+exports.flow = Flow.flow
 exports.GridList = GridList
 exports.Header = Header
 exports.Icon = Icon
@@ -82,18 +85,8 @@ exports.Body1 = Type.Body1
 exports.Body2 = Type.Body2
 exports.Caption = Type.Caption
 
-
-
-
-
-
-
-
-
-
-
-
-
+loading_screen?.destroy()
+color_pallette?.destroy()
 
 
 

@@ -18,45 +18,41 @@
 
 exports.Page = class Page extends StackView
 	constructor: (options = {}) ->
-		
-		@_header = {}
-		@_header.title = options.header?.title ? 'New Page'
-		@_header.visible = options.header?.visible ? true
-		@_header.icon = options.header?.icon ? 'menu'
-		@_header.iconAction = options.header?.iconAction ? -> null
+		@__constructor = true
 
-		@_template = options.template
-		@_templateOpacity = options.templateOpacity ? .5
-		@_load = options.load ? -> null
-		@_update = options.update ? -> null
+		{ flow } = require 'md-components/Flow'
+
+		# header
+		@headerOptions = {
+			title: options.title
+			icon: options.icon
+			iconAction: options.iconAction
+			actions: options.actions
+		}
+
+		# on load
+		@onLoad = options.onLoad ? -> null
+
+		# refresh
+		@refresh = options.refresh ? -> null
 
 		@_app = options.app
 
-		if @_header.iconAction then @_header.iconAction = _.bind(@_header.iconAction, @)
-		if @_onLoad then @_onLoad = _.bind(@_onLoad, @)
-
 		super _.defaults options,
-			name: 'Page'
+			name: options.title ? 'View'
 			size: Screen.size
 			scrollHorizontal: false
 			backgroundColor: Theme.page.primary.backgroundColor
-			contentInset: { bottom: 16 }
-		
-		@contentInset =
-			top: 0, bottom: 160
+			shadowSpread: 1
+			shadowColor: 'rgba(0,0,0,.16)'
+			shadowBlur: 3
+			contentInset: {top: flow.header?.height + 16, bottom: 241}
 
 		@content.backgroundColor = null
-		@content._app = @_app
-
-		if @_template?
-			@_template.props =
-				parent: @
-				opacity: @_templateOpacity
 
 		@sendToBack()
 
-	update: -> @_update()
+		delete @__constructor
 
-	load: -> @_load()
-
-	build: (func) -> do _.bind(func, @)
+	onLoad: -> null
+	refresh: -> null

@@ -23,6 +23,8 @@ exports.View = class View extends FlowComponent
 			animationOptions: {curve: "spring(300, 35, 0)"}
 			shadowSpread: 2, shadowColor: 'rgba(0,0,0,.1)', shadowBlur: 6
 
+		@home = new Page
+
 		@onTransitionStart (current, next, direction) -> @_app?.changePage(next)
 
 	newPage: (options = {}) ->

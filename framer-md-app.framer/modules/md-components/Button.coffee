@@ -24,9 +24,10 @@ exports.Button = class Button extends Layer
 
 		@_disabled
 		@_action
-		@_labelText
 		@_raised
 		@_type 
+		
+		@_labelText
 		@_base
 		@_explicitWidth = options.width?
 		@_startX = options.x

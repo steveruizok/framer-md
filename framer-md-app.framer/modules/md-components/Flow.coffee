@@ -76,11 +76,13 @@ class exports.Flow extends FlowComponent
 			@showPrevious()
 
 		@menuOverlay = new MenuOverlay
-			# title: @_menuOverlay.title ? throw 'MenuOverlay needs a title.'
-		
+			title: @name
+			
 		# Transition Events
 
 		@onTransitionStart (prev, next, direction) =>
+			next?.scrollY = 0
+
 			@setHeader(next?.headerOptions)
 			
 			if next.refresh? then next.refresh()
@@ -149,3 +151,8 @@ class exports.Flow extends FlowComponent
 
 			for layer in [@header.titleLayer, @header.iconLayer]
 				layer.animate {opacity: 1, options: {time: .15}}
+
+	# add view
+
+	addView: (options = {}) ->
+		@menuOverlay.addLink(options)

@@ -7,7 +7,7 @@ class exports.StackView extends ScrollComponent
 		# stack related
 		@_stack = []
 		@padding = options.padding ? {
-			top: 16, right: 0, 
+			top: 16, right: 16, 
 			bottom: 0, left: 16
 			stack: 16
 			}
@@ -25,17 +25,23 @@ class exports.StackView extends ScrollComponent
 	# add a layer to the stack
 	addToStack: (layers = []) =>
 		if not _.isArray(layers) then layers = [layers]
-		
+	
 		last = _.last(@stack)
 		if last?
 			startY = last.maxY + (@padding.stack ? 0)
 		else
 			startY = @padding.top ? 0
-		
+
 		for layer in layers
 			layer.parent = @content
-			layer.x = @padding.left ? 0
+			layer.x = _.clamp(
+				@padding.left + layer.x, 
+				@padding.left, 
+				@width - @padding.right - layer.width
+				)
 			layer.y = startY
+			if layer.constructor.name is 'Card'
+				layer.width = @width - ( @padding.left + @padding.right )
 			@stack.push(layer)
 			
 			layer.on "change:height", => @moveStack(@)

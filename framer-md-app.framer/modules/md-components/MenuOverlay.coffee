@@ -8,16 +8,15 @@
 #                                                                                           d8888P 
 
 Type = require 'md-components/Type'
-{ Ripple } = require 'md-components/Ripple'
+{ Rippple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 { MenuButton } = require 'md-components/MenuButton'
 
 exports.MenuOverlay = class MenuOverlay extends Layer
-	
 	constructor: (options = {}) ->
 
-		@_links = options.links ? [{title: 'Home', icon: 'home', action: -> null}]
+		@links = []
 		@_title = options.title ? 'Menu'
 		@_image = options.image ? null
 		@_app = options.app
@@ -70,17 +69,6 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			text: @_title
 			color: Theme.menuOverlay.subheader.text
 
-		links = []
-
-		for link, i in @_links
-			links[i] = new MenuButton
-				name: '.', parent: @
-				x: 16, y: 189 + (48 * i)
-				text: link.title
-				icon: link.icon
-				view: link.view
-				app: @_app
-
 	show: ->
 		@bringToFront()
 		@visible = true
@@ -105,3 +93,16 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 			@scrim.visible = false
 			@sendToBack()
 			@scrim.sendToBack()
+
+	addLink: (options) -> 
+		lastY = _.last(@links)?.maxY ? 189
+		@links.push new MenuButton
+			name: '.', parent: @
+			x: 16, y: lastY
+			text: options.name
+			icon: options.icon
+			view: options.view
+			app: @_app
+			i: @links.length
+
+		options.view.i = @links.length

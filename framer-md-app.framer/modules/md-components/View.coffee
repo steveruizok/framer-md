@@ -10,34 +10,6 @@
 { Theme } = require 'md-components/Theme'
 { Page } = require 'md-components/Page'
 
-exports.View = class View extends FlowComponent
+exports.View = class View extends Page
 	constructor: (options = {}) ->
-
-		@_title = options.title ? 'Home'
-		@_icon = options.icon ? 'menu'
-		@_iconAction = options.iconAction ? -> app.menuOverlay.show() 
-		@_app = options.app
-
-		super _.defaults options,
-			name: 'View'
-			animationOptions: {curve: "spring(300, 35, 0)"}
-			shadowSpread: 2, shadowColor: 'rgba(0,0,0,.1)', shadowBlur: 6
-
-		@home = new Page
-
-		@onTransitionStart (current, next, direction) -> @_app?.changePage(next)
-
-	newPage: (options = {}) ->
-		page = new Page _.defaults options,
-			size: @size
-			app: @_app
-
-		page.load()
-
-		return page 
-
-	linkTo: (page) ->
-		if page? and @current isnt page
-			@showNext(page)
-
-	build: (func) -> do _.bind(func, @home)
+		super options

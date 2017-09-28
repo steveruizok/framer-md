@@ -1,11 +1,3 @@
-Type = require 'md-components/Type'
-{ Ripple } = require 'md-components/Ripple'
-{ Icon } = require 'md-components/Icon'
-{ Theme } = require 'md-components/Theme'
-{ Divider } = require 'md-components/Divider'
-{ Button } = require 'md-components/Button'
-{ Elevation } = require 'md-components/Elevation'
-
 # 	 a88888b.                         dP
 # 	d8'   `88                         88
 # 	88        .d8888b. 88d888b. .d888b88
@@ -13,6 +5,13 @@ Type = require 'md-components/Type'
 # 	Y8.   .88 88.  .88 88       88.  .88
 # 	 Y88888P' `88888P8 dP       `88888P8
 
+Type = require 'md-components/Type'
+{ Ripple } = require 'md-components/Ripple'
+{ Icon } = require 'md-components/Icon'
+{ Theme } = require 'md-components/Theme'
+{ Divider } = require 'md-components/Divider'
+{ Button } = require 'md-components/Button'
+{ Elevation } = require 'md-components/Elevation'
 
 exports.Card = class Card extends Layer
 	constructor: (options = {}) ->
@@ -45,7 +44,7 @@ exports.Card = class Card extends Layer
 
 		super _.defaults options,
 			name: 'Card'
-			x: Align.center, y: 8
+			y: 8
 			width: Screen.width - 16
 			borderRadius: 2
 			backgroundColor: '#f9f9f9'

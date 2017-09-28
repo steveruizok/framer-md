@@ -9,9 +9,7 @@
 #                      d8888P          
 
 # simplify header controls
-# add stackview integration
 # remove template(?)
-# change update to refresh (as in rest of app)
 
 { Theme } = require 'md-components/Theme'
 { StackView } = require 'md-components/StackView'
@@ -46,7 +44,7 @@ exports.Page = class Page extends StackView
 			shadowSpread: 1
 			shadowColor: 'rgba(0,0,0,.16)'
 			shadowBlur: 3
-			contentInset: {top: flow.header?.height + 16, bottom: 241}
+			contentInset: {top: flow.header?.height, bottom: 241}
 
 		@content.backgroundColor = null
 

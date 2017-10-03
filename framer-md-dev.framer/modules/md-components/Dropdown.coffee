@@ -11,7 +11,7 @@
 Type = require 'md-components/Type'
 { Theme } = require 'md-components/Theme'
 { Icon } = require 'md-components/Icon'
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 
 # Bugs:
 
@@ -57,7 +57,7 @@ class exports.Dropdown extends Layer
 				opacity: 0, text: option
 				clip: true
 			
-			newOption.ripple = new Rippple(newOption, false, colorOverride = 'rgba(0,0,0,.05)' )
+			newOption.ripple = new Ripple(newOption, false, colorOverride = 'rgba(0,0,0,.05)' )
 
 			newOption.onMouseOver -> @animate { backgroundColor: 'rgba(238, 238, 238, 1)' }
 			newOption.onMouseOut ->  @animate { backgroundColor: 'rgba(238, 238, 238, 0)' }

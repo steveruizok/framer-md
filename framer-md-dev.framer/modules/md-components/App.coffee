@@ -7,37 +7,47 @@
 # 	           88       88
 # 	           dP       dP
 
-{ Theme } = require 'md-components/Theme'
 { Header } = require 'md-components/Header'
 { BottomNav } = require 'md-components/BottomNav'
 { MenuOverlay } = require 'md-components/MenuOverlay'
+{ Theme } = require 'md-components/Theme'
 
-exports.App = class App extends Layer
+exports.app # set by class
+
+class exports.App extends FlowComponent
 	constructor: (options = {}) ->
+		@__constructor = true
 
-		@_bottomNav = options.bottomNav ? undefined
-		@_menuOverlay = options.menuOverlay ? undefined
-		
-		@Theme = Theme
-		@views = options.views ? []
-		@current = {i: 0}
+		exports.app = @
+
+		@activeInput
+		@header
+		@keyboard
+
 		@notifications = []
-		@actionButton = undefined
-		@snackbar = undefined
 
 		super _.defaults options,
 			name: 'App'
-			size: Screen.size
-			backgroundColor: null
-			index: 1
 
-		# HEADER
+		# Header
 
 		@header = new Header
-			Theme: Theme
-			index: 999
+			title: ''
+			icon: ''
 
-		# FOOTER
+		# Keyboard
+
+		@keyboard = new Layer
+			name: 'Keyboard'
+			y: @maxY, image: Theme.keyboard.image
+			width: @width, height: 222
+			index: 1000
+			animationOptions:
+				time: .25
+
+		@keyboard.onTap @closeKeyboard
+
+		# App Footer
 
 		@footer = new Layer
 			name: 'Footer'
@@ -66,91 +76,71 @@ exports.App = class App extends Layer
 		@backButton.onTap => 
 			flash?.animateStop()
 			flash?.animate {opacity: 0, options:{time: .5}}
-			@current.showPrevious()
+			return if @current.constructor.name is 'View'
+			@showPrevious()
 
+		@menuOverlay = new MenuOverlay
+			title: @name
+			
+		# Transition Events
 
-		if @_bottomNav
-			@bottomNav = new BottomNav
-				name: 'Bottom Nav', app: @
-				destinations: @_bottomNav.links ? "BottomNav needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
-				y: if @footer? then Align.bottom(-@footer.height) else Align.bottom()
-				index: 998
+		@onTransitionStart (prev, next, direction) =>
+			Utils.delay 0, => @onChange(next)
 
-		# MENU OVERLAY
-		if @_menuOverlay
-			@menuOverlay = new MenuOverlay
-				name: 'Menu Overlay', app: @
-				title: @_menuOverlay.title ? throw 'MenuOverlay needs a title.'
-				links: @_menuOverlay.links ? throw "MenuOverlay needs an array of links. Example: [{title: 'Home', icon: 'home', action: -> view.linkTo(home)}]"
+	# On changing to a new page
+	
+	onChange: (next) ->
+		return if typeof next is 'string'
+		if !_.includes(['View', 'Page'], next.constructor?.name)
+			throw 'App only words with Views and Pages.'
+			return
 
+		@setHeader(next.headerOptions)
+		next.contentInset.top = @header.maxY + 16
 
-		# KEYBOARD
+		next.scrollY = 0
+		next.onLoad()
 
-		@keyboard = new Layer
-			name: 'Keyboard'
-			y: @maxY, image: Theme.keyboard.image
-			width: @width, height: 222
-			index: 1000
-			animationOptions:
-				time: .25
+	# Transitions
 
-		@keyboard.onTap => @hideKeyboard()
+	showNextRight: (nav, layerA, layerB, overlay) ->
+		options = {curve: "spring(300, 35, 0)"}
 
-		for view, i in @views
-			@addView(view, i)
+		transition =
+			layerA:
+				show: {options: options, x: 0, y: 0}
+				hide: {options: options, x: 0 - layerA?.width / 2, y: 0}
+			layerB:
+				show: {options: options, x: 0, y: 0}
+				hide: {options: options, x: layerB.width, y: 0}
 
-		@changeView(@views[0].name)
+	showNextLeft: (nav, layerA, layerB, overlay) ->
+		options = {curve: "spring(300, 35, 0)"}
 
-	showKeyboard: ->
-		@keyboard.animateStop()
-		@keyboard.animate
-			y: Align.bottom()
+		transition =
+			layerA:
+				show: {options: options, x: 0, y: 0}
+				hide: {options: options, x: 0 + layerA?.width / 2, y: 0}
+			layerB:
+				show: {options: options, x: 0, y: 0}
+				hide: {options: options, x: -layerB.width, y: 0}
+
+	# keyboard
+
+	openKeyboard: () => 
+		@footer.visible = false
+		return if Utils.isMobile()
+
 		@keyboard.bringToFront()
+		@animate { y: -@keyboard.height }
+		@keyboard.animate { y: Screen.height - @keyboard.height }
+			
+	closeKeyboard: => 
+		@footer.visible = true
+		@animate { y: 0 }
+		@keyboard.animate { y: Screen.height }
 
-	hideKeyboard: ->
-		@keyboard.animateStop()
-		@keyboard.animate
-			y: @maxY
-
-	addView: (view, i) ->
-		view.i = i
-		view.parent = @
-		view._app = @
-		view.y = @header.maxY
-		view.height = Screen.height - @header.height - @footer.height
-		view.name = view._title.toLowerCase()
-
-		view.home = view.newPage
-		 	name: 'home'
-		 	header:
-			 	title: view._title
-			 	icon: view._icon
-			 	iconAction: view._iconAction
-
-		view.showNext(view.home)
-
-	changeView: (viewName) ->
-		view = _.find(@views, {'name': viewName})
-
-		return if view is @current
-
-		@header.title = view.current._header?.title ? 'Default'
-		@header.icon = view.current._header?.icon ? 'menu'
-		@header.iconAction = view.current._header?.iconAction ? -> app.showMenu()
-		@header.visible = view.current._header?.visible ? true
-
-		if view.i > @current.i
-			view.x = Screen.width 
-			@current.animate {x: -Screen.width}
-		else if view.i < @current.i
-			view.x = -Screen.width
-			@current.animate {x: Screen.width}
-
-		view.animate {x: 0}
-		view.bringToFront()
-		@current = view
-
-		@bottomNav?.activeDestination = _.find(@bottomNav._items, {'view': viewName})
+	# menu
 
 	showMenu: ->
 		@menuOverlay.show()
@@ -158,9 +148,12 @@ exports.App = class App extends Layer
 	hideMenu: ->
 		@menuOverlay.hide()
 
-	changePage: (page) ->
-		@header.title = page._header.title
-		@header.icon = page._header.icon
-		@header.iconAction = page._header.iconAction
-		@header.visible = page._header.visible
-		page.update()
+	# header
+
+	setHeader: (options = {}) ->
+		@header.setHeader(options)
+	
+	# add view
+
+	addView: (options = {}) ->
+		@menuOverlay.addLink(options)

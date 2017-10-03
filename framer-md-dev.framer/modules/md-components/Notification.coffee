@@ -5,7 +5,7 @@
 # 	88     88 88.  .88   88   88 88     88 88.  ... 88.  .88   88   88 88.  .88 88    88
 # 	dP     dP `88888P'   dP   dP dP     dP `88888P' `88888P8   dP   dP `88888P' dP    dP
 
-# Notification does not require an app property, however if one is not set then notifications will not flow around eachother.
+# Notification does not require an app property, however if one is not set then notifications will not app around eachother.
 
 # TODO: replace action1 and action2 with array of actions.
 
@@ -17,7 +17,8 @@ Type = require 'md-components/Type'
 exports.Notification = Notification = class Notification extends Layer
 	constructor: (options = {}) ->
 
-		
+		{ app } = require 'md-components/App'
+
 		@_title = options.title ? 'Notification'
 		@_body = options.body ? 'This is a notification.'
 		@_icon = options.icon ? undefined
@@ -28,17 +29,10 @@ exports.Notification = Notification = class Notification extends Layer
 
 		@_time = options.time ? new Date()
 		@_timeout = options.timeout ? 5
-
-		@_app = options.app
-		@_group = @_app?.notifications ? options.group
-
-		
+		@_group = app?.notifications ? options.group ? []
 
 		# actions should be:
 		# {title: 'archive', icon: 'archive', color: '', backgroundColor: ''}
-		
-		if @_app?
-			@_group = @_app.notifications
 
 		super _.defaults options,
 			name: options.name ? '.'
@@ -142,26 +136,24 @@ exports.Notification = Notification = class Notification extends Layer
 		@open()
 
 	open: => 
-		if @_app then startY = @_app.header.maxY + 4
-		else startY = 8
-
-		startY += _.last(@_group)?.maxY ? 0
+		startY = _.last(@_group)?.maxY ? 24
+		startY += 8
 
 		@y = startY
-
-		Utils.delay @_timeout, => if not @closed then @close('right')
 		
 		@animate {opacity: 1}
 		@_group.push(@)
 
+		Utils.delay @_timeout, => if not @closed then @close('right')
+
 
 	close: (direction) =>
-		if @_group
-			_.pull(@_group, @)
+		_.pull(@_group, @)
 
-			for notification in @_group
-				if notification.y > @maxY
-					notification.animate {y: notification.y - @height}
+		newY = 32
+		for layer, i in @_group
+			layer.animate { y: newY }
+			newY += layer.height + 8
 
 		@animate
 			x: if direction is 'left' then -Screen.width else Screen.width

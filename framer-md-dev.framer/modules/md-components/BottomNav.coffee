@@ -6,7 +6,7 @@
 # 	 88888888P `88888P'   dP     dP   `88888P' dP  dP  dP dP     dP `88888P8 8888P'
 
 Type = require 'md-components/Type'
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 
@@ -54,7 +54,7 @@ exports.BottomNav = class BottomNav extends Layer
 					clip: true
 					opacity: 1
 
-				@ripple = new Rippple( @mask , external = true, undefined, events = false)
+				@ripple = new Ripple( @mask , external = true, undefined, events = false)
 
 				@iconLayer = new Icon
 					name: '.', parent: @

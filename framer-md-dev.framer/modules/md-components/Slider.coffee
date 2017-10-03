@@ -5,7 +5,7 @@
 # 	d8'   .8P 88 88 88.  .88 88.  ... 88
 # 	 Y88888P  dP dP `88888P8 `88888P' dP
 
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 

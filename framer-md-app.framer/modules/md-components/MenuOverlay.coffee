@@ -8,7 +8,7 @@
 #                                                                                           d8888P 
 
 Type = require 'md-components/Type'
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 { MenuButton } = require 'md-components/MenuButton'
@@ -99,10 +99,8 @@ exports.MenuOverlay = class MenuOverlay extends Layer
 		@links.push new MenuButton
 			name: '.', parent: @
 			x: 16, y: lastY
-			text: options.name
+			text: options.title
 			icon: options.icon
 			view: options.view
-			app: @_app
-			i: @links.length
 
 		options.view.i = @links.length

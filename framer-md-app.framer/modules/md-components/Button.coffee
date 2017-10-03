@@ -7,33 +7,34 @@
 
 
 Type = require 'md-components/Type'
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 
 exports.Button = class Button extends Layer 
 	constructor: (options = {}) ->
 		@__constructor = true
+		showLayers = options.showLayers
 
+		# if an icon is passed in, return an icon class and bail
 		if options.icon
 			options.action ?= -> null
 			options.color ?= Theme.colors.primary.main
 			return new Icon(options)
 
-		showLayers = options.showLayers
-
 		@_disabled
 		@_action
 		@_raised
 		@_type 
-		
-		@_labelText
 		@_base
+		@_labelText
+
 		@_explicitWidth = options.width?
 		@_startX = options.x
 
 		@_type = options.type ? if options.raised then 'raised' else 'flat'
 
+		# properties by type
 		switch @_type
 			when 'flat'
 				@_base =
@@ -62,6 +63,7 @@ exports.Button = class Button extends Layer
 
 		super _.defaults options, @_base
 
+		# text label
 		@labelLayer = new Type.Button
 			name: if showLayers then 'Label' else '.'
 			parent: @
@@ -74,7 +76,8 @@ exports.Button = class Button extends Layer
 			padding: 
 				left: 16.5, right: 16.5
 				top: 9, bottom: 11
-
+		
+		# events
 		@onTapStart ->
 			@showRaised()
 
@@ -83,12 +86,25 @@ exports.Button = class Button extends Layer
 			@_action()
 			@refresh()
 
+		@labelLayer.on "change:width", =>
+			return if @_explicitWidth
+			@width = @labelLayer.width
+			@_base.width = @labelLayer.width
+			@setRipple()
+
+		@on "change:width", =>
+			return if @width is @labelLayer.width
+			@labelLayer.width = @width
+			@setRipple()
+
+		# set props
 		@action = options.action
 		@disabled = options.disabled ? false
 
 		delete @__constructor
-		@text = options.text ? 'button'
 
+		@text = options.text ? 'button'
+		
 	showRaised: => 
 		return if @disabled
 		return if @type isnt 'raised'
@@ -109,9 +125,9 @@ exports.Button = class Button extends Layer
 
 		switch @type
 			when 'flat'
-				@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
+				@ripple = new Ripple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
 			when 'raised'  
-				@ripple = new Rippple( @mask, null )
+				@ripple = new Ripple( @mask, null )
 
 	refresh: =>
 		@animateStop()
@@ -139,7 +155,8 @@ exports.Button = class Button extends Layer
 
 			@emit("change:disabled", @_disabled, @)
 
-			if not @__constructor then @refresh()
+			return if @__constructor
+			@refresh()
 
 	@define "action",
 		get: -> return @_action
@@ -153,13 +170,8 @@ exports.Button = class Button extends Layer
 			return if @__constructor
 			@_labelText = text
 
-			@labelLayer.visible = @text.length > 0
-			@labelLayer.template = @text
+			@labelLayer.visible = text.length > 0
+			@labelLayer.template = text
 
-			if not @_explicitWidth
-				@width = @labelLayer.width
-				@_base.width = @width
-			
 			@x = @_startX
-			@setRipple()
 			@refresh()

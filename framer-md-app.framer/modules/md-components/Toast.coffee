@@ -8,25 +8,28 @@
 Type = require 'md-components/Type'
 { Ripple } = require 'md-components/Ripple'
 { Theme } = require 'md-components/Theme'
-{ Button } = require 'md-components/Button' 
+{ Button } = require 'md-components/Button'
+
+# currently identical to snackbar
 
 class exports.Toast extends Layer
 	constructor: (options = {}) ->
-		@__constructor = true
-		showLayers = options.showLayers
+
+		{ app } = require 'md-components/App'
+		@_app = app
 
 		@_title = options.title ? 'Toast'
 		@_timeout = options.timeout ? 4
 		@_action = options.action
-		@_app = options.app
 
 		super _.defaults options,
-			name: 'Toast'
+			name: '.'
 			y: Screen.maxY
 			width: Screen.width
 			clip: true
 			backgroundColor: Theme.toast.backgroundColor
 			animationOptions: {time: .25}
+			visible: false
 
 		titleWidth = @width - 48
 
@@ -51,8 +54,7 @@ class exports.Toast extends Layer
 		@height = @textLabel.maxY + 14
 		@action?.y = Align.center
 
-		if @_app?
-			@y = if @_app.bottomNav? then Align.bottom(-@_app.bottomNav.height + @height) ? Align.bottom(@height)
+		
 
 		Utils.delay @_timeout, @hide
 
@@ -67,9 +69,19 @@ class exports.Toast extends Layer
 			else
 				@_app.toast = @
 				@_app.actionButton?.animate {y: @_app.actionButton.y - @height, options: @animationOptions}
-				@animate {y: @y - @height}
+
+				height = @height
+
+				@y = Screen.height - @_app.footer.height
+				@height = 0
+				@visible = true
+				@animate
+					y: @y - (height - 1)
+					height: height
 		else
-			@animate {y: @y - @height}
+			@visible = true
+			@y = Screen.height
+			@animate {y: Screen.height - @height}
 
 	hide: => 
 		if @_app?

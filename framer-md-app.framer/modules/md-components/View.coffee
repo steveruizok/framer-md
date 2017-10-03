@@ -12,4 +12,18 @@
 
 exports.View = class View extends Page
 	constructor: (options = {}) ->
+		
+		{ app } = require 'md-components/App'
+
+		@_icon = options.icon ? 'open-in-new'
+		
+		options.title ?= 'New View'
+		options.icon = 'menu'
+		options.action = -> app.showMenu()
+
 		super options
+
+		app.addView
+			title: options.title
+			icon: @_icon
+			view: @

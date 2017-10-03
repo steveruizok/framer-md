@@ -11,7 +11,7 @@
 
 Screen.backgroundColor = '#000'
 
-modifyColor = (color, h, s, l) ->
+exports.modifyColor = modifyColor = (color, h, s, l) ->
 	clip = _.replace(_.replace(color.toHslString().slice(4, -1), '%', ''), '%', '') .split(', ')
 
 	newColor = new Color(

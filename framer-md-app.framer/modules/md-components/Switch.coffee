@@ -7,7 +7,7 @@
 # 	 Y88888P  8888P Y8P  dP   dP   `88888P' dP    dP
 
 Type = require 'md-components/Type'
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 
@@ -33,7 +33,7 @@ exports.Switch = class Switch extends Layer
 			opacity: 1
 			animationOptions: {time: .15}
 
-		@ripple = new Rippple( @mask, external = true )
+		@ripple = new Ripple( @mask, external = true )
 
 		@knob = new Layer
 			name: 'Knob', parent: @mask

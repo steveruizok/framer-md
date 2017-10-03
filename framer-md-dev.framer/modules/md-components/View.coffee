@@ -13,17 +13,17 @@
 exports.View = class View extends Page
 	constructor: (options = {}) ->
 		
-		{ flow } = require 'md-components/Flow'
+		{ app } = require 'md-components/App'
 
 		@_icon = options.icon ? 'open-in-new'
 		
 		options.title ?= 'New View'
 		options.icon = 'menu'
-		options.iconAction = -> flow.showMenu()
+		options.action = -> app.showMenu()
 
 		super options
 
-		flow.addView
-			view: @
-			text: options.title
+		app.addView
+			title: options.title
 			icon: @_icon
+			view: @

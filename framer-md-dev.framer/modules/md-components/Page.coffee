@@ -18,16 +18,16 @@ exports.Page = class Page extends StackView
 	constructor: (options = {}) ->
 		@__constructor = true
 
-		{ flow } = require 'md-components/Flow'
+		{ app } = require 'md-components/App'
 
 		options.icon ?= 'arrow-left'
-		options.iconAction ?= -> flow.showPrevious()
+		options.action ?= -> app.showPrevious()
 
 		# header
 		@headerOptions = {
 			title: options.title
 			icon: options.icon
-			iconAction: options.iconAction
+			action: options.action
 			actions: options.actions
 		}
 
@@ -37,7 +37,6 @@ exports.Page = class Page extends StackView
 		# refresh
 		@refresh = options.refresh ? -> null
 
-
 		super _.defaults options,
 			name: options.title ? 'View'
 			size: Screen.size
@@ -46,7 +45,7 @@ exports.Page = class Page extends StackView
 			shadowSpread: 1
 			shadowColor: 'rgba(0,0,0,.16)'
 			shadowBlur: 3
-			contentInset: {top: flow.header?.height, bottom: 241}
+			contentInset: {top: app.header?.height, bottom: 241}
 
 		@content.backgroundColor = null
 

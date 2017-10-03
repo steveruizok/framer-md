@@ -8,15 +8,17 @@
 Type = require 'md-components/Type'
 { Ripple } = require 'md-components/Ripple'
 { Theme } = require 'md-components/Theme'
-{ Button } = require 'md-components/Button' 
+{ Button } = require 'md-components/Button'
 
 class exports.Snackbar extends Layer
 	constructor: (options = {}) ->
 
+		{ app } = require 'md-components/App'
+		@_app = app
+
 		@_title = options.title ? 'Snackbar'
 		@_timeout = options.timeout ? 4
 		@_action = options.action
-		@_app = options.app
 
 		super _.defaults options,
 			name: '.'
@@ -25,6 +27,7 @@ class exports.Snackbar extends Layer
 			clip: true
 			backgroundColor: Theme.snackbar.backgroundColor
 			animationOptions: {time: .25}
+			visible: false
 
 		titleWidth = @width - 48
 
@@ -49,8 +52,7 @@ class exports.Snackbar extends Layer
 		@height = @textLabel.maxY + 14
 		@action?.y = Align.center
 
-		if @_app?
-			@y = if @_app.bottomNav? then Align.bottom(-@_app.bottomNav.height + @height) ? Align.bottom(@height)
+		
 
 		Utils.delay @_timeout, @hide
 
@@ -65,9 +67,19 @@ class exports.Snackbar extends Layer
 			else
 				@_app.snackbar = @
 				@_app.actionButton?.animate {y: @_app.actionButton.y - @height, options: @animationOptions}
-				@animate {y: @y - @height}
+
+				height = @height
+
+				@y = Screen.height - @_app.footer.height
+				@height = 0
+				@visible = true
+				@animate
+					y: @y - (height - 1)
+					height: height
 		else
-			@animate {y: @y - @height}
+			@visible = true
+			@y = Screen.height
+			@animate {y: Screen.height - @height}
 
 	hide: => 
 		if @_app?

@@ -7,7 +7,7 @@
 
 
 Type = require 'md-components/Type'
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 
@@ -76,7 +76,7 @@ exports.Button = class Button extends Layer
 			padding: 
 				left: 16.5, right: 16.5
 				top: 9, bottom: 11
-
+		
 		# events
 		@onTapStart ->
 			@showRaised()
@@ -86,6 +86,17 @@ exports.Button = class Button extends Layer
 			@_action()
 			@refresh()
 
+		@labelLayer.on "change:width", =>
+			return if @_explicitWidth
+			@width = @labelLayer.width
+			@_base.width = @labelLayer.width
+			@setRipple()
+
+		@on "change:width", =>
+			return if @width is @labelLayer.width
+			@labelLayer.width = @width
+			@setRipple()
+
 		# set props
 		@action = options.action
 		@disabled = options.disabled ? false
@@ -93,7 +104,6 @@ exports.Button = class Button extends Layer
 		delete @__constructor
 
 		@text = options.text ? 'button'
-		@setRipple()
 		
 	showRaised: => 
 		return if @disabled
@@ -115,9 +125,9 @@ exports.Button = class Button extends Layer
 
 		switch @type
 			when 'flat'
-				@ripple = new Rippple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
+				@ripple = new Ripple( @mask, null, colorOverride = 'rgba(0,0,0,.05)' )
 			when 'raised'  
-				@ripple = new Rippple( @mask, null )
+				@ripple = new Ripple( @mask, null )
 
 	refresh: =>
 		@animateStop()
@@ -163,9 +173,5 @@ exports.Button = class Button extends Layer
 			@labelLayer.visible = text.length > 0
 			@labelLayer.template = text
 
-			if not @_explicitWidth
-				@width = @labelLayer.width
-				@_base.width = @width
-			
 			@x = @_startX
 			@refresh()

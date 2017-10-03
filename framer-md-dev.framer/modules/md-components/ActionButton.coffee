@@ -5,7 +5,7 @@
 # 	88     88  88.  ...   88   88 88.  .88 88    88  88    .88 88.  .88   88     88   88.  .88 88    88
 # 	88     88  `88888P'   dP   dP `88888P' dP    dP  88888888P `88888P'   dP     dP   `88888P' dP    dP
 
-{ Rippple } = require 'md-components/Ripple'
+{ Ripple } = require 'md-components/Ripple'
 { Icon } = require 'md-components/Icon'
 { Theme } = require 'md-components/Theme'
 
@@ -15,7 +15,7 @@ exports.ActionButton = class ActionButton extends Layer
 		@_action = options.action ? -> null
 		@_icon = options.icon ? 'plus'
 
-		{ flow } = require 'md-components/Flow'
+		{ app } = require 'md-components/App'
 
 		super _.defaults options,
 			name: 'Action Button'
@@ -26,9 +26,9 @@ exports.ActionButton = class ActionButton extends Layer
 			shadowColor: 'rgba(0,0,0,.25)'
 			animationOptions: {time: .15}
 
-		if flow?
-			@y = Align.bottom(-flow.footer.height - 17)
-			flow.actionButton = @
+		if app?
+			@y = Align.bottom(-app.footer.height - 17)
+			app.actionButton = @
 
 		# icon
 		
@@ -49,7 +49,7 @@ exports.ActionButton = class ActionButton extends Layer
 			opacity: 1
 
 		@mask.placeBehind @iconLayer
-		@ripple = new Rippple( @mask, null )
+		@ripple = new Ripple( @mask, null )
 
 		# events
 

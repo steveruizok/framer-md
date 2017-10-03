@@ -7,79 +7,57 @@ https://materialdesignicons.com/
 ###
 
 md = require "md"
-flow = new md.Flow
-	name: 'Framer Introduction'
+Screen.backgroundColor = '#FFF'
 
-# Create App
+header = new md.Header
+	icon: 'menu'
+	title: 'Hello World!'
+	action: -> print 'hello'
+
+header.icon = 'star'
+
+Utils.delay 3, =>
+	header.setHeader
+		title: 'whaddup world'
+		action: -> print 'whaddup'
+		backgroundColor: 'FF0077'
 
 # app = new md.App
-# 
-# 	# bottomnav links for each view are created automatically
-# 	# if a project has more than one view, it has a bottomnav by default
-# 	# (bottomnav option should be boolean to enable / disable this)
-# 
-# 	bottomNav:
-# 		links: [
-# 			{
-# 				title: 'Home', 
-# 				icon: 'home', 
-# 				view: 'home'
-# 			}, { 
-# 				title: 'Favorites', 
-# 				icon: 'star',
-# 				view: 'favorites' 
-# 			}, { 
-# 				title: 'Profile', 
-# 				icon: 'face',
-# 				view: 'profile'
-# 			}
-# 		]
-# 	
-# 	# menu overlay should be header, then links (a stackview of MenuButtons or MenuLinks(?))
-# 	# links for each view are added automatically
-# 	# other links can be added manually (menuOverlay.links.addToStack?)
-# 	
-# 	menuOverlay:
-# 		title: 'MenuDemo@gmail.com'
-# 		links: [
-# 			{
-# 				title: 'Home', 
-# 				icon: 'home', 
-# 				view: 'home'
-# 			}, { 
-# 				title: 'Favorites', 
-# 				icon: 'star',
-# 				view: 'favorites' 
-# 			}, { 
-# 				title: 'Profile', 
-# 				icon: 'face',
-# 				view: 'profile'
-# 			}
-# 		]
-# 	
-# 	# views need to be rewritten; they should extend stackview and add header integration
-# 	# possibly a more complex header property as used in TheCops
-# 	
-# 	views: [
-# 		favorites = new md.View
-# 			title: "Favorites"
-# 			iconAction: -> app.showMenu(),
-# 		profile = new md.View
-# 			title: "Profile"
-# 			iconAction: -> app.showMenu()
-# 		]
-
+# 	name: 'Framer Introduction'
 
 # ###################################
 # Pages
 
+# refactored:
+
+# Button
+# Notification
+# StackView
+# Card
+# View
+# Snackbar
+# Toast
+
+
+# to do:
+
+# Text Inputs
+# combine into a single class - wrap everything in a container layer, so that I can adjus height depending on whether label or helpertext exists.
+
+
 # Home
 
-home = new md.View
-	title: 'Hello World'
-	iconAction: -> flow.showMenu()
+# home = new md.View
+# 	title: 'Refactoring!'
+# 	icon: 'home'
+# 	showLayers: true
+# 
+# home.build ->
+# 	@addToStack new md.Button
+# 		action: -> new md.Toast
+# 	
+# app.showNext(home)
 
-home.build ->
-	@addToStack new md.Button
-
-flow.showNext(home)
+# myView = new md.View
+# 
+# app.showNext(myView)

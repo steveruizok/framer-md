@@ -20,7 +20,7 @@ exports.Card = class Card extends Layer
 		@_stack = []
 
 		@padding = options.padding ? {
-			top: 16, right: 0, 
+			top: 16, right: 16, 
 			bottom: 16, left: 16
 			stack: 16
 			}
@@ -51,7 +51,6 @@ exports.Card = class Card extends Layer
 			shadowY: 2, shadowBlur: 3
 			clip: true
 			animationOptions: {time: .15}
-
 
 		@footer = new Layer
 			name: '.', parent: @
@@ -103,23 +102,45 @@ exports.Card = class Card extends Layer
 			@_baseFooterHeight = @footer.height
 
 	# add a layer to the stack
-	addToStack: (layers = []) =>
+	addToStack: (layers = [], position) =>
 		if not _.isArray(layers) then layers = [layers]
-		
-		for layer in layers
-			last = _.last(@stack)
-			if last?
-				startY = last.maxY + (@padding.stack ? 0)
-			else
-				startY = @padding.top ? 0
+		last = _.last(@stack)
 
-			layer.parent = @
-			layer.x = @padding.left ? 0
-			layer.y = startY
-			do (layer) =>
-				layer.on "change:height", => @_moveStack(layer)
+		if last?
+			startY = last.maxY + (@padding.stack ? 0)
+		else
+			startY = @padding.top ? 0
+
+		for layer in layers
+
+			if layer.constructor.name is 'Card' then position = 'full'
+
+			layer.props = 
+				parent: @
+				x: _.clamp(
+					@padding.left + layer.x, 
+					@padding.left, 
+					@width - @padding.right - layer.width
+					)
+				y: startY
+
+			switch position
+				when 'full'
+					layer.width = @width - ( @padding.left + @padding.right )
+				when 'left'
+					layer.props =
+						width: (@width / 2) - @padding.left
+						x: @padding.left
+				when 'right'
+					layer.props =
+						width: (@width / 2) - @padding.right
+						x: Align.right(-@padding.right)
+				when 'center'
+					layer.x = Align.center
 
 			@stack.push(layer)
+			
+			layer.on "change:height", => @moveStack(@)
 			
 		@_setHeight()
 	
@@ -207,3 +228,7 @@ exports.Card = class Card extends Layer
 		get: -> return @_elevation
 		set: (number) ->
 			Elevation(@, number)
+
+			
+	
+	

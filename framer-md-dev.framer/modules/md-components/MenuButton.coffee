@@ -14,7 +14,7 @@ Type = require 'md-components/Type'
 exports.MenuButton = class MenuButton extends Layer
 	constructor: (options = {}) ->
 
-		{ flow } = require 'md-components/Flow'
+		{ app } = require 'md-components/App'
 		
 		@_icon = options.icon ? 'home'
 		@_text = options.text ? 'Default'
@@ -43,7 +43,7 @@ exports.MenuButton = class MenuButton extends Layer
 		@onTapEnd ->
 			if @_view?
 				if @_view.i > @_i
-					flow?.transition(@_view, flow.showNextRight)
+					app?.transition(@_view, app.showNextRight)
 				else
-					flow?.transition(@_view, flow.showNextLeft)
+					app?.transition(@_view, app.showNextLeft)
 			Utils.delay .25, => @parent.hide()
